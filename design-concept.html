@@ -2,14 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Comfort Zone</title>
+    {%block title%}<title>The Comfort Zone</title>{% endblock %}
     <style>
-        body{background: linear-gradient(45deg, lightgreen, cyan)}
+        *{
+            margin:0;
+            padding: 0%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        body{
+            background: linear-gradient(45deg, lightgreen, cyan)
+        }
+        .header-section{
+            display: flex;
+            justify-content: space-between;
+        }
+        #company-title{
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        .footer-conatiner{
+            position: fixed;
+        }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Hello World</h1>
-    </div>    
+    {% block header %}
+    <header class="header-section">
+        <h2 id="company-title">The Comfort Zone</h2>
+        <div>
+            <a href="">Store</a>
+            <a href="">Users</a>
+            <a href="">About</a>
+        </div>
+    </header>
+    {% endblock %}
+    {% block body %}
+    {% endblock %}
+    <footer class="footer-container">
+        <h1>Footer</h1>
+    </footer>    
 </body>
 </html>
