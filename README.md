@@ -1,1 +1,3 @@
-# CSET-170-Final-Project
+# CSET-180-Final-Project
+Connor here!
+Franklin here!
