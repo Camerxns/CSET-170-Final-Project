@@ -1,53 +1,238 @@
-from . import db
-from sqlalchemy.sql import func
-from flask_login import UserMixin
+from sqlalchemy import CheckConstraint, Column, DECIMAL, DateTime, ForeignKey, Integer, String, Table, Text, text, UserMixin
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
 
-class Users(db.Model):
-    __tablename__ = 'Users'
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(60), nullable=False)
-    username = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(40), nullable=False, unique=True)
-    password = db.Column(db.String(40), nullable=False)
-    admins = db.relationship('Admins', backref='user', uselist=False)
-    vendors = db.relationship('Vendors', backref='user', uselist=False)
-    customers = db.relationship('Customers', backref='user', uselist=False)
+ADMIN_ACCOUNT = "ADMIN"
+VENDOR_ACCOUNT = "VENDOR"
+CUSTOMER_ACCOUNT = "CUSTOMER"
 
 
-class Admins(db.Model):
-    __tablename__ = 'Admins'
-    admin_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'), unique=True, nullable=False)
-    user = db.relationship('Users', backref='admin')
+Base = declarative_base()
+metadata = Base.metadata
 
 
-class Vendors(db.Model):
-    __tablename__ = 'Vendors'
-    vendor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'), unique=True, nullable=False)
-    user = db.relationship('Users', backref='vendor')
+class Chat(Base):
+    __tablename__ = 'Chats'
+
+    chat_id = Column(Integer, primary_key=True, unique=True)
+
+    users = relationship('User', secondary='Chat_Users')
 
 
-class Customers(db.Model):
-    __tablename__ = 'Customers'
-    customer_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'), unique=True, nullable=False)
-    user = db.relationship('Users', backref='customer')
-
-
-class Products(db.Model):
+class Product(Base):
     __tablename__ = 'Products'
-    product_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String(40), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    product_image = db.Column(db.String(255), nullable=False)
-    category = db.Column(db.Integer, nullable=False)
+
+    product_id = Column(Integer, primary_key=True, unique=True)
+    title = Column(String(40), nullable=False)
+    description = Column(Text, nullable=False)
+    product_image = Column(String(255), nullable=False)
+    category = Column(Integer, nullable=False)
 
 
-class Vendor_Products(db.Model):
+class User(Base, UserMixin):
+    __tablename__ = 'Users'
+
+    user_id = Column(Integer, primary_key=True, unique=True)
+    name = Column(String(60), nullable=False)
+    username = Column(String(20), nullable=False)
+    email = Column(String(40), nullable=False, unique=True)
+    password = Column(String(40), nullable=False)
+
+    @property
+    def account_type(self):
+        admin = Admin.query.filter_by(user_id=self.user_id).first()
+        vendor = Vendor.query.filter_by(user_id=self.user_id).first()
+        customer = Customer.query.filter_by(user_id=self.user_id).first()
+
+        if admin:
+            return ADMIN_ACCOUNT
+        elif vendor:
+            return VENDOR_ACCOUNT
+        elif customer:
+            return CUSTOMER_ACCOUNT
+        else:
+            return None
+
+
+class Admin(Base, UserMixin):
+    __tablename__ = 'Admins'
+
+    admin_id = Column(Integer, primary_key=True, unique=True)
+    user_id = Column(ForeignKey('Users.user_id'), nullable=False, unique=True)
+
+    user = relationship('User')
+
+    @property
+    def id(self):
+        return self.user.user_id
+
+
+class ChatMessage(Base):
+    __tablename__ = 'Chat_Messages'
+
+    chat_message_id = Column(Integer, primary_key=True, unique=True)
+    chat_id = Column(ForeignKey('Chats.chat_id'), nullable=False, index=True)
+    user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
+    message_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    message = Column(Text, nullable=False)
+
+    chat = relationship('Chat')
+    user = relationship('User')
+
+
+t_Chat_Users = Table(
+    'Chat_Users', metadata,
+    Column('chat_id', ForeignKey('Chats.chat_id'), nullable=False, index=True),
+    Column('user_id', ForeignKey('Users.user_id'), nullable=False, index=True)
+)
+
+
+class Complaint(Base):
+    __tablename__ = 'Complaints'
+
+    complaint_id = Column(Integer, primary_key=True, unique=True)
+    user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
+    admin_id = Column(ForeignKey('Users.user_id'), index=True)
+    complaint_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    title = Column(String(40), nullable=False)
+    description = Column(Text, nullable=False)
+    demand = Column(Text, nullable=False)
+    status = Column(String(20), nullable=False, server_default=text("'pending'"))
+
+    admin = relationship('User', primaryjoin='Complaint.admin_id == User.user_id')
+    user = relationship('User', primaryjoin='Complaint.user_id == User.user_id')
+
+
+class Customer(Base, UserMixin):
+    __tablename__ = 'Customers'
+
+    customer_id = Column(Integer, primary_key=True, unique=True)
+    user_id = Column(ForeignKey('Users.user_id'), nullable=False, unique=True)
+
+    user = relationship('User')
+
+    @property
+    def id(self):
+        return self.user.user_id
+
+
+class Review(Base):
+    __tablename__ = 'Reviews'
+    __table_args__ = (
+        CheckConstraint('((`rating` >= 1) and (`rating` <= 5))'),
+    )
+
+    review_id = Column(Integer, primary_key=True, unique=True)
+    product_id = Column(ForeignKey('Products.product_id'), nullable=False, index=True)
+    user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
+    rating = Column(Integer, nullable=False)
+    review_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    message = Column(Text)
+    image = Column(String(255))
+
+    product = relationship('Product')
+    user = relationship('User')
+
+
+class Vendor(Base, UserMixin):
+    __tablename__ = 'Vendors'
+
+    vendor_id = Column(Integer, primary_key=True, unique=True)
+    user_id = Column(ForeignKey('Users.user_id'), nullable=False, unique=True)
+
+    user = relationship('User')
+
+    @property
+    def id(self):
+        return self.user.user_id
+
+
+class Cart(Base):
+    __tablename__ = 'Carts'
+
+    cart_id = Column(Integer, primary_key=True, unique=True)
+    customer_id = Column(ForeignKey('Customers.customer_id'), nullable=False, unique=True)
+
+    customer = relationship('Customer')
+
+
+class VendorProduct(Base):
     __tablename__ = 'Vendor_Products'
-    vendor_product_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    product_id = db.Column(db.Integer, nullable=False)
-    vendor_id = db.Column(db.Integer, nullable=False)
-    qty = db.Column(db.Integer, nullable=False, d)
+
+    vendor_product_id = Column(Integer, primary_key=True, unique=True)
+    product_id = Column(ForeignKey('Products.product_id'), nullable=False, index=True)
+    vendor_id = Column(ForeignKey('Vendors.vendor_id'), nullable=False, index=True)
+    qty = Column(Integer, nullable=False, server_default=text("'1'"))
+    price = Column(DECIMAL(9, 2), nullable=False, server_default=text("'0.00'"))
+    warranty_length = Column(Integer)
+
+    product = relationship('Product')
+    vendor = relationship('Vendor')
+
+
+class CartItem(Base):
+    __tablename__ = 'Cart_Items'
+
+    cart_item_id = Column(Integer, primary_key=True, unique=True)
+    cart_id = Column(ForeignKey('Carts.cart_id'), nullable=False, index=True)
+    product_id = Column(ForeignKey('Products.product_id'), nullable=False, index=True)
+    qty = Column(Integer, nullable=False, server_default=text("'1'"))
+    color = Column(String(40))
+    size = Column(String(20))
+
+    cart = relationship('Cart')
+    product = relationship('Product')
+
+
+class Discount(Base):
+    __tablename__ = 'Discounts'
+
+    discount_id = Column(Integer, primary_key=True, unique=True)
+    vendor_product_id = Column(ForeignKey('Vendor_Products.vendor_product_id'), nullable=False, index=True)
+    discount_price = Column(DECIMAL(9, 2), nullable=False, server_default=text("'0.00'"))
+    from_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    to_date = Column(DateTime, nullable=False)
+
+    vendor_product = relationship('VendorProduct')
+
+
+class Order(Base):
+    __tablename__ = 'Orders'
+
+    order_id = Column(Integer, primary_key=True, unique=True)
+    customer_id = Column(ForeignKey('Customers.customer_id'), nullable=False, index=True)
+    cart_id = Column(ForeignKey('Carts.cart_id'), nullable=False, index=True)
+    order_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    status = Column(String(40), nullable=False, server_default=text("'pending'"))
+
+    cart = relationship('Cart')
+    customer = relationship('Customer')
+
+
+t_Vendor_Product_Colors = Table(
+    'Vendor_Product_Colors', metadata,
+    Column('vendor_product_id', ForeignKey('Vendor_Products.vendor_product_id'), nullable=False, index=True),
+    Column('color', String(40), nullable=False)
+)
+
+
+t_Vendor_Product_Sizes = Table(
+    'Vendor_Product_Sizes', metadata,
+    Column('vendor_product_id', ForeignKey('Vendor_Products.vendor_product_id'), nullable=False, index=True),
+    Column('size', String(20), nullable=False)
+)
+
+
+class OrderItem(Base):
+    __tablename__ = 'Order_Items'
+
+    order_item_id = Column(Integer, primary_key=True, unique=True)
+    order_id = Column(ForeignKey('Orders.order_id'), nullable=False, index=True)
+    product_id = Column(ForeignKey('Products.product_id'), nullable=False, index=True)
+    qty = Column(Integer)
+    color = Column(String(40))
+    size = Column(String(20))
+
+    order = relationship('Order')
+    product = relationship('Product')
