@@ -1,6 +1,7 @@
-from sqlalchemy import CheckConstraint, Column, DECIMAL, DateTime, ForeignKey, Integer, String, Table, Text, text, UserMixin
+from sqlalchemy import CheckConstraint, Column, DECIMAL, DateTime, ForeignKey, Integer, String, Table, Text, text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from flask_login import UserMixin
 
 
 ADMIN_ACCOUNT = "ADMIN"

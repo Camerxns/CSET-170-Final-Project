@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Users, Teachers, Students
+from .models import User, Admin, Vendor, Customer
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # This file will need some work. We need to hash the passwords instead of using plan-text
@@ -16,23 +17,14 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        user = Users.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
         if user:
-            if password == user.password:
-                teacher = Teachers.query.filter_by(
-                    user_id=user.user_id).first()
-                if teacher:
-                    login_user(teacher, remember=True)
-                else:
-                    student = Students.query.filter_by(
-                        user_id=user.user_id).first()
-                    login_user(student, remember=True)
-                return redirect(url_for('views.tests'))
+            if check_password_hash(user.password, password):
+                pass # Check which account type?
             else:
                 flash("Incorrect Password, try again!")
         else:
-            flash(
-                "No account associated with that email.")
+            flash("No account associated with that email.")
 
     return render_template("login.html")
 
@@ -53,16 +45,15 @@ def register():
         teacher_account = True if request.form.get(
             "teacher") == "on" else False
 
-        user = Users.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
         if user:
             flash("Username already exists")
         else:
-            user = Users.query.filter_by(email=email).first()
+            user = User.query.filter_by(email=email).first()
             if user:
                 flash("email already exists")
             else:
-                new_user = Users(username=username,
-                                 email=email, password=password)
+                new_user = User(username=username, email=email, password=generate_password_hash(password, method='sha256'))
                 db.session.add(new_user)
                 db.session.commit()
                 if teacher_account:
