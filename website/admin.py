@@ -4,10 +4,7 @@ from sqlalchemy import text
 from .models import *
 
 
-views = Blueprint('views', __name__)
+admin = Blueprint('admin', __name__)
 
-
-@views.route('/')
-def index():
-    return render_template("index.html")
+@admin.route('/')
 
