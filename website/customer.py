@@ -4,11 +4,6 @@ from sqlalchemy import text
 from .models import *
 
 
+customer = Blueprint('customer', __name__)
 
-views = Blueprint('views', __name__)
-
-
-@views.route('/')
-def index():
-    return render_template("index.html")
-
+@customer.route('/')
