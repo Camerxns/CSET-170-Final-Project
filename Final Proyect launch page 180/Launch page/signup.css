@@ -73,7 +73,8 @@ button:hover {
 }
 
 header{
-  background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.3)),url("/Launch page/resources/images/signup.webp");
-  background-size: 700px;
+  background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.3)),url("/Launch page/resources/images/signup.gif");
+  /* background-size: 1042px; */
+  background-size: 300px cover;
   height: 60vh;
 }

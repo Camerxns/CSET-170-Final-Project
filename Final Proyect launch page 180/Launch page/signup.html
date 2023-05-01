@@ -10,29 +10,45 @@
 <body>
     <header>
     </header>
-    <form action="action_page.php" style="border:1px solid #ccc">
-        <div class="Title">
-            <h1>The Comfort Zone</h1>
-           </div>
-        <div class="container">
-          <h1>Sign Up</h1>
-          <hr>
-      
-          <label for="email"><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" name="email" required>
-      
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
-      
-      
-      
-         
-          <div class="clearfix">
-            <a href="/Launch page/index.html"> <button type="button" class="cancelbtn">Cancel</button></a>
-            <button type="submit" class="signupbtn">Sign Up</button>
-          </div>
+    <form action="action_page.php" style="border: 1px solid #ccc;">
+      <div class="Title">
+        <h1>The Comfort Zone</h1>
+      </div>
+      <div class="container">
+        <h1>Sign Up</h1>
+        <hr>
+        
+        <label for="name"><b>Name</b></label>
+        <input type="text" placeholder="Enter Name" name="name" required>
+        
+        <label for="email"><b>Email</b></label>
+        <input type="password" placeholder="Enter Email" name="email" required>
+        
+        <label for="username"><b>Username</b></label>
+        <input type="text" placeholder="Enter username" name="username" required>
+        
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+        
+        <label><b>Account type:</b></label>
+        <br>
+        <input type="radio" id="customer" name="user_type" value="customer" checked>
+        <label for="customer">Customer</label>
+        <br>
+        <input type="radio" id="admin" name="user_type" value="admin">
+        <label for="admin">Admin</label>
+        <br>
+        <input type="radio" id="vendor" name="user_type" value="vendor">
+        <label for="vendor">Vendor</label>
+        
+        <div class="clearfix">
+          <a href="/Launch page/index.html">
+            <button type="button" class="cancelbtn">Cancel</button>
+          </a>
+          <button type="submit" class="signupbtn">Sign Up</button>
         </div>
-      </form>
-</body>
+      </div>
+    </form>
+    
 </html>
   

@@ -290,10 +290,10 @@ pre{
 }
 
 .content{
-    font-size: 15.5px;
+    font-size: 17.5px;
     color: white;
    background-color: rgb(38, 11, 109);
-   height: 120px;
+   height: 140px;
    border: solid 3px ;
    
 }
@@ -397,4 +397,12 @@ button, input, optgroup, select, textarea {
 
 .customer-name-photo{
  
+}
+
+.Customerrev{
+    width:100%;
+}
+
+.Customerrev td{
+    width: 33%;
 }
