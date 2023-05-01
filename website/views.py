@@ -16,8 +16,8 @@ def index():
 @views.route("/home")
 @login_required
 def home():
-  match current_user.account_type:
-       case "ADMIN":
+    match current_user.account_type:
+        case "ADMIN":
             admin = Admin.query.filter_by(user_id=current_user.user_id).first()
 
             products = VendorProduct.query.all()
