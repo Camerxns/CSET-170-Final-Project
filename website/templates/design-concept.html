@@ -1,80 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>The Comfort Zone</title>
-    <style>
-        *{
-            margin:0;
-            padding: 0%;
-            height: 100%;
-            box-sizing: border-box;
-        }
-        body{
-            background-color: #dcd3bd;
-            min-height: 100vh;
-        }
-        .header-section{
+    <head>
+        <meta charset="UTF-8">
+        <title>The Comfort Zone</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+            *{
+                margin:0;
+                padding: 0%;
+                height: 100%;
+                box-sizing: border-box;
+            }
+            body{
+                background-color: #dcd3bd;
+                min-height: 100vh;
+            }
+            
+            #company-title{
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            }
+
+            .header-section{
             display: grid;
             height: 5%;
             position: sticky;
             background-color: grey;
-            grid-template-columns: repeat(4, 250px);
+            grid-template-columns: repeat(4, auto);
             grid-template-rows: repeat(1, 20px);
-            justify-content: space-between;
+        }
+
+        .header-item-3{
+            grid-column: -1 / -1;
         }
 
         .main-content{
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto;
+            grid-template-columns: 250px 150px;
+            grid-template-rows: minmax(150px, auto);
+            gap: 20px;
         }
-
         .item{
             background-color: #87999f;
-            grid-column: 1/2;
+            grid-row: span 2;
+        }
+        .item-1{
+            grid-row: span 1;
+            grid-column: span 3;
+        }
+        
+        footer{
+            display: grid;
+            height: auto;
+            width: auto;
+            grid-template-columns: repeat(2, 50%);
+            gap: 50px;
         }
 
-        #company-title{
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        .fa{
+            padding: 10px;
+            font-size: 30px;
+            text-decoration: none;
+            background-color: 9e7857;
+            color: white;
         }
-        footer{
-            height: auto;
-            width: 100%;
+
+        .fa-facebook{
+
+            background-color: lightblue;
+        }
+
+        .fa-twitter{
+            color: aqua;
         }
     </style>
 </head>
 <body>
     <header class="header-section">
-        <div>
-            <h2 id="company-title">The Comfort Zone</h2>
-            
-        </div>
-        <div>
+        <div class="header-item-1"><h2 id="company-title">The Comfort Zone</h2></div>
+        <div class="header-item-2">
             <a href="">Store</a>
             <a href="">Users</a>
             <a href="">About</a>
         </div>
-
-        <div>
+        
+        <div class="header-item-3">
             <h3>Hello, {{username}}</h3>
             <button name="logout">Log Out</button>
         </div>
     </header>
     {%block body%}
     <div class="main-content">
-        <div class="item">Box1</div>
-        <div class="item">Box2</div>
-        <div class="item">Box3</div>
-        <div class="item">Box4</div>
-        <div class="item">Box5</div>
-        <div class="item">Box6</div>
-        <div class="item">Box7</div>
+        <div class="item item-1">
+            <img src="static/bedframe1.png" alt="">
+        </div>
+        <div class="item item-2">
+            Box2
+
+        </div>
+        <div class="item item-3">Box3</div>
+        <div class="item item-4">Box4</div>
+        <div class="item item-5">Box5</div>
+        <div class="item item-6">Box6</div>
+        <div class="item item-7">Box7</div>
     </div>
     {% endblock %}
-
     <footer>
-    <h1>Footer</h1>
+        <div>
+            <h1>Footer</h1>
+            <p>Copyright 2023, All rights reserved.</p>
+        </div>
+        <div>
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a>
+            <a href="#" class="fa fa-instagram"></a>
+        </div>
     </footer>
 </body>
 </html>
