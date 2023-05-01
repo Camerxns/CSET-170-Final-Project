@@ -50,3 +50,9 @@ def home():
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
+
+
+@views.route("/shop")
+@login_required
+def shop():
+    return render_template("shop.html")
