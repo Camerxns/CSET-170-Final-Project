@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    color: #555;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    text-rendering: optimizeLegibility;
+  }
+
+  .header {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)),
+    url("{{ url_for('static', filename='iamges/empty-room.gif') }}");
+    background-size: cover;
+    height: 90vh;
+    background-attachment: fixed;
+  }
+
+  .row {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    height: 100px;
+    height: 100px;
+    /* margin-left:70px; */
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  ul {
+    display: flex;
+    list-style-type: none;
+  }
+
+  li a {
+    color: white;
+    padding: 5px 0;
+    margin: 0 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  li a:hover {
+    border-bottom: 2px solid orange;
+  }
+
+  .hero-text-box {
+    width: 1140px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+  }
+
+  .hero-text {
+    font-weight: 500;
+    text-size-adjust: 68px;
+    /* font-size: 40px; */
+    word-spacing: 4;
+  }
+
+  .btn {
+    display: inline-block;
+    font-weight: 300;
+    padding: 10px 30px;
+    text-decoration: none;
+    color: white;
+    border-radius: 100px;
+  }
+
+  .btn:hover,
+  btn:active {
+    background-color: #cf6d17;
+  }
+
+  .btn-full {
+    background-color: #e67e22;
+    border: 1px solid #e67e22;
+    color: #fff;
+  }
+
+  .btn-ghost {
+    border: 1px solid;
+    color: orangered;
+    transition: color 0.2s;
+  }
+
+  .btn-full:hover,
+  .btn-full:active {
+    border: 1px solid #cf6d17;
+  }
+
+  .btn-ghost:hover,
+  .btn-ghost:active {
+    border: 1px solid #cf6d17;
+    color: white;
+  }
+
+  /* Lecture 7 */
+  h2 {
+    text-align: center;
+    font-weight: 300;
+    font-size: 40px;
+    word-spacing: 2px;
+    text-align: center;
+    letter-spacing: 1px;
+
+  }
+
+  h2:after {
+    display: block;
+    height: 2px;
+    width: 100px;
+    background-color: #e67e22;
+    content: " ";
+    margin: auto;
+    margin-top: 30px
+  }
+
+  .features-text {
+    width: 800px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+
+
+  }
+
+
+  .features {
+    padding: 80px;
+    background-color: #d6c5a1ad;
+  }
+
+
+  .big-icon {
+    font-size: 350%;
+    display: block;
+    color: #44290e;
+    margin-bottom: 10px;
+    --ionicon-stroke-width: 20px;
+  }
+
+  .cards {
+    display: flex;
+    justify-content: stretch;
+  }
+
+  .cards p {
+    text-align: justify;
+    font-size: 90%;
+    line-height: 145%;
+    padding: 20px;
+  }
+
+  .cards>div {
+    width: 25%;
+    padding: 15px;
+  }
+
+  h3 {
+    font-size: 110%;
+    font-weight: 300;
+    margin: 15px 0px;
+  }
+
+  .meals-flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: black;
+  }
+
+  .meals-flexbox div {
+    width: 25%;
+    overflow: hidden;
+  }
+
+  .meals-flexbox img {
+    max-width: 100%;
+    transform: scale(1.15);
+    transition: transform 0.5s;
+    opacity: 0.7;
+  }
+
+  .meals-flexbox img:hover {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .phoneapp {
+    width: 210px;
+    margin-left: 310px
+  }
+
+
+  p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+
+  .span-1-of-2 {
+    width: 49.2%;
+  }
+
+  .col {
+    display: block;
+    float: left;
+    margin: 1% 0 1% 1.6%;
+  }
+
+  .num {
+    border: #e67e22 solid 2px;
+    border-radius: 100px;
+    padding: 7px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 30px;
+    color: #cf6d17;
+  }
+
+  .lato {
+    font-family: 'Lato', sans-serif;
+  }
+
+  .how {
+    background-color: rgb(245, 243, 240);
+  }
+
+  .span-1-of-4 {
+    width: 93.8%;
+  }
+
+  .box {
+    padding: 8px;
+  }
+
+  .box img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+  }
+
+  .city-feature {
+    margin-bottom: 5px;
+  }
+
+  .icon-small {
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+    color: #e67e22;
+    font-size: 120%;
+    margin-right: 10px;
+    line-height: 120%;
+    vertical-align: middle;
+    margin-top: -5px;
+  }
+
+  .hydrated {
+    visibility: inherit;
+  }
+
+  pre {
+    font-family: 'Lato', sans-serif;
+  }
+
+  .live {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("{{ url_for('static', filename='images/back_customers.jpg') }}");
+    background-size: cover;
+    background-attachment: fixed;
+    margin: auto 0;
+  }
+
+  .coma {
+    font-size: 140px;
+    font-style: italic;
+    color: antiquewhite;
+  }
+
+  .content {
+    font-size: 17.5px;
+    color: white;
+    background-color: rgb(38, 11, 109);
+    height: 140px;
+    border: solid 3px;
+
+  }
+
+  .customer {
+    border: 2px solid black;
+    border-radius: 100px;
+    width: 90px;
+    display: block;
+    margin-top: 25px;
+  }
+
+  .span-1-of-3 {
+    width: 32.26%;
+  }
+
+  .plan-box {
+    background-color: #fff;
+    border-radius: 5px;
+    width: 90%;
+    margin-left: 5%;
+    box-shadow: 0 2px 2px #cac5c5;
+  }
+
+  .section-plans {
+    background-color: #f4f4f4;
+  }
+
+  div {
+    display: block;
+  }
+
+  .plan-box div:first-child {
+    background-color: #fcfcfc;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+
+  .col:first-child {
+    margin-left: 0;
+  }
+
+  .plan-box ul {
+    list-style: none;
+  }
+
+  .puu {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+  }
+
+  .plan-price {
+    font-size: 300%;
+    margin-bottom: 10px;
+    font-weight: 100;
+    color: #e67e22;
+  }
+
+  .plan-box div:last-child {
+    text-align: center;
+    border: 0;
+  }
+
+  .contact-form {
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  .span-2-of-3 {
+    width: 66.13%;
+  }
+
+  textarea {
+    height: 100px;
+  }
+
+  textarea {
+    overflow: auto;
+  }
+
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  .row:after {
+    clear: both
+  }
+
+  .row:before,
+  .row:after {
+    content: "";
+    display: table;
+  }
+
+  .customer-name-photo {}
+
+  .Customerrev {
+    width: 100%;
+  }
+
+  .Customerrev td {
+    width: 33%;
+  }
+</style>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Comfort Zone</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <header class="header">
+    <nav class="row">
+      <pre>                                                                                                                                                                                </pre>
+      <ul>
+        <li><a href="/login">Log in</a></li>
+        <li><a href="/signup">Sign up</a></li>
+      </ul>
+    </nav>
+    <div class="hero-text-box">
+
+      <h1 class="hero-text">The Comfort Zone</h1>
+      </h1> <br>
+    </div>
+  </header>
+
+
+  <section class="features">
+    <div class="row">
+      <h2>Find the Furniture that you need </h2>
+      <p class="features-text"> We are The Comfort Zone an e-commerce multivendor application. Furniture will be
+        available to you and you will be able to Contact the vendor at all times during the process of your purchase
+      </p>
+    </div>
+
+    <div class="row cards">
+      <div>
+        <ion-icon name="chatbox-outline" class="big-icon"></ion-icon>
+        <h3>Get in contact with the vendor at all times</h3>
+        <p>You can contact the Vendor at all times including before during and even after the purchase has been made.
+        </p>
+      </div>
+      <div>
+        <ion-icon name="grid-outline" class="big-icon"></ion-icon>
+        <h3>Variety of Furniture to Choose from</h3>
+        <p>A big variety of pieces of
+          Furniture that is including
+          mattresses
+          tables and most of things needed to have the room of your dreams.</p>
+      </div>
+      <div>
+        <ion-icon name="happy-outline" class="big-icon"></ion-icon>
+        <h3>100% Guaranteed Customer satisfaction</h3>
+        <p>All of our vendors will be required to follow a specific directions to guarantee the best customer service.
+          The Comfort Zone's main goal is to have a friendly and safe community
+        </p>
+      </div>
+      <div>
+        <ion-icon name="cart-outline" class="big-icon"></ion-icon>
+        <h3>Everything is Ready to start either your purchasing or selling of any Furniture</h3>
+        <p>The Products will have accurate description and pictures that will make the communication between the
+          customer and seller the best!</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-meals" style="padding:0px">
+    <div class="meals-flexbox">
+      <div>
+        <img src="{{ url_for('static', filename='iamges/1.jpg') }}">
+      </div>
+
+      <div>
+        <img src="{{ url_for('static', filename='iamges/2.jpg') }}">
+      </div>
+
+      <div>
+        <img src="{{ url_for('static', filename='iamges/3.jpg') }}">
+      </div>
+
+      <div>
+        <img src="{{ url_for('static', filename='iamges/4.jpg') }}">
+      </div>
+
+      <div>
+        <img src="{{ url_for('static', filename='iamges/5.jpg') }}">
+      </div>
+
+      <div>
+        <img src="{{ url_for('static', filename='iamges/6.jpg') }}">
+      </div>
+
+      <div>
+        <img src="{{ url_for('static', filename='iamges/7.jpg') }}">
+      </div>
+
+      <div>
+        <img src="{{ url_for('static', filename='iamges/8.jpg') }}">
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="live" style="text-align: center !important;">
+    <br>
+    <h2 style="color:antiquewhite">Here are some reviews from our current customers and vendors from The Comfort Zone
+    </h2>
+    <br>
+    <table style="margin: 0 auto">
+      <tr>
+
+        <td class="customer-name-photo"><img src="{{ url_for('static', filename='images/customer-1.jpg') }}"
+            class="customer">
+          <p style="color: white ; font-size: larger;">Edward Jones</p>
+
+
+        </td>
+        <td>
+          <pre>
+                                                                           </pre>
+        </td>
+        <td> </td>
+
+
+
+        <td><img src="{{ url_for('static', filename='images/customer-2.jpg') }}" class="customer">
+          <p style="color: white ;  font-size: larger;">Donkey Reyes</p>
+          <!--        
+      <td><pre>                                            </pre> </td> -->
+
+        </td>
+
+
+        </td>
+
+      </tr>
+      <tr></tr>
+      <td>
+        <pre class=" lato content"> "The Comfort Zone, this place have 
+changed the way I see buying and selling of Furniture. 
+The Flexibilty of the Items 
+I can sell is very nice. I can communicate with the customers
+at all times and I can also see all my reviews too!"</pre>
+      </td>
+      <td> </td>
+      <td> </td>
+      <td>
+        <pre class=" lato content">        "I have had an amazing experience with all my purchases 
+        on The Comfort Zone, The communication with the vendor
+     of the item I am going to purchase is amazing, I really Love it!. 
+    I do not know what I would do without The Comfort Zone I would really 
+        not be comfortable at my house with out this existing!"          
+         <!-- </pre>
+        </pre> -->
+      </td>
+
+      </tr>
+
+
+    </table>
+    <br>
+  </section>
+
+
+
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
