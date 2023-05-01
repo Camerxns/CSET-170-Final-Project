@@ -5,9 +5,6 @@ from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-# This file will need some work. We need to hash the passwords instead of using plan-text
-
-
 auth = Blueprint('auth', __name__)
 
 
@@ -44,7 +41,7 @@ def register():
         name = request.form.get("name")
         email = request.form.get("email")
         password = request.form.get("password")
-        user_type = request.form.get("permission")
+        user_type = request.form.get("user_type")
 
         user = User.query.filter_by(username=username).first()
         if user:
