@@ -1,6 +1,7 @@
-from sqlalchemy import CheckConstraint, Column, DECIMAL, DateTime, ForeignKey, Integer, String, Table, Text, text, UserMixin
+from sqlalchemy import CheckConstraint, Column, DECIMAL, DateTime, ForeignKey, Integer, String, Table, Text, text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from flask_login import UserMixin
 
 
 ADMIN_ACCOUNT = "ADMIN"
@@ -74,7 +75,8 @@ class ChatMessage(Base):
     chat_message_id = Column(Integer, primary_key=True, unique=True)
     chat_id = Column(ForeignKey('Chats.chat_id'), nullable=False, index=True)
     user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
-    message_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    message_date = Column(DateTime, nullable=False,
+                          server_default=text("CURRENT_TIMESTAMP"))
     message = Column(Text, nullable=False)
 
     chat = relationship('Chat')
@@ -94,14 +96,18 @@ class Complaint(Base):
     complaint_id = Column(Integer, primary_key=True, unique=True)
     user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
     admin_id = Column(ForeignKey('Users.user_id'), index=True)
-    complaint_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    complaint_date = Column(DateTime, nullable=False,
+                            server_default=text("CURRENT_TIMESTAMP"))
     title = Column(String(40), nullable=False)
     description = Column(Text, nullable=False)
     demand = Column(Text, nullable=False)
-    status = Column(String(20), nullable=False, server_default=text("'pending'"))
+    status = Column(String(20), nullable=False,
+                    server_default=text("'pending'"))
 
-    admin = relationship('User', primaryjoin='Complaint.admin_id == User.user_id')
-    user = relationship('User', primaryjoin='Complaint.user_id == User.user_id')
+    admin = relationship(
+        'User', primaryjoin='Complaint.admin_id == User.user_id')
+    user = relationship(
+        'User', primaryjoin='Complaint.user_id == User.user_id')
 
 
 class Customer(Base, UserMixin):
@@ -124,10 +130,12 @@ class Review(Base):
     )
 
     review_id = Column(Integer, primary_key=True, unique=True)
-    product_id = Column(ForeignKey('Products.product_id'), nullable=False, index=True)
+    product_id = Column(ForeignKey('Products.product_id'),
+                        nullable=False, index=True)
     user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
     rating = Column(Integer, nullable=False)
-    review_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    review_date = Column(DateTime, nullable=False,
+                         server_default=text("CURRENT_TIMESTAMP"))
     message = Column(Text)
     image = Column(String(255))
 
@@ -152,7 +160,8 @@ class Cart(Base):
     __tablename__ = 'Carts'
 
     cart_id = Column(Integer, primary_key=True, unique=True)
-    customer_id = Column(ForeignKey('Customers.customer_id'), nullable=False, unique=True)
+    customer_id = Column(ForeignKey('Customers.customer_id'),
+                         nullable=False, unique=True)
 
     customer = relationship('Customer')
 
@@ -161,10 +170,13 @@ class VendorProduct(Base):
     __tablename__ = 'Vendor_Products'
 
     vendor_product_id = Column(Integer, primary_key=True, unique=True)
-    product_id = Column(ForeignKey('Products.product_id'), nullable=False, index=True)
-    vendor_id = Column(ForeignKey('Vendors.vendor_id'), nullable=False, index=True)
+    product_id = Column(ForeignKey('Products.product_id'),
+                        nullable=False, index=True)
+    vendor_id = Column(ForeignKey('Vendors.vendor_id'),
+                       nullable=False, index=True)
     qty = Column(Integer, nullable=False, server_default=text("'1'"))
-    price = Column(DECIMAL(9, 2), nullable=False, server_default=text("'0.00'"))
+    price = Column(DECIMAL(9, 2), nullable=False,
+                   server_default=text("'0.00'"))
     warranty_length = Column(Integer)
 
     product = relationship('Product')
@@ -176,7 +188,8 @@ class CartItem(Base):
 
     cart_item_id = Column(Integer, primary_key=True, unique=True)
     cart_id = Column(ForeignKey('Carts.cart_id'), nullable=False, index=True)
-    product_id = Column(ForeignKey('Products.product_id'), nullable=False, index=True)
+    product_id = Column(ForeignKey('Products.product_id'),
+                        nullable=False, index=True)
     qty = Column(Integer, nullable=False, server_default=text("'1'"))
     color = Column(String(40))
     size = Column(String(20))
@@ -189,9 +202,12 @@ class Discount(Base):
     __tablename__ = 'Discounts'
 
     discount_id = Column(Integer, primary_key=True, unique=True)
-    vendor_product_id = Column(ForeignKey('Vendor_Products.vendor_product_id'), nullable=False, index=True)
-    discount_price = Column(DECIMAL(9, 2), nullable=False, server_default=text("'0.00'"))
-    from_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    vendor_product_id = Column(ForeignKey(
+        'Vendor_Products.vendor_product_id'), nullable=False, index=True)
+    discount_price = Column(DECIMAL(9, 2), nullable=False,
+                            server_default=text("'0.00'"))
+    from_date = Column(DateTime, nullable=False,
+                       server_default=text("CURRENT_TIMESTAMP"))
     to_date = Column(DateTime, nullable=False)
 
     vendor_product = relationship('VendorProduct')
@@ -201,10 +217,13 @@ class Order(Base):
     __tablename__ = 'Orders'
 
     order_id = Column(Integer, primary_key=True, unique=True)
-    customer_id = Column(ForeignKey('Customers.customer_id'), nullable=False, index=True)
+    customer_id = Column(ForeignKey('Customers.customer_id'),
+                         nullable=False, index=True)
     cart_id = Column(ForeignKey('Carts.cart_id'), nullable=False, index=True)
-    order_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
-    status = Column(String(40), nullable=False, server_default=text("'pending'"))
+    order_date = Column(DateTime, nullable=False,
+                        server_default=text("CURRENT_TIMESTAMP"))
+    status = Column(String(40), nullable=False,
+                    server_default=text("'pending'"))
 
     cart = relationship('Cart')
     customer = relationship('Customer')
@@ -212,14 +231,16 @@ class Order(Base):
 
 t_Vendor_Product_Colors = Table(
     'Vendor_Product_Colors', metadata,
-    Column('vendor_product_id', ForeignKey('Vendor_Products.vendor_product_id'), nullable=False, index=True),
+    Column('vendor_product_id', ForeignKey(
+        'Vendor_Products.vendor_product_id'), nullable=False, index=True),
     Column('color', String(40), nullable=False)
 )
 
 
 t_Vendor_Product_Sizes = Table(
     'Vendor_Product_Sizes', metadata,
-    Column('vendor_product_id', ForeignKey('Vendor_Products.vendor_product_id'), nullable=False, index=True),
+    Column('vendor_product_id', ForeignKey(
+        'Vendor_Products.vendor_product_id'), nullable=False, index=True),
     Column('size', String(20), nullable=False)
 )
 
@@ -228,11 +249,13 @@ class OrderItem(Base):
     __tablename__ = 'Order_Items'
 
     order_item_id = Column(Integer, primary_key=True, unique=True)
-    order_id = Column(ForeignKey('Orders.order_id'), nullable=False, index=True)
-    product_id = Column(ForeignKey('Products.product_id'), nullable=False, index=True)
+    order_id = Column(ForeignKey('Orders.order_id'),
+                      nullable=False, index=True)
+    vendor_product_id = Column(ForeignKey(
+        'Vendor_Products.vendor_product_id'), nullable=False, index=True)
     qty = Column(Integer)
     color = Column(String(40))
     size = Column(String(20))
 
     order = relationship('Order')
-    product = relationship('Product')
+    vendor_product = relationship('VendorProduct')
