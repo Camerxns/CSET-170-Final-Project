@@ -20,7 +20,8 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                pass # Check which account type?
+                login_user(user, remember=True)
+                return redirect(url_for("views.home"))
             else:
                 flash("Incorrect Password, try again!")
         else:
@@ -29,7 +30,7 @@ def login():
     return render_template("login.html")
 
 
-@auth.route("/logout")
+@auth.route("/logout", methods=["POST"])
 @login_required
 def logout():
     logout_user()
@@ -40,32 +41,39 @@ def logout():
 def register():
     if request.method == "POST":
         username = request.form.get("username")
+        name = request.form.get("name")
         email = request.form.get("email")
         password = request.form.get("password")
-        teacher_account = True if request.form.get(
-            "teacher") == "on" else False
+        user_type = request.form.get("permission")
 
         user = User.query.filter_by(username=username).first()
         if user:
-            flash("Username already exists")
+            flash("Username already taken!")
         else:
             user = User.query.filter_by(email=email).first()
             if user:
-                flash("email already exists")
+                flash("Email already taken")
             else:
-                new_user = User(username=username, email=email, password=generate_password_hash(password, method='sha256'))
+                new_user = User(username=username, name=name,
+                                email=email, password=password)
                 db.session.add(new_user)
                 db.session.commit()
-                if teacher_account:
-                    new_teacher = Teachers(user_id=new_user.user_id)
-                    db.session.add(new_teacher)
-                    db.session.commit()
-                    login_user(new_teacher, remember=True)
-                else:
-                    new_student = Students(user_id=new_user.user_id)
-                    db.session.add(new_student)
-                    db.session.commit()
-                    login_user(new_student, remember=True)
-                return redirect(url_for('views.tests'))
+                match user_type:
+                    case "Customer":
+                        new_customer = Customer(user_id=new_user.user_id)
+                        db.session.add(new_customer)
+                        db.session.commit()
+                    case "Vendor":
+                        new_vendor = Vendor(user_id=new_user.user_id)
+                        db.session.add(new_vendor)
+                        db.session.commit()
+                    case "Admin":
+                        new_admin = Admin(user_id=new_user.user_id)
+                        db.session.add(new_admin)
+                        db.session.commit()
+                    case _:
+                        print("THERE WAS AN ERROR WITH THE REGISTRATION!")
+                login_user(new_user, remember=True)
+                return redirect(url_for("views.home"))
 
     return render_template("register.html")
