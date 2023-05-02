@@ -1,10 +1,8 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Users, Teachers, Students
+from .models import User, Admin, Vendor, Customer
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
-
-
-# This file will need some work. We need to hash the passwords instead of using plan-text
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 auth = Blueprint('auth', __name__)
@@ -16,28 +14,20 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        user = Users.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
         if user:
-            if password == user.password:
-                teacher = Teachers.query.filter_by(
-                    user_id=user.user_id).first()
-                if teacher:
-                    login_user(teacher, remember=True)
-                else:
-                    student = Students.query.filter_by(
-                        user_id=user.user_id).first()
-                    login_user(student, remember=True)
-                return redirect(url_for('views.tests'))
+            if check_password_hash(user.password, password):
+                login_user(user, remember=True)
+                return redirect(url_for("views.home"))
             else:
                 flash("Incorrect Password, try again!")
         else:
-            flash(
-                "No account associated with that email.")
+            flash("No account associated with that email.")
 
     return render_template("login.html")
 
 
-@auth.route("/logout")
+@auth.route("/logout", methods=["POST"])
 @login_required
 def logout():
     logout_user()
@@ -48,33 +38,39 @@ def logout():
 def register():
     if request.method == "POST":
         username = request.form.get("username")
+        name = request.form.get("name")
         email = request.form.get("email")
         password = request.form.get("password")
-        teacher_account = True if request.form.get(
-            "teacher") == "on" else False
+        user_type = request.form.get("user_type")
 
-        user = Users.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
         if user:
-            flash("Username already exists")
+            flash("Username already taken!")
         else:
-            user = Users.query.filter_by(email=email).first()
+            user = User.query.filter_by(email=email).first()
             if user:
-                flash("email already exists")
+                flash("Email already taken")
             else:
-                new_user = Users(username=username,
-                                 email=email, password=password)
+                new_user = User(username=username, name=name,
+                                email=email, password=password)
                 db.session.add(new_user)
                 db.session.commit()
-                if teacher_account:
-                    new_teacher = Teachers(user_id=new_user.user_id)
-                    db.session.add(new_teacher)
-                    db.session.commit()
-                    login_user(new_teacher, remember=True)
-                else:
-                    new_student = Students(user_id=new_user.user_id)
-                    db.session.add(new_student)
-                    db.session.commit()
-                    login_user(new_student, remember=True)
-                return redirect(url_for('views.tests'))
+                match user_type:
+                    case "Customer":
+                        new_customer = Customer(user_id=new_user.user_id)
+                        db.session.add(new_customer)
+                        db.session.commit()
+                    case "Vendor":
+                        new_vendor = Vendor(user_id=new_user.user_id)
+                        db.session.add(new_vendor)
+                        db.session.commit()
+                    case "Admin":
+                        new_admin = Admin(user_id=new_user.user_id)
+                        db.session.add(new_admin)
+                        db.session.commit()
+                    case _:
+                        print("THERE WAS AN ERROR WITH THE REGISTRATION!")
+                login_user(new_user, remember=True)
+                return redirect(url_for("views.home"))
 
     return render_template("register.html")

@@ -5,5 +5,3 @@ from .models import *
 
 
 customer = Blueprint('customer', __name__)
-
-@customer.route('/')
