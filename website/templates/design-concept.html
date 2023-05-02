@@ -11,11 +11,12 @@
                 height: 100%;
                 box-sizing: border-box;
             }
+
             body{
                 background-color: #dcd3bd;
                 min-height: 100vh;
             }
-            
+
             #company-title{
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
@@ -27,51 +28,56 @@
             background-color: grey;
             grid-template-columns: repeat(4, auto);
             grid-template-rows: repeat(1, 20px);
-        }
+            }
 
-        .header-item-3{
-            grid-column: -1 / -1;
-        }
+            .header-item-3{
+                grid-column: -1 / -1;
+            }
 
-        .main-content{
-            display: grid;
-            grid-template-columns: 250px 150px;
-            grid-template-rows: minmax(150px, auto);
-            gap: 20px;
-        }
-        .item{
-            background-color: #87999f;
-            grid-row: span 2;
-        }
-        .item-1{
-            grid-row: span 1;
-            grid-column: span 3;
-        }
-        
-        footer{
-            display: grid;
-            height: auto;
-            width: auto;
-            grid-template-columns: repeat(2, 50%);
-            gap: 50px;
-        }
+            img{
+                width: 200px;
+                height: 200px;
+            }
 
-        .fa{
-            padding: 10px;
-            font-size: 30px;
-            text-decoration: none;
-            background-color: 9e7857;
-            color: white;
-        }
+            .main-content{
+                display: grid;
+                grid-template-columns: 250px 150px;
+                grid-template-rows: minmax(150px, auto);
+                gap: 20px;
+                justify-content: center;
+            }
 
-        .fa-facebook{
+            .item{
+                background-color: #87999f;
+                grid-row: span 1;
+                grid-column: span 2;
+            }
 
-            background-color: lightblue;
-        }
+            footer{
+                display: grid;
+                height: auto;
+                width: auto;
+                grid-template-columns: repeat(2, 50%);
+                gap: 50px;
+                padding: 50px;
+                background-color: #80674f;
+            }
 
-        .fa-twitter{
-            color: aqua;
-        }
+            .fa{
+                padding: 10px;
+                font-size: 30px;
+                text-decoration: none;
+                color: white;
+            }
+
+            .fa-facebook{
+                background-color: lightblue;
+                height: 85%;
+            }
+
+            .fa-twitter{
+                color: aqua;
+            }
     </style>
 </head>
 <body>
@@ -91,17 +97,26 @@
     {%block body%}
     <div class="main-content">
         <div class="item item-1">
-            <img src="static/bedframe1.png" alt="">
+            <img src="/website/static/images/bedframe1.png" alt="bedframe">
         </div>
         <div class="item item-2">
-            Box2
-
+            <img src="/website/static/images/dining-chair.png" alt="">
         </div>
-        <div class="item item-3">Box3</div>
-        <div class="item item-4">Box4</div>
-        <div class="item item-5">Box5</div>
-        <div class="item item-6">Box6</div>
-        <div class="item item-7">Box7</div>
+        <div class="item item-3">
+            <img src="/website/static/images/bedframe2.png" alt="">
+        </div>
+        <div class="item item-4">
+            <img src="/website/static/images/sofa1.png" alt="">
+        </div>
+        <div class="item item-5">
+            <img src="/website/static/images/sofa2.png" alt="">
+        </div>
+        <div class="item item-6">
+            <img src="/website/static/images/coffeetable2.png" alt="">
+        </div>
+        <div class="item item-7">
+            <img src="/website/static/images/loveseat1.png" alt="">
+        </div>
     </div>
     {% endblock %}
     <footer>

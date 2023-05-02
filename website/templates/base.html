@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}The Comfort Zone{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .header-section{
+        display: grid;
+        height: 5%;
+        position: sticky;
+        background-color: grey;
+        grid-template-columns: repeat(4, auto);
+        grid-template-rows: repeat(1, 20px);
+        }
+        .header-item-3{
+            grid-column: -1 / -1;
+        }
+        footer{
+            display: grid;
+            height: auto;
+            width: auto;
+            grid-template-columns: repeat(2, 50%);
+            gap: 50px;
+            padding: 50px;
+            background-color: #80674f;
+        }
+
+        .fa{
+            padding: 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .fa-facebook{
+            background-color: lightblue;
+            height: 85%;
+        }
+
+        .fa-twitter{
+            color: aqua;
+        }
+
+
+    </style>
+</head>
+<body>
+    {% block header %}
+    <header class="header-section">
+        <div class="header-item-1"><h2 id="company-title">The Comfort Zone</h2></div>
+        <div class="header-item-2">
+            <a href="">Store</a>
+            <a href="">Users</a>
+            <a href="">About</a>
+        </div>
+        
+        <div class="header-item-3">
+            <h3>Hello, {{username}}</h3>
+            <button name="logout">Log Out</button>
+        </div>
+    </header>
+    {% endblock %}
+
+    {% block main-content%}
+    {% endblock %}
+    
+    {% block footer %}
+    <footer>
+        <div>
+            <h1>Footer</h1>
+            <p>Copyright 2023, All rights reserved.</p>
+        </div>
+        <div>
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a>
+            <a href="#" class="fa fa-instagram"></a>
+        </div>
+    </footer>
+    {% endblock %}
+</body>
+</html>
