@@ -1,0 +1,57 @@
+<style>
+    body {
+      background-color: #f7f7f7;
+      font-family: Arial, sans-serif;
+    }
+    
+   
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    h1 {
+      font-size: 36px;
+      margin-top: 20px;
+      text-align: center;
+      color: #333;
+    }
+    
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    
+    li {
+      margin-bottom: 10px;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+   
+    </style>
+
+{% extends 'base.html' %}
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body %}
+<section class="container-background">
+    <div class="container">
+      <h1>Hello, {{current_user.name}}!</h1>
+      <ul>
+        <li><strong>Name:</strong> {{ current_user.name }}</li>
+        <li><strong>Username:</strong> {{current_user.username}}</ul>li>
+        <li><strong>Email:</strong> {{ current_user.email }}</li>
+        <li><strong>Account Type:</strong> {{ current_user.account_type }}</li>
+      </ul>
+    </div>
+  </section>
+{% endblock %}
