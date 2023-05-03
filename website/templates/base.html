@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}The Comfort Zone{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
+    <!-- <style>
         .header-section {
             display: grid;
             height: 5%;
@@ -29,6 +29,83 @@
             gap: 50px;
             padding: 50px;
             background-color: #80674f;
+        }
+
+        .fa {
+            padding: 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .fa-facebook {
+            background-color: lightblue;
+            height: 85%;
+        }
+
+        .fa-twitter {
+            color: aqua;
+        }
+    </style> -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            background-color: #80674f;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .header-item-1 {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .header-item-2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex: 1;
+        }
+
+        .header-item-2 a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+        }
+
+        .header-item-3 {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 150px;
+            background-color: #80674f;
+            color: white;
+            padding: 0 100px;
+        }
+
+        .footer-item-1 {
+            flex: 1;
+            text-align: center;
+        }
+
+        .footer-item-2 {
+            display: flex;
+            gap: 20px;
         }
 
         .fa {
@@ -72,12 +149,12 @@
     {% endblock %}
 
     {% block footer %}
-    <footer>
-        <div>
-            <h1>Footer</h1>
+    <footer class="footer">
+        <div class="footer-item-1">
+            <h2>Footer</h2>
             <p>Copyright 2023, All rights reserved.</p>
         </div>
-        <div>
+        <div class="footer-item-2">
             <a href="#" class="fa fa-facebook"></a>
             <a href="#" class="fa fa-twitter"></a>
             <a href="#" class="fa fa-instagram"></a>
