@@ -53,6 +53,7 @@ def home():
 
 
 @views.route("/shop")
-@login_required
+# @login_required
 def shop():
-    return render_template("shop.html")
+    items = Product.query.all()
+    return render_template("shop.html", items=items)

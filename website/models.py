@@ -4,11 +4,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
 
 
-ADMIN_ACCOUNT = "ADMIN"
-VENDOR_ACCOUNT = "VENDOR"
-CUSTOMER_ACCOUNT = "CUSTOMER"
-
-
 Base = declarative_base()
 metadata = Base.metadata
 
@@ -47,11 +42,11 @@ class User(Base, UserMixin):
         customer = Customer.query.filter_by(user_id=self.user_id).first()
 
         if admin:
-            return ADMIN_ACCOUNT
+            return "ADMIN"
         elif vendor:
-            return VENDOR_ACCOUNT
+            return "VENDOR"
         elif customer:
-            return CUSTOMER_ACCOUNT
+            return "CUSTOMER"
         else:
             return None
 

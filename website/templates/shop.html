@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shop</title>
-</head>
+</style>
 
-<body>
-
-</body>
-
-</html>
+{% extends 'base.html' %}
+{% block title %}
+Shop
+{% endblock %}
+{% block body %}
+<h1>Welcom to the shop page!</h1>
+<br>
+<br>
+<h2>Couches</h2>
+<div class="couch">
+    <h3>Couch 1</h3>
+    <p>This is couch one</p>
+</div>
+<div class="couch">
+    <h3>Couch 2</h3>
+    <p>This is couch two</p>
+</div>
+{% endblock %}
