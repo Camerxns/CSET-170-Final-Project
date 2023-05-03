@@ -7,57 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}The Comfort Zone{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- <style>
-        .header-section {
-            display: grid;
-            height: 5%;
-            position: sticky;
-            background-color: grey;
-            grid-template-columns: repeat(4, auto);
-            grid-template-rows: repeat(1, 20px);
-        }
-
-        .header-item-3 {
-            grid-column: -1 / -1;
-        }
-
-        footer {
-            display: grid;
-            height: auto;
-            width: auto;
-            grid-template-columns: repeat(2, 50%);
-            gap: 50px;
-            padding: 50px;
-            background-color: #80674f;
-        }
-
-        .fa {
-            padding: 10px;
-            font-size: 30px;
-            text-decoration: none;
-            color: white;
-        }
-
-        .fa-facebook {
-            background-color: lightblue;
-            height: 85%;
-        }
-
-        .fa-twitter {
-            color: aqua;
-        }
-    </style> -->
     <style>
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
+            box-sizing: border-box;
         }
 
         .header-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
             height: 70px;
             background-color: #80674f;
             color: white;
@@ -90,12 +52,15 @@
 
         .footer {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            height: 150px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
             background-color: #80674f;
             color: white;
-            padding: 0 100px;
+            height: 150px;
+            padding: 20px;
         }
 
         .footer-item-1 {
@@ -104,8 +69,8 @@
         }
 
         .footer-item-2 {
-            display: flex;
-            gap: 20px;
+            /* display: flex; */
+            /* gap: 20px; */
         }
 
         .fa {
@@ -145,8 +110,10 @@
     </header>
     {% endblock %}
 
-    {% block body %}
-    {% endblock %}
+    <div class="main-content">
+        {% block body %}
+        {% endblock %}
+    </div>
 
     {% block footer %}
     <footer class="footer">
