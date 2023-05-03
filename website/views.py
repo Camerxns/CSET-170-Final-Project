@@ -50,3 +50,8 @@ def home():
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
+
+
+@views.route("/profile")
+def profile():
+    return render_template("profile.html")
