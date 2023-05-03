@@ -4,7 +4,6 @@ from sqlalchemy import text
 from .models import *
 from . import db
 
-
 views = Blueprint('views', __name__)
 
 
@@ -50,3 +49,4 @@ def home():
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
+
