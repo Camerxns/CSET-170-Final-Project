@@ -4,22 +4,82 @@
         padding: 0;
         box-sizing: border-box;
     }
-    
+
+    #company-title{
+        font-family: "Apple Chancery", "cursive";
+    }
 
     .main-content{
-        display: grid;
-        height: 77%;
-        background-color: yellow;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr;
+        display: grid; 
+        background-image: url("../static/images/wood-background.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas: 
+        "hello hello hello cart"
+        "slideshow slideshow slideshow cart"
+        "slideshow slideshow slideshow cart"
+        "slideshow slideshow slideshow cart"
+        "orders orders reviews cart"
+        "orders orders reviews cart"
+        ;
         gap: 20px;
     }
 
     .content-item{
-
-        
         background-color: lightblue;
+    }
 
+    .intro-box{
+        grid-area: hello;
+        font-size: 25pt;
+    }
+
+    .cart{
+        grid-area: cart;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .cart>button{
+        font-size: 25px;
+        padding: 32px 15px;
+        width: 50%;
+    }
+
+    .slideshow{
+        grid-area: slideshow;
+    }
+
+    .orders-box{
+        grid-area: orders;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .reviews-box{
+        grid-area: reviews;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .reviews-box>button{
+        height: 25%;
+        width: 50%;
+        margin-bottom: 5%;
+        border: 2px solid goldenrod;
+        border-radius: 25px;
+        filter: drop-shadow(5px 5px 1rem black);
+    }
+    .reviews-box>button:hover{
+        background-color: black;
+        color: white;
     }
 
 #content-item{
@@ -46,21 +106,29 @@
 {% endblock %}
 
 {% block body %} 
-<div class = "main-content">
     <div class="content-item intro-box">
-        {Hello, {current_user.username}}
+        Hello, {current_user.username}
     </div>
     <div class="content-item cart">
         <h2>Cart</h2>
+        <button>Checkout</button>
     </div>
     <div class="content-item slideshow">
-        TEST
+        Slideshow
     </div>
     <div class="content-item orders-box">
-        TEST
+        <div>
+            <h4>Orders</h4>
+        </div>
+        <div>
+            <h4>Shipped</h4>
+        </div>
+        <div>
+            <h4>Pending</h4>
+        </div>
     </div>
     <div class="content-item reviews-box">
-        
+        Reviews
+        <button>Link!</button>
     </div>
-</div>
 {% endblock %}
