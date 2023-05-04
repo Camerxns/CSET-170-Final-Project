@@ -55,3 +55,7 @@ def home():
 @views.route("/profile")
 def profile():
     return render_template("profile.html")
+
+@views.route("/products_page")
+def products_page():
+    return render_template("product_page.html")

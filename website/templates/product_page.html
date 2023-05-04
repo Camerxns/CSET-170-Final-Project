@@ -1,0 +1,162 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url('https://www.example.com/background.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .container {
+        min-width: 800px;
+        width:fit-content;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .product-details{
+        padding: 30px;
+        margin: 20px;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+    }
+    
+    .product-info {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 30%;
+        padding: 10px;
+        background-color: #e6e6e6;
+        border-radius: 5px;
+    }
+    
+    h1 {
+        font-size: 48px;
+        margin-bottom: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        text-shadow: 2px 2px #ccc;
+    }
+    
+    img {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .product-info label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    
+    .product-info select {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+    
+    .product-desc {
+        line-height: 1.5;
+        margin-bottom: 20px;
+       max-width: 500px;
+    }
+    
+    .price {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        border: none;
+        text-shadow: 1px 1px #333;
+    }
+    
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .product-image{
+        height: 400px;
+        width: 400px;
+    }
+</style>
+
+{% extends 'base.html' %}
+{% block title %}
+Products_Page
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="product-image">
+        <h1>Product Name</h1>
+        <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Product Image">
+    </div>
+    <div class="product-details">
+       
+        <div class="product-desc">
+            <p>Greates Burger Around , no pickles yumyyyyyyy very yummy , yum yummmmmmmmmmmmmmmmm</p>
+        </div>
+        <div class="product-info">
+            <label for="vendor">Vendor:</label>
+            <select name="vendor" id="vendor">
+                <option value="vendor1">Vendor 1</option>
+                <option value="vendor2">Vendor 2</option>
+                <option value="vendor3">Vendor 3</option>
+            </select>
+        </div>
+        <div class="product-info">
+            <label for="quantity">Quantity:</label>
+            <select name="quantity" id="quantity">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="product-info">
+            <label for="color">Color:</label>
+            <select name="color" id="color">
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+                <option value="yellow">Yellow</option>
+            </select>
+        </div>
+        <div class="product-info">
+            <label for="size">Size:</label>
+            <select name="size" id="size">
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+                <option value="xlarge">X-Large</option>
+            </select>
+        </div>
+        <p class="price">$9.99</p>
+        <button class="btn add-to-cart">Add to Cart</button>
+    </div>
+</div>
+{% endblock %}
