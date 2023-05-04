@@ -34,8 +34,9 @@
         .header-item-2 {
             display: flex;
             align-items: center;
-            justify-content: space-around;
             flex: 1;
+            font-size: 16pt;
+            margin-left: 35px;
         }
 
         .header-item-2 a {
@@ -53,6 +54,7 @@
         .footer {
             display: flex;
             align-items: center;
+            flex-direction: column;
             text-align: center;
             position: fixed;
             bottom: 0;
@@ -60,7 +62,7 @@
             background-color: #80674f;
             color: white;
             height: 150px;
-            padding: 20px;
+            padding: 25px;
         }
 
         .footer-item-1 {
@@ -69,8 +71,8 @@
         }
 
         .footer-item-2 {
-            /* display: flex; */
-            /* gap: 20px; */
+            display: flex;
+            gap: 20px;
         }
 
         .fa {
@@ -81,13 +83,17 @@
         }
 
         .fa-facebook {
-            background-color: lightblue;
-            height: 85%;
+            background-color: darkblue;
         }
 
         .fa-twitter {
-            color: aqua;
+            background-color: aqua;
         }
+
+        .fa-instagram{
+            background: linear-gradient(pink 25%, orange );
+        }
+
     </style>
 </head>
 
@@ -104,7 +110,7 @@
         </div>
 
         <div class="header-item-3">
-            <h3>Hello, {{username}}</h3>
+            <h3>Hello, {{current_user.username}}</h3>
             <button name="logout">Log Out</button>
         </div>
     </header>
