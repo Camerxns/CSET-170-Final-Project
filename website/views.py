@@ -14,9 +14,8 @@ def index():
 
 
 @views.route("/home")
-# @login_required
+@login_required
 def home():
-    return render_template("base.html")
     match current_user.account_type:
         case "ADMIN":
             admin = Admin.query.filter_by(user_id=current_user.user_id).first()
