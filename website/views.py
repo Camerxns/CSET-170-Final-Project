@@ -10,9 +10,14 @@ views = Blueprint('views', __name__)
 def index():
     return render_template("index.html")
 
+@views.route("/base")        
+def base():
+    return render_template("base.html")
+
 @views.route("/home")
-@login_required
+# @login_required
 def home():
+    return render_template("home.html")
     match current_user.account_type:
         case "ADMIN":
             admin = Admin.query.filter_by(user_id=current_user.user_id).first()
@@ -47,6 +52,8 @@ def home():
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
+
+
 
 
 @views.route("/profile")

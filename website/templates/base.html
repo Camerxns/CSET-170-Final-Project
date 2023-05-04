@@ -8,14 +8,14 @@
     <title>{% block title %}The Comfort Zone{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             box-sizing: border-box;
         }
 
-        .header-section {
+        .header-section{
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -26,12 +26,12 @@
             padding: 0 20px;
         }
 
-        .header-item-1 {
+        .header-item-1{
             font-size: 32px;
             font-weight: bold;
         }
 
-        .header-item-2 {
+        .header-item-2{
             display: flex;
             align-items: center;
             flex: 1;
@@ -39,19 +39,19 @@
             margin-left: 35px;
         }
 
-        .header-item-2 a {
+        .header-item-2 a{
             color: white;
             text-decoration: none;
             margin: 0 20px;
         }
 
-        .header-item-3 {
+        .header-item-3{
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .footer {
+        footer{
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -65,35 +65,34 @@
             padding: 25px;
         }
 
-        .footer-item-1 {
+        .footer-item-1{
             flex: 1;
             text-align: center;
         }
 
-        .footer-item-2 {
+        .footer-item-2{
             display: flex;
             gap: 20px;
         }
 
-        .fa {
+        .fa{
             padding: 10px;
             font-size: 30px;
             text-decoration: none;
             color: white;
         }
 
-        .fa-facebook {
+        .fa-facebook{
             background-color: darkblue;
         }
 
-        .fa-twitter {
+        .fa-twitter{
             background-color: aqua;
         }
 
         .fa-instagram{
             background: linear-gradient(pink 25%, orange );
         }
-
     </style>
 </head>
 
@@ -116,10 +115,8 @@
     </header>
     {% endblock %}
 
-    <div class="main-content">
-        {% block body %}
-        {% endblock %}
-    </div>
+    {% block body %}
+    {% endblock %}
 
     {% block footer %}
     <footer class="footer">

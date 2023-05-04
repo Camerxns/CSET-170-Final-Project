@@ -1,76 +1,66 @@
-{% extends "base.html" %}
-
 <style>
     *{
-            margin:0;
-            padding: 0%;
-            height: 100%;
-            box-sizing: border-box;
-        }
-        body{
-            background-color: #dcd3bd;
-            min-height: 100vh;
-        }
-        #company-title{
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        }
-        
-        .main-content{
-            display: grid;
-            grid-template-columns: 250px 200px;
-            grid-template-rows: 200px;
-            gap: 20px;
-            justify-content: space-between;
-        }
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+
+    .main-content{
+        display: grid;
+        height: 77%;
+        background-color: yellow;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        gap: 20px;
+    }
+
+    .content-item{
 
         
+        background-color: lightblue;
 
-        .cart-column{
-            display: grid;
-            grid-template-columns: 200px;
-            background-color: lightblue;
-            justify-content: space-between;
-            text-align: center;
-        }
+    }
 
-        footer{
-            /* display: grid; */
-            height: auto;
-            width: auto;
-            /* grid-template-columns: repeat(2, 50%); */
-            /* gap: 50px; */
-            padding: 50px;
-            position: fixed;
-            min-height: 100vh;
-            background-color: #80674f;
-        }
-
-        .fa{
-            padding: 10px;
-            font-size: 30px;
-            text-decoration: none;
-            color: white;
-        }
-
-        .fa-facebook{
-            background-color: lightblue;
-            height: 85%;
-        }
-
-        .fa-twitter{
-            color: aqua;
-        }
+#content-item{
+    font-size: 50pt;
+}
 </style>
-{% block body %}
-<div class="main-content">
-    <div class="greeting-box">
-        Hello, {username}
+{% extends "base.html" %}
+
+{% block header %}
+<header class="header-section">
+    <div class="header-item-1">
+        <h2 id="company-title">The Comfort Zone</h2>
     </div>
-    <div class="cart-column">
-        <div>
-            <h2>Cart</h2>
-        </div>
-            <button style="color: blue;">Submit</button>
+    <div class="header-item-2">
+        <a href="">Store</a>
+        <a href="">Users</a>
+        <a href="">About</a>
+    </div>
+
+    <div class="header-item-3">
+        <button name="logout">Log Out</button>
+    </div>
+</header>
+{% endblock %}
+
+{% block body %} 
+<div class = "main-content">
+    <div class="content-item intro-box">
+        {Hello, {current_user.username}}
+    </div>
+    <div class="content-item cart">
+        <h2>Cart</h2>
+    </div>
+    <div class="content-item slideshow">
+        TEST
+    </div>
+    <div class="content-item orders-box">
+        TEST
+    </div>
+    <div class="content-item reviews-box">
+        
     </div>
 </div>
 {% endblock %}
