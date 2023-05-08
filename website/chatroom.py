@@ -1,11 +1,30 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import join_room, leave_room, send, SocketIO
 import random
-from string import ascii_uppercase
+from flask_sqlalchemy import SQLAlchemy
+from models import ChatMessages
+from environs import Env
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "hjhjsdahhds"
 socketio = SocketIO(app)
+
+
+
+env = Env()
+env.read_env()
+
+db = SQLAlchemy()
+MYSQL_USERNAME = env("MYSQL_USERNAME")
+MYSQL_PASSWORD = env("MYSQL_PASSWORD")
+MYSQL_HOST = env("MYSQL_HOST")
+MYSQL_PORT = env.int("MYSQL_PORT")
+MYSQL_DATABASE = "CSET180_FINAL_PROJECT"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
+db.init_app(app)
+
 
 rooms = {}
 
@@ -14,7 +33,7 @@ def generate_unique_code(length):
     while True:
         code = ""
         for _ in range(length):
-            code += random.choice(ascii_uppercase)
+            code += str(random.randint(0, 9))
 
         if code not in rooms:
             break
@@ -104,6 +123,22 @@ def disconnect():
 
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
+
+@app.route("/message", methods=["POST"])
+def message():
+    name = request.form.get("name")
+    message = request.form.get("message")
+    room = session.get("room")
+
+    if not name or not message or not room:
+        return redirect(url_for("room"))
+
+    chat_message = ChatMessages(user_id=name, message=message, chat_id=room)
+    db.session.add(chat_message)
+    db.session.commit()
+    print('Message comitted')
+
+    return redirect(url_for("room"))
 
 
 if __name__ == "__main__":

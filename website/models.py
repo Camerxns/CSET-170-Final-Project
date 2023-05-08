@@ -69,25 +69,35 @@ class Admin(Base, UserMixin):
         return self.user.user_id
 
 
-class ChatMessage(Base):
-    __tablename__ = 'Chat_Messages'
+# class ChatMessage(Base):
+#     __tablename__ = 'Chat_Messages'
 
+#     chat_message_id = Column(Integer, primary_key=True, unique=True)
+#     chat_id = Column(ForeignKey('Chats.chat_id'), nullable=False, index=True)
+#     user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
+#     message_date = Column(DateTime, nullable=False,
+#                           server_default=text("CURRENT_TIMESTAMP"))
+#     message = Column(Text, nullable=False)
+
+#     chat = relationship('Chat')
+#     user = relationship('User')
+
+
+# t_Chat_Users = Table(
+#     'Chat_Users', metadata,
+#     Column('chat_id', ForeignKey('Chats.chat_id'), nullable=False, index=True),
+#     Column('user_id', ForeignKey('Users.user_id'), nullable=False, index=True)
+# )
+
+class ChatMessages(Base):
+    __tablename__ = 'Chat_Messages'
     chat_message_id = Column(Integer, primary_key=True, unique=True)
-    chat_id = Column(ForeignKey('Chats.chat_id'), nullable=False, index=True)
-    user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
+    chat_id = Column(Integer, nullable=False, index=True)
+    user_id = Column(Text, nullable=False, index=True)
     message_date = Column(DateTime, nullable=False,
                           server_default=text("CURRENT_TIMESTAMP"))
     message = Column(Text, nullable=False)
 
-    chat = relationship('Chat')
-    user = relationship('User')
-
-
-t_Chat_Users = Table(
-    'Chat_Users', metadata,
-    Column('chat_id', ForeignKey('Chats.chat_id'), nullable=False, index=True),
-    Column('user_id', ForeignKey('Users.user_id'), nullable=False, index=True)
-)
 
 
 class Complaint(Base):
