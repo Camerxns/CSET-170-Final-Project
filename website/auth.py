@@ -34,7 +34,7 @@ def logout():
     return redirect(url_for("views.index"))
 
 
-@auth.route("/register", methods=["GET", "POST"])
+@auth.route("/signup", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form.get("username")
@@ -52,19 +52,20 @@ def register():
                 flash("Email already taken")
             else:
                 new_user = User(username=username, name=name,
-                                email=email, password=password)
+                                email=email, password=generate_password_hash(password))
                 db.session.add(new_user)
                 db.session.commit()
+                print(user_type)
                 match user_type:
-                    case "Customer":
+                    case "customer":
                         new_customer = Customer(user_id=new_user.user_id)
                         db.session.add(new_customer)
                         db.session.commit()
-                    case "Vendor":
+                    case "vendor":
                         new_vendor = Vendor(user_id=new_user.user_id)
                         db.session.add(new_vendor)
                         db.session.commit()
-                    case "Admin":
+                    case "admin":
                         new_admin = Admin(user_id=new_user.user_id)
                         db.session.add(new_admin)
                         db.session.commit()
@@ -73,4 +74,4 @@ def register():
                 login_user(new_user, remember=True)
                 return redirect(url_for("views.home"))
 
-    return render_template("register.html")
+    return render_template("signup.html")
