@@ -7,27 +7,28 @@
 Shop
 {% endblock %}
 {% block body %}
-<div class="container">
-    <h1>Welcome to the shop page!</h1>
-    <hr>
-    <div class="row">
-      {% for product in products %}
-        <div class="col-md-4">
-          <div class="card mb-4 box-shadow">
-            <img class="card-img-top" src="{{ product.product_image }}" alt="{{ product.title }}">
-            <div class="card-body">
-              <h4 class="card-title">{{ product.title }}</h4>
-              <p class="card-text">{{ product.category }}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View details</button>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="category-selection">
+  {% for category in categories %}
+  {% endfor %}
+</div>
+{% for product in products %}
+<div class="">
+  <div class="">
+    <img class="" src="{{ product.product_image }}" alt="{{ product.title }}">
+    <div class="">
+      <h4 class="">{{ product.title }}</h4>
+      <p class="">{{ product.category }}</p>
+      <div class="">
+        <div class="">
+          <button type="button" class="">Add to cart</button>
+          <button type="button" class="">View details</button>
         </div>
-      {% endfor %}
+      </div>
     </div>
   </div>
+</div>
+{% endfor %}
+{% for i in range(50) %}
+<h1>{{ i }}</h1>
+{% endfor %}
 {% endblock %}

@@ -4,11 +4,7 @@ from flask_login import UserMixin
 from . import db
 
 
-<<<<<<< HEAD
-Base = declarative_base()
-=======
 Base = db.Model
->>>>>>> main
 metadata = Base.metadata
 
 
@@ -43,13 +39,6 @@ class User(Base, UserMixin):
         admin = Admin.query.filter_by(user_id=self.user_id).first()
         if admin:
             return "ADMIN"
-<<<<<<< HEAD
-        elif vendor:
-            return "VENDOR"
-        elif customer:
-            return "CUSTOMER"
-=======
->>>>>>> main
         else:
             vendor = Vendor.query.filter_by(user_id=self.user_id).first()
             if vendor:
