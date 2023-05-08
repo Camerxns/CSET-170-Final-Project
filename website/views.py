@@ -4,10 +4,6 @@ from sqlalchemy import text, create_engine
 from .models import *
 from . import db
 
-conn_str = "mysql://root:Brody678@localhost/cset_180_final_project"
-engine = create_engine(conn_str, echo=True)
-conn = engine.connect()
-
 views = Blueprint('views', __name__)
 
 
@@ -20,7 +16,6 @@ def base():
     return render_template("base.html")
 
 @views.route("/home")
-
 
 # @login_required
 
