@@ -57,3 +57,8 @@ def home():
 def shop():
     items = Product.query.all()
     return render_template("shop.html", items=items)
+
+
+@views.route("/profile")
+def profile():
+    return render_template("profile.html")

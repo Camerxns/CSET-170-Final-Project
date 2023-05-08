@@ -8,27 +8,71 @@
     <title>{% block title %}The Comfort Zone{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
         .header-section {
-            display: grid;
-            height: 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: sticky;
-            background-color: grey;
-            grid-template-columns: repeat(4, auto);
-            grid-template-rows: repeat(1, 20px);
+            height: 70px;
+            background-color: #80674f;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .header-item-1 {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .header-item-2 {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            font-size: 16pt;
+            margin-left: 35px;
+        }
+
+        .header-item-2 a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
         }
 
         .header-item-3 {
-            grid-column: -1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
-        footer {
-            display: grid;
-            height: auto;
-            width: auto;
-            grid-template-columns: repeat(2, 50%);
-            gap: 50px;
-            padding: 50px;
+        .footer {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
             background-color: #80674f;
+            color: white;
+            height: 150px;
+            padding: 25px;
+        }
+
+        .footer-item-1 {
+            flex: 1;
+            text-align: center;
+        }
+
+        .footer-item-2 {
+            display: flex;
+            gap: 20px;
         }
 
         .fa {
@@ -39,13 +83,17 @@
         }
 
         .fa-facebook {
-            background-color: lightblue;
-            height: 85%;
+            background-color: darkblue;
         }
 
         .fa-twitter {
-            color: aqua;
+            background-color: aqua;
         }
+
+        .fa-instagram{
+            background: linear-gradient(pink 25%, orange );
+        }
+
     </style>
 </head>
 
@@ -62,22 +110,24 @@
         </div>
 
         <div class="header-item-3">
-            <h3>Hello, {{username}}</h3>
+            <h3>Hello, {{current_user.username}}</h3>
             <button name="logout">Log Out</button>
         </div>
     </header>
     {% endblock %}
 
-    {% block body %}
-    {% endblock %}
+    <div class="main-content">
+        {% block body %}
+        {% endblock %}
+    </div>
 
     {% block footer %}
-    <footer>
-        <div>
-            <h1>Footer</h1>
+    <footer class="footer">
+        <div class="footer-item-1">
+            <h2>Footer</h2>
             <p>Copyright 2023, All rights reserved.</p>
         </div>
-        <div>
+        <div class="footer-item-2">
             <a href="#" class="fa fa-facebook"></a>
             <a href="#" class="fa fa-twitter"></a>
             <a href="#" class="fa fa-instagram"></a>
