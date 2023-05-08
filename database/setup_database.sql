@@ -29,6 +29,9 @@ CREATE TABLE IF NOT EXISTS Users(
     PRIMARY KEY (user_id)
 );
 
+insert into users (name, username, email, password)
+VALUES ("Gabriel", "gabe_is_cool23", "gabrielnewman23@gmail.com", "q0gf0qwugyu");
+
 CREATE TABLE IF NOT EXISTS Admins (
 	admin_id INT NOT NULL UNIQUE AUTO_INCREMENT,
 	user_id INT UNIQUE NOT NULL,
@@ -50,14 +53,24 @@ CREATE TABLE IF NOT EXISTS Customers (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
+-- select * from users;
+insert into customers(user_id) values(1);
+
+select * from users join customers;
+
 CREATE TABLE IF NOT EXISTS Products (
 	product_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     title VARCHAR(40) NOT NULL,
     description TEXT NOT NULL,
     product_image VARCHAR(255) NOT NULL,
-    category INT NOT NULL,
+    category VARCHAR(20) NOT NULL,
     PRIMARY KEY(product_id)
 );
+
+insert into products(title, description, product_image, category)
+VALUES("Country Rustic Distressed Wood Bedframe1",
+		"This clean design met with a retro style turns country into country sheek.  Featured color:  Vintage Brown. No box spring required. ",
+        "https://i.pinimg.com/originals/2e/ad/99/2ead99a8db781a700a5d1afb7e402e19.jpg", "Bedframes");
 
 CREATE TABLE IF NOT EXISTS Vendor_Products (
 	vendor_product_id INT NOT NULL UNIQUE AUTO_INCREMENT,
@@ -128,6 +141,12 @@ CREATE TABLE IF NOT EXISTS Carts (
     FOREIGN KEY(customer_id) REFERENCES Customers(customer_id)
 );
 
+-- select * from users natural join customers;
+
+insert into carts (customer_id) values(1);
+
+select * from users natural join customers natural join carts;
+
 CREATE TABLE IF NOT EXISTS Cart_Items(
 	cart_item_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     cart_id INT NOT NULL,
@@ -139,6 +158,15 @@ CREATE TABLE IF NOT EXISTS Cart_Items(
     FOREIGN KEY(cart_id) REFERENCES Carts(cart_id),
     FOREIGN KEY(product_id) REFERENCES Products(product_id)
 );
+
+select * from products;
+
+insert into cart_items(cart_id, product_id, qty, color, size)
+values(1, 1, 1, "Vintage Brown", "King");
+
+-- select * from users natural join customers natural join carts natural join cart_items;
+
+-- select * from carts join cart_items join products using(product_id) where customer_id = current_user.user_id;
 
 CREATE TABLE IF NOT EXISTS Orders(
 	order_id INT NOT NULL UNIQUE AUTO_INCREMENT,

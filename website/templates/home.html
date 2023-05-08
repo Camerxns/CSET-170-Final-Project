@@ -51,6 +51,10 @@
         width: 50%;
     }
 
+    .cart-items{
+        background-color: lightblue;
+    }
+
     .slideshow{
         grid-area: slideshow;
     }
@@ -107,10 +111,13 @@
 
 {% block body %} 
     <div class="content-item intro-box">
-        Hello, {current_user.username}
+        Hello, {{ current_user.username }}
     </div>
     <div class="content-item cart">
         <h2>Cart</h2>
+        <div class="cart-items">
+            {{ cart_items }}          
+        </div>
         <button>Checkout</button>
     </div>
     <div class="content-item slideshow">
@@ -128,7 +135,7 @@
         </div>
     </div>
     <div class="content-item reviews-box">
-        Reviews
+        <h4>Reviews</h4>
         <button>Link!</button>
     </div>
 {% endblock %}

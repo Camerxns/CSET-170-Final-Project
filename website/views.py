@@ -1,10 +1,15 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from flask_login import login_required
-from sqlalchemy import text
+from flask_login import login_required, current_user
+from sqlalchemy import text, create_engine
 from .models import *
 from . import db
 
+conn_str = "mysql://root:Brody678@localhost/cset_180_final_project"
+engine = create_engine(conn_str, echo=True)
+conn = engine.connect()
+
 views = Blueprint('views', __name__)
+
 
 @views.route('/')
 def index():
@@ -15,9 +20,15 @@ def base():
     return render_template("base.html")
 
 @views.route("/home")
+
+
 # @login_required
+
 def home():
-    return render_template("home.html")
+    t = conn.execute(text(f"SELECT * from carts join cart_items join products using(product_id) where customer_id = {current_user.user_id};"))
+    rows = t.fetchall()
+    return render_template("home.html", rows)
+    
     match current_user.account_type:
         case "ADMIN":
             admin = Admin.query.filter_by(user_id=current_user.user_id).first()
