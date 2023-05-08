@@ -25,11 +25,7 @@ def base():
 # @login_required
 
 def home():
-    t = conn.execute(text(f"SELECT * from carts join cart_items join products using(product_id) where customer_id = {current_user.user_id};"))
-    rows = t.fetchall()
-    return render_template("home.html", rows)
-    
-    match current_user.account_type:
+    match current_user.account_type():
         case "ADMIN":
             admin = Admin.query.filter_by(user_id=current_user.user_id).first()
 

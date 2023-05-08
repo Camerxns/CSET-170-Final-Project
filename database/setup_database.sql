@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Users(
     name VARCHAR(60) NOT NULL,
     username VARCHAR(20) NOT NULL,
     email VARCHAR(40) NOT NULL UNIQUE,
-    password VARCHAR(40) NOT NULL,
+    password VARCHAR(256) NOT NULL,
     PRIMARY KEY (user_id)
 );
 

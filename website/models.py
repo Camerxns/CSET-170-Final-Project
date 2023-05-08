@@ -1,15 +1,10 @@
 from sqlalchemy import CheckConstraint, Column, DECIMAL, DateTime, ForeignKey, Integer, String, Table, Text, text
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
+from . import db
 
 
-ADMIN_ACCOUNT = "ADMIN"
-VENDOR_ACCOUNT = "VENDOR"
-CUSTOMER_ACCOUNT = "CUSTOMER"
-
-
-Base = declarative_base()
+Base = db.Model
 metadata = Base.metadata
 
 
@@ -28,7 +23,7 @@ class Product(Base):
     title = Column(String(40), nullable=False)
     description = Column(Text, nullable=False)
     product_image = Column(String(255), nullable=False)
-    category = Column(Integer, nullable=False)
+    category = Column(String(20), nullable=False)
 
 
 class User(Base, UserMixin):
@@ -37,36 +32,36 @@ class User(Base, UserMixin):
     user_id = Column(Integer, primary_key=True, unique=True)
     name = Column(String(60), nullable=False)
     username = Column(String(20), nullable=False)
-    email = Column(String(40), nullable=False, unique=True)
+    email = Column(String(256), nullable=False, unique=True)
     password = Column(String(40), nullable=False)
 
-    @property
     def account_type(self):
         admin = Admin.query.filter_by(user_id=self.user_id).first()
-        vendor = Vendor.query.filter_by(user_id=self.user_id).first()
-        customer = Customer.query.filter_by(user_id=self.user_id).first()
-
         if admin:
-            return ADMIN_ACCOUNT
-        elif vendor:
-            return VENDOR_ACCOUNT
-        elif customer:
-            return CUSTOMER_ACCOUNT
+            return "ADMIN"
         else:
-            return None
+            vendor = Vendor.query.filter_by(user_id=self.user_id).first()
+            if vendor:
+                return "VENDOR"
+            else:
+                customer = Customer.query.filter_by(user_id=self.user_id).first()
+                if customer:
+                    return "CUSTOMER"
+                else:
+                    return None
+    
+    @property
+    def id(self):
+        return self.user_id
 
-
-class Admin(Base, UserMixin):
+    
+class Admin(Base):
     __tablename__ = 'Admins'
 
     admin_id = Column(Integer, primary_key=True, unique=True)
     user_id = Column(ForeignKey('Users.user_id'), nullable=False, unique=True)
 
     user = relationship('User')
-
-    @property
-    def id(self):
-        return self.user.user_id
 
 
 class ChatMessage(Base):
@@ -110,17 +105,13 @@ class Complaint(Base):
         'User', primaryjoin='Complaint.user_id == User.user_id')
 
 
-class Customer(Base, UserMixin):
+class Customer(Base):
     __tablename__ = 'Customers'
 
     customer_id = Column(Integer, primary_key=True, unique=True)
     user_id = Column(ForeignKey('Users.user_id'), nullable=False, unique=True)
 
     user = relationship('User')
-
-    @property
-    def id(self):
-        return self.user.user_id
 
 
 class Review(Base):
@@ -143,17 +134,13 @@ class Review(Base):
     user = relationship('User')
 
 
-class Vendor(Base, UserMixin):
+class Vendor(Base):
     __tablename__ = 'Vendors'
 
     vendor_id = Column(Integer, primary_key=True, unique=True)
     user_id = Column(ForeignKey('Users.user_id'), nullable=False, unique=True)
 
     user = relationship('User')
-
-    @property
-    def id(self):
-        return self.user.user_id
 
 
 class Cart(Base):
