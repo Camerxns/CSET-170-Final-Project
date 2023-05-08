@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+
 
 <style>
   /* Bordered form */
@@ -76,27 +75,20 @@
     }
   }
 
-  header {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)),
-    url("{{ url_for('static', filename='images/login.gif') }}");
-    background-size: 700px;
-    height: 45vh;
-  }
+  
 </style>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-</head>
 
-<body>
-  <header>
-  </header>
+{% extends 'base.html' %}
+{% block title %}
+Login
+{% endblock %}
+
+{% block body %}
+
   <form action="/login" method="post">
     <div class="imgcontainer">
-      <h1>The Comfort Zone</h1>
+ 
     </div>
 
     <div class="container">
@@ -113,7 +105,4 @@
       <a href="/"> <button type="button" class="cancelbtn">Cancel</button></a>
     </div>
   </form>
-
-</body>
-
-</html>
+  {% endblock %}
