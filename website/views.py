@@ -56,6 +56,14 @@ def home():
 def profile():
     return render_template("profile.html")
 
-@views.route("/products_page")
-def products_page():
-    return render_template("product_page.html")
+@views.route("/shop/product/<int:product_id>")
+def products_page(product_id):
+    product= db.session.execute(text(f"select title, description, product_image from Products where product_id={product_id}")).first()
+    title=product[0]
+    description=product[1]
+    product_image=product[2]
+
+    vendors= db.session.execute(text(f"select name, vendor_id from Users join Vendors using (user_id) where user_id in (select user_id from Vendors where vendor_id in (select vendor_id from Vendor_Products where product_id = {product_id}))")).all()
+    print(vendors)
+    return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors)
+    

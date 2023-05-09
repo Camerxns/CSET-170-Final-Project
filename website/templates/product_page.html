@@ -111,20 +111,20 @@ Products_Page
 {% block body %}
 <div class="container">
     <div class="product-image">
-        <h1>Product Name</h1>
+        <h1>{{ title }}</h1>
         <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Product Image">
     </div>
     <div class="product-details">
        
         <div class="product-desc">
-            <p>Greates Burger Around , no pickles yumyyyyyyy very yummy , yum yummmmmmmmmmmmmmmmm</p>
+            <p>{{ description }}</p>
         </div>
         <div class="product-info">
             <label for="vendor">Vendor:</label>
             <select name="vendor" id="vendor">
-                <option value="vendor1">Vendor 1</option>
-                <option value="vendor2">Vendor 2</option>
-                <option value="vendor3">Vendor 3</option>
+                {% for vendor in vendors %}
+                <option value="{{ vendor[1] }}">{{ vendor[0] }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="product-info">
