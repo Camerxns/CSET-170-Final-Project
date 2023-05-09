@@ -222,12 +222,30 @@ INSERT INTO Vendor_Products (product_id, vendor_id, qty, price, warranty_length)
     ((SELECT product_id FROM Products WHERE title="Framework Laptop"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="breads23@gmail.com")), 4, 32.66, NULL),
     ((SELECT product_id FROM Products WHERE title="Couch"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="breads23@gmail.com")), 7, 65.23, NULL);
 
+DESC Vendor_Product_Colors;
 
+SELECT * FROM Vendor_Products;
 
+INSERT INTO Vendor_Product_Colors (vendor_product_id, color) VALUES
+	(1, "Black"),
+    (1, "Blue"),
+    (1, "Orange"),
+    (3, "Orange"),
+    (3, "Black"),
+    (2, "Silver"),
+	(2, "Rose Gold");
+    
+DESC Vendor_Product_Sizes;
+INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
+	(1, '13\"'),
+	(1, '15\"'),
+    (1, '17\"'),
+	(2, '15\"'),
+    (2, '17\"'),
+    (4, 'Large'),
+    (4, 'Small');
 
-
-
-
+SELECT color FROM Vendor_Product_Colors WHERE vendor_product_id=(SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id=1 AND product_id=1);
 
 
 
