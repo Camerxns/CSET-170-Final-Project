@@ -10,7 +10,7 @@
     
     .container {
         min-width: 800px;
-        width:fit-content;
+        width: fit-content;
         margin: 0 auto;
         padding: 20px;
         background-color: #fff;
@@ -19,8 +19,6 @@
         margin-top: 50px;
         margin-bottom: 50px;
         display: flex;
-        flex-direction: row;
-        align-items: flex-start;
         justify-content: space-between;
     }
 
@@ -35,25 +33,28 @@
         margin-bottom: 20px;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        width: 30%;
+        width: fit-content;
         padding: 10px;
-        background-color: #e6e6e6;
         border-radius: 5px;
     }
+
+    .product-title-img {
+        display: block;
+        max-width: 500px;
+    }
     
-    h1 {
-        font-size: 48px;
+    .product-title {
+        font-size: 32pt;
         margin-bottom: 10px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         color: #333;
         text-shadow: 2px 2px #ccc;
     }
     
-    img {
-        max-width: 100%;
-        margin-bottom: 20px;
+    .product-img {
+        display: block;
+        width: 400px;
+        height: 400px;
     }
     
     .product-info label {
@@ -110,9 +111,9 @@ Products_Page
 
 {% block body %}
 <div class="container">
-    <div class="product-image">
-        <h1>{{ title }}</h1>
-        <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Product Image">
+    <div class="product-title-img">
+        <h1 class="product-title">{{ title }}</h1>
+        <img class="product-img" src="{{ url_for('static', filename='images/1.jpg') }}" alt="Product Image">
     </div>
     <div class="product-details">
        
@@ -123,7 +124,11 @@ Products_Page
             <label for="vendor">Vendor:</label>
             <select name="vendor" id="vendor">
                 {% for vendor in vendors %}
+                {% if vendor[1] | int == default_vendor | int %}
+                <option value="{{ vendor[1] }}" selected>{{ vendor[0] }}</option>
+                {% else %}
                 <option value="{{ vendor[1] }}">{{ vendor[0] }}</option>
+                {% endif %}
                 {% endfor %}
             </select>
         </div>
@@ -137,26 +142,42 @@ Products_Page
                 <option value="5">5</option>
             </select>
         </div>
+        {% if colors | length > 0 %}
         <div class="product-info">
             <label for="color">Color:</label>
             <select name="color" id="color">
-                <option value="red">Red</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="yellow">Yellow</option>
+                {% for color in colors %}
+                <option value="{{ color }}">{{ color }}</option>
+                {% endfor %}
             </select>
         </div>
+        {% endif %}
+        {% if sizes | length > 0 %}
         <div class="product-info">
             <label for="size">Size:</label>
             <select name="size" id="size">
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-                <option value="xlarge">X-Large</option>
+                {% for size in sizes %}
+                <option value="{{ size }}">{{ size }}</option>
+                {% endfor %}
             </select>
         </div>
-        <p class="price">$9.99</p>
+        {% endif %}
+        <p class="price">${{ price[0] }}</p>
         <button class="btn add-to-cart">Add to Cart</button>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#vendor").on("change", function() {
+        let queryParams = new URLSearchParams(window.location.search);
+        let newVendorId = $("#vendor").val();
+
+        queryParams.set("vendor_id", newVendorId);
+
+        let newUrl = new URL(window.location.origin + window.location.pathname + "?" + queryParams.toString())
+        window.location.href = newUrl;
+    });
+</script>
 {% endblock %}

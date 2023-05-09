@@ -58,12 +58,25 @@ def profile():
 
 @views.route("/shop/product/<int:product_id>")
 def products_page(product_id):
+    vendor_id = request.args.get("vendor_id")
+    
     product= db.session.execute(text(f"select title, description, product_image from Products where product_id={product_id}")).first()
     title=product[0]
     description=product[1]
     product_image=product[2]
 
-    vendors= db.session.execute(text(f"select name, vendor_id from Users join Vendors using (user_id) where user_id in (select user_id from Vendors where vendor_id in (select vendor_id from Vendor_Products where product_id = {product_id}))")).all()
-    print(vendors)
-    return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors)
+    vendors = db.session.execute(text(f"select name, vendor_id from Users join Vendors using (user_id) where user_id in (select user_id from Vendors where vendor_id in (select vendor_id from Vendor_Products where product_id = {product_id}))")).all()
+
+    if not vendor_id:
+        vendor_id = vendors[0][1]
+    
+    colors = db.session.execute(text(f"SELECT color FROM Vendor_Product_Colors WHERE vendor_product_id=(SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id={vendor_id} AND product_id={product_id})")).all()
+    sizes = db.session.execute(text(f"SELECT size FROM Vendor_Product_Sizes WHERE vendor_product_id=(SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id={vendor_id} AND product_id={product_id})")).all()
+    
+    colors = [color[0] for color in colors]
+    sizes = [size[0] for size in sizes]
+
+    price = db.session.execute(text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id=(SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id={vendor_id} AND product_id={product_id})")).first()
+
+    return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price)
     
