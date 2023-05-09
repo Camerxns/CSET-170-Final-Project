@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+
 
 <style>
-  * {
-    box-sizing: border-box
-  }
-
+  
   /* Full-width input fields */
   input[type=text],
   input[type=password],
@@ -84,29 +80,15 @@
     margin: 24px 0 12px 0;
   }
 
-  header {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)),
-    url("{{ url_for('static', filename='images/signup.gif') }}");
-    /* background-size: 1042px; */
-    background-size: 300px cover;
-    height: 60vh;
-  }
+  
 </style>
+{% extends 'base.html' %}
+{% block title %}
+Signup
+{% endblock %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
-</head>
-
-<body>
-  <header>
-  </header>
+{% block body %}
   <form action="/signup" method="POST" style="border: 1px solid #ccc;">
-    <div class="Title">
-      <h1>The Comfort Zone</h1>
-    </div>
     <div class="container">
       <h1>Sign Up</h1>
       <hr>
@@ -142,5 +124,4 @@
       </div>
     </div>
   </form>
-
-</html>
+  {% endblock %}
