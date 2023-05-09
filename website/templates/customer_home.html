@@ -13,8 +13,6 @@
         display: grid; 
         background-image: url("../static/images/wood-background.jpg");
         background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: auto auto auto auto;
         grid-template-areas: 
@@ -23,8 +21,7 @@
         "slideshow slideshow slideshow cart"
         "slideshow slideshow slideshow cart"
         "orders orders reviews cart"
-        "orders orders reviews cart"
-        ;
+        "orders orders reviews cart";
         gap: 20px;
     }
 
@@ -46,14 +43,42 @@
     }
 
     .cart>button{
-        font-size: 25px;
-        padding: 32px 15px;
+        height: 100px;
         width: 50%;
+        border: 2px solid goldenrod;
+        font-size: 20pt;
+        filter: drop-shadow(5px 5px 1rem black);
+    }
+
+    .cart>button:hover{
+        cursor: pointer;
+        background-color: black;
+        color: gold;
+        
     }
 
     .cart-items{
-        background-color: lightblue;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: lightyellow;
     }
+
+    .cart-details{
+        display: flex;
+        height: 80px;
+        width: 100%;
+        overflow-wrap: break-word;
+        justify-content: flex-start;
+        border: 2px solid gray;
+    }
+
+    .cart-item-image{
+        height: 75px;
+        width: 75px;
+        border-radius: 50% ;
+    }
+
 
     .slideshow{
         grid-area: slideshow;
@@ -74,23 +99,27 @@
     }
 
     .reviews-box>button{
-        height: 25%;
+        height: 100px;
         width: 50%;
         margin-bottom: 5%;
         border: 2px solid goldenrod;
         border-radius: 25px;
+        font-size: 20pt;
         filter: drop-shadow(5px 5px 1rem black);
     }
     .reviews-box>button:hover{
         background-color: black;
-        color: white;
+        color: gold;
+        cursor: pointer;
     }
-
-#content-item{
-    font-size: 50pt;
-}
+    
+    #content-item{
+        font-size: 50pt;
+    }
 </style>
+
 {% extends "base.html" %}
+
 
 {% block header %}
 <header class="header-section">
@@ -104,7 +133,9 @@
     </div>
 
     <div class="header-item-3">
-        <button name="logout">Log Out</button>
+        <form action="/logout" method="post">
+            <input type="submit" value = "logout">
+        </form>
     </div>
 </header>
 {% endblock %}
@@ -116,7 +147,17 @@
     <div class="content-item cart">
         <h2>Cart</h2>
         <div class="cart-items">
-            {{ cart_items }}          
+            {% for item in cart_items %}
+            <div class="cart-details">
+                <div>
+                    <h3>{{ item[0] }}</h3>
+                </div>
+                <div>
+                    <img src="{{ item[2] }}" class="cart-item-image" alt="item-image"> 
+                </div>
+            </div>
+            {% endfor %}
+
         </div>
         <button>Checkout</button>
     </div>
@@ -136,6 +177,6 @@
     </div>
     <div class="content-item reviews-box">
         <h4>Reviews</h4>
-        <button>Link!</button>
+        <button>View</button>
     </div>
 {% endblock %}
