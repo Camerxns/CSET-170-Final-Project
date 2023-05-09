@@ -53,11 +53,13 @@ def home():
 
 
 @views.route("/shop")
-# @login_required
+@login_required
 def shop():
-    # products = Product.query.all()
-    #  products= products
-    return render_template("shop.html")
+    categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products")).all()]
+    categories.insert(0, "All")
+    
+    products = Product.query.all()
+    return render_template("shop.html", categories=categories, products=products)
 
 
 @views.route("/profile")

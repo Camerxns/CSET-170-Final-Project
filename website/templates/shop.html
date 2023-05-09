@@ -1,6 +1,31 @@
-
 <style>
+  .main-content {
+    padding: 15px;
+  }
+  
+  .category-selection {
+    background-color: lightblue;
+    padding: 5px;
+    margin-right: 15px;
+    float: left;
+    min-width: fit-content;
+    width: 200px;
+    height: inherit;
+  }
+  
+  .category {
+    padding: 5px;
+    margin-left: 10px;
+  }
 
+  .product-card {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    padding: 10px;
+    background-color: gray;
+  }
+  
 </style>
 {% extends 'base.html' %}
 {% block title %}
@@ -9,26 +34,13 @@ Shop
 {% block body %}
 <div class="category-selection">
   {% for category in categories %}
+  <p><a class="category" href="/shop?category={{ category | lower }}">{{ category }}</a></p>
   {% endfor %}
 </div>
 {% for product in products %}
-<div class="">
-  <div class="">
-    <img class="" src="{{ product.product_image }}" alt="{{ product.title }}">
-    <div class="">
-      <h4 class="">{{ product.title }}</h4>
-      <p class="">{{ product.category }}</p>
-      <div class="">
-        <div class="">
-          <button type="button" class="">Add to cart</button>
-          <button type="button" class="">View details</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endfor %}
-{% for i in range(50) %}
-<h1>{{ i }}</h1>
+<a class="product-card" href="/shop/product/{{ product.product_id }}">
+  <img class="product-img" src="{{ product.product_image }}" alt="pic">
+  <h2 class="product-title">{{ product.title }}</h2>
+</a>
 {% endfor %}
 {% endblock %}
