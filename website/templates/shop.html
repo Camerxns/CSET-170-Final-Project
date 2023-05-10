@@ -167,12 +167,12 @@ Shop
 </div>
 <div class="product-grid">
   {% for product in products %}
-  <a class="product-card" href="/shop/product/{{ product.product_id }}">
+  <a class="product-card" href="/shop/product/{{ product[0] }}">
     <div class="product-img-container">
-      <img class="product-img" src="{{ product.product_image }}" alt="pic">
+      <img class="product-img" src="{{ product[2] }}" alt="pic">
     </div>
     <div class="product-details">
-      <h2 class="product-title">{{ product.title }}</h2>
+      <h2 class="product-title">{{ product[1] }}</h2>
     </div>
   </a>
 {% endfor %}

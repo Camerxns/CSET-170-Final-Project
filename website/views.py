@@ -58,15 +58,18 @@ def home():
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
+        
+
 
 
 @views.route("/shop")
 @login_required
 def shop():
-    categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products")).all()]
+    categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
     categories.insert(0, "All")
     
-    products = Product.query.all()
+    # products = Product.query.all()
+    products = db.session.execute(text(f"select product_id, title, product_image from Products WHERE product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
     return render_template("shop.html", categories=categories, products=products)
 
 
@@ -97,4 +100,3 @@ def products_page(product_id):
     price = db.session.execute(text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id=(SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id={vendor_id} AND product_id={product_id})")).first()
 
     return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price)
-    
