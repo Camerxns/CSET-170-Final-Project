@@ -48,9 +48,9 @@ Profile
       <h1>Hello, {{current_user.name}}!</h1>
       <ul>
         <li><strong>Name:</strong> {{ current_user.name }}</li>
-        <li><strong>Username:</strong> {{current_user.username}}</ul>li>
+        <li><strong>Username:</strong> {{current_user.username}}</ul></li>
         <li><strong>Email:</strong> {{ current_user.email }}</li>
-        <li><strong>Account Type:</strong> {{ current_user.account_type }}</li>
+        <li><strong>Account Type:</strong> {{ current_user.account_type() }}</li>
       </ul>
     </div>
   </section>

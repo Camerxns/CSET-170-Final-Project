@@ -418,6 +418,11 @@
   .Customerrev td {
     width: 33%;
   }
+
+  .home_logout{
+display: flex;
+justify-content: space-between;
+  }
 </style>
 
 <head>
@@ -432,7 +437,21 @@
 </head>
 
 <body>
+
   <header class="header">
+    {% if current_user.is_authenticated  %}
+    <nav class="home_logout ">
+      <ul>
+        <pre>                                                                                        </pre>
+      <li><a href="/home">Home</a></li>
+      <pre>                                                                                                                                                                                            </pre>
+      <li><form action="/logout" method="POST">
+        <input type="submit" value="Logout">
+      </form></li></ul>
+      </ul>
+    </nav>
+    {%else%}
+    <div>
     <nav class="row">
       <pre>                                                                                                                                                                                </pre>
       <ul>
@@ -440,11 +459,13 @@
         <li><a href="/signup">Sign up</a></li>
       </ul>
     </nav>
+    {% endif %}
     <div class="hero-text-box">
 
       <h1 class="hero-text">The Comfort Zone</h1>
       </h1> <br>
     </div>
+  </div>
   </header>
 
 
