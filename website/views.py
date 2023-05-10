@@ -86,3 +86,14 @@ def products_page(product_id):
 
     return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price)
     
+   
+   
+    
+@views.route("/checkout")
+def checkout():
+   # Retrieve cart items from the database
+    
+
+    return render_template("checkout.html")
+
+    
