@@ -118,8 +118,10 @@
         </div>
 
         <div class="header-item-3">
-            <h3>Hello, {{current_user.username}}</h3>
-            <button name="logout">Log Out</button>
+            <h3>Hello, {{ current_user.username }}</h3>
+            <form action="/logout" method="post">
+                <input type="submit" value = "logout">
+            </form>
         </div>
     </header>
     {% endblock %}
@@ -132,7 +134,7 @@
     {% block footer %}
     <footer class="footer">
         <div class="footer-item-1">
-            <h2>Footer</h2>
+            <h2>The Comfort Zone</h2>
             <p>Copyright 2023, All rights reserved.</p>
         </div>
         <div class="footer-item-2">

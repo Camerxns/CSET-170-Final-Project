@@ -1,0 +1,182 @@
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    #company-title{
+        font-family: "Apple Chancery", "cursive";
+    }
+
+    .main-content{
+        display: grid; 
+        background-image: url("../static/images/wood-background.jpg");
+        background-size: cover;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas: 
+        "hello hello hello cart"
+        "slideshow slideshow slideshow cart"
+        "slideshow slideshow slideshow cart"
+        "slideshow slideshow slideshow cart"
+        "orders orders reviews cart"
+        "orders orders reviews cart";
+        gap: 20px;
+    }
+
+    .content-item{
+        background-color: lightblue;
+    }
+
+    .intro-box{
+        grid-area: hello;
+        font-size: 25pt;
+    }
+
+    .cart{
+        grid-area: cart;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .cart>button{
+        height: 100px;
+        width: 50%;
+        border: 2px solid goldenrod;
+        font-size: 20pt;
+        filter: drop-shadow(5px 5px 1rem black);
+    }
+
+    .cart>button:hover{
+        cursor: pointer;
+        background-color: black;
+        color: gold;
+        
+    }
+
+    .cart-items{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: lightyellow;
+    }
+
+    .cart-details{
+        display: flex;
+        height: 80px;
+        width: 100%;
+        overflow-wrap: break-word;
+        justify-content: flex-start;
+        border: 2px solid gray;
+    }
+
+    .cart-item-image{
+        height: 75px;
+        width: 75px;
+        border-radius: 50% ;
+    }
+
+
+    .slideshow{
+        grid-area: slideshow;
+    }
+
+    .orders-box{
+        grid-area: orders;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .reviews-box{
+        grid-area: reviews;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .reviews-box>button{
+        height: 100px;
+        width: 50%;
+        margin-bottom: 5%;
+        border: 2px solid goldenrod;
+        border-radius: 25px;
+        font-size: 20pt;
+        filter: drop-shadow(5px 5px 1rem black);
+    }
+    .reviews-box>button:hover{
+        background-color: black;
+        color: gold;
+        cursor: pointer;
+    }
+    
+    #content-item{
+        font-size: 50pt;
+    }
+</style>
+
+{% extends "base.html" %}
+
+
+{% block header %}
+<header class="header-section">
+    <div class="header-item-1">
+        <h2 id="company-title">The Comfort Zone</h2>
+    </div>
+    <div class="header-item-2">
+        <a href="">Store</a>
+        <a href="">Users</a>
+        <a href="">About</a>
+    </div>
+
+    <div class="header-item-3">
+        <form action="/logout" method="post">
+            <input type="submit" value = "logout">
+        </form>
+    </div>
+</header>
+{% endblock %}
+
+{% block body %} 
+    <div class="content-item intro-box">
+        Hello, {{ current_user.username }}
+    </div>
+    <div class="content-item cart">
+        <h2>Cart</h2>
+        <div class="cart-items">
+            {% for item in cart_items %}
+            <div class="cart-details">
+                <div>
+                    <h3>{{ item[0] }}</h3>
+                </div>
+                <div>
+                    <img src="{{ item[2] }}" class="cart-item-image" alt="item-image"> 
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+        <button>Checkout</button>
+    </div>
+    <div class="content-item slideshow">
+        Slideshow
+    </div>
+    <div class="content-item orders-box">
+        <div>
+            <h4>Orders</h4>
+        </div>
+        <div>
+            <h4>Shipped</h4>
+        </div>
+        <div>
+            <h4>Pending</h4>
+        </div>
+    </div>
+    <div class="content-item reviews-box">
+        <h4>Reviews</h4>
+        <button>View</button>
+    </div>
+{% endblock %}

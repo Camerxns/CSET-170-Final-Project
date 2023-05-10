@@ -1,9 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from flask_login import current_user, login_required
-from sqlalchemy import text
+from flask_login import login_required, current_user
+from sqlalchemy import text, create_engine
 from .models import *
 from . import db
-
 
 views = Blueprint('views', __name__)
 
@@ -12,10 +11,14 @@ views = Blueprint('views', __name__)
 def index():
     return render_template("index.html")
 
+@views.route("/base")        
+def base():
+    return render_template("base.html")
 
 @views.route("/home")
+
 @login_required
-def home():
+def home():    
     match current_user.account_type():
         case "ADMIN":
             admin = Admin.query.filter_by(user_id=current_user.user_id).first()
@@ -37,21 +40,23 @@ def home():
 
             return render_template("vendor_home.html", vendor_products=vendor_products, incoming_order=incoming_orders)
         case "CUSTOMER":
+            result = db.session.execute(text(f"select title, description, product_image, category from carts natural join cart_items join products using(product_id) where customer_id = { current_user.user_id };")).all()
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
-            cart_items = CartItem.query.filter_by(
-                db.CartItem.cart.customer_id == customer.customer_id).all()
+            # cart_items = CartItem.query.filter_by(
+                # db.CartItem.cart.customer_id == customer.customer_id).all()
 
             orders = Order.query.filter_by(
                 customer_id=customer.customer_id).order_by(Order.order_date).all()
 
-            return render_template("customer_home.html", orders=orders, cart_items=cart_items)
+            return render_template("customer_home.html", orders=orders, cart_items=result)
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
 
 
+<<<<<<< HEAD
 @views.route("/shop")
 @login_required
 def shop():
@@ -60,6 +65,8 @@ def shop():
     
     products = Product.query.all()
     return render_template("shop.html", categories=categories, products=products)
+=======
+>>>>>>> main
 
 
 @views.route("/profile")
