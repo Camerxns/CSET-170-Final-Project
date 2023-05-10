@@ -190,13 +190,13 @@ CREATE TABLE IF NOT EXISTS Orders(
 CREATE TABLE IF NOT EXISTS Order_Items(
 	order_item_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     order_id INT NOT NULL,
-    product_id INT NOT NULL,
+    vendor_product_id INT NOT NULL,
     qty INT,
     color VARCHAR(40),
     size VARCHAR(20),
     PRIMARY KEY(order_item_id),
     FOREIGN KEY(order_id) REFERENCES Orders(order_id),
-    FOREIGN KEY(product_id) REFERENCES Products(product_id)
+    FOREIGN KEY(vendor_product_id) REFERENCES Vendor_Products(vendor_product_id)
 );
 
 CREATE TABLE IF NOT EXISTS Chats(
@@ -260,7 +260,8 @@ INSERT INTO Vendor_Products (product_id, vendor_id, qty, price, warranty_length)
 
 DESC Vendor_Product_Colors;
 
-SELECT * FROM Vendor_Products;
+SELECT * FROM Vendor_Products natural join products where vendor_id = 1;
+
 
 INSERT INTO Vendor_Product_Colors (vendor_product_id, color) VALUES
 	(1, "Black"),
@@ -282,20 +283,3 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
     (4, 'Small');
 
 SELECT color FROM Vendor_Product_Colors WHERE vendor_product_id=(SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id=1 AND product_id=1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

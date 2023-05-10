@@ -32,11 +32,15 @@ def home():
             vendor = Vendor.query.filter_by(
                 user_id=current_user.user_id).first()
 
-            vendor_products = VendorProduct.query.filter_by(
-                vendor_id=vendor.vendor_id).all()
+            # vendor_products = VendorProduct.query.filter_by(
+                # vendor_id=vendor.vendor_id).all()
 
-            incoming_orders = OrderItem.query.filter(
-                db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
+            vendor_products = db.session.execute(text(f"select * from Vendor_Products natural join products where vendor_id = { vendor.vendor_id };")).all()
+
+            # incoming_orders = OrderItem.query.filter(
+            #     db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
+            
+            incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
 
             return render_template("vendor_home.html", vendor_products=vendor_products, incoming_order=incoming_orders)
         case "CUSTOMER":
