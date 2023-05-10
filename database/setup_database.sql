@@ -29,6 +29,10 @@ CREATE TABLE IF NOT EXISTS Users(
     PRIMARY KEY (user_id)
 );
 
+insert into Users (name, username, email, password)
+VALUES ("Gabriel", "gabe_is_cool23", "gabrielnewman23@gmail.com", "pbkdf2:sha256:260000$KqXkWOfYtbjLjTd4$69b9d203971cee50195b022963e8d753d12f5cc73e93b892a19685a4884bf8cc"),
+		("Tyler", "tyler21", "tyler23@gmail.com", "pbkdf2:sha256:260000$KqXkWOfYtbjLjTd4$69b9d203971cee50195b022963e8d753d12f5cc73e93b892a19685a4884bf8cc");
+
 CREATE TABLE IF NOT EXISTS Admins (
 	admin_id INT NOT NULL UNIQUE AUTO_INCREMENT,
 	user_id INT UNIQUE NOT NULL,
@@ -50,6 +54,9 @@ CREATE TABLE IF NOT EXISTS Customers (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
+insert into customers(user_id) values(1);
+insert into customers(user_id) values(2);
+
 CREATE TABLE IF NOT EXISTS Products (
 	product_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     title VARCHAR(40) NOT NULL,
@@ -58,6 +65,20 @@ CREATE TABLE IF NOT EXISTS Products (
     category VARCHAR(20) NOT NULL,
     PRIMARY KEY(product_id)
 );
+
+insert into products(title, description, product_image, category)
+VALUES("Country Rustic Distressed Wood Bedframe1",
+		"This clean design met with a retro style turns country into country sheek. No box spring required. ",
+        "https://i.pinimg.com/originals/2e/ad/99/2ead99a8db781a700a5d1afb7e402e19.jpg", "Bedframes"),
+	  ("Natural Mindi Side Table with Drawer",
+		"Add a touch of rustic charm to your bedroom 
+        with this Unfinished Natural Mindi Wood Side Table with Drawer. 
+        The modern silhouette of this farmhouse-inspired nightstand 
+        is both visually pleasing and functional, 
+        providing ample space for all your before-bed necessities.",
+        "https://ak1.ostkcdn.com/images/products/is/images/direct/5db6dac5b56fd7b10e390b62c9f4eb74b1db513d/Unfinished-Natural-Mindi-Wood-Side-Table-with-Drawer.jpg", 
+        "End table");
+
 
 CREATE TABLE IF NOT EXISTS Vendor_Products (
 	vendor_product_id INT NOT NULL UNIQUE AUTO_INCREMENT,
@@ -128,6 +149,8 @@ CREATE TABLE IF NOT EXISTS Carts (
     FOREIGN KEY(customer_id) REFERENCES Customers(customer_id)
 );
 
+insert into carts (customer_id) values(1), (2);
+
 CREATE TABLE IF NOT EXISTS Cart_Items(
 	cart_item_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     cart_id INT NOT NULL,
@@ -139,6 +162,19 @@ CREATE TABLE IF NOT EXISTS Cart_Items(
     FOREIGN KEY(cart_id) REFERENCES Carts(cart_id),
     FOREIGN KEY(product_id) REFERENCES Products(product_id)
 );
+
+insert into cart_items(cart_id, product_id, qty, color, size)
+values	(1, 1, 1, "Vintage Brown", "King"),
+		(2, 2, 1, "Natural", "1-Drawer");
+
+
+select name, user_id, cart_id, product_id, title from users natural join products natural join cart_items;
+
+-- select * from carts join cart_items join products using(product_id) where customer_id = current_user.user_id;
+
+select * from carts join cart_items join products using(product_id);
+
+select * from users;
 
 CREATE TABLE IF NOT EXISTS Orders(
 	order_id INT NOT NULL UNIQUE AUTO_INCREMENT,
