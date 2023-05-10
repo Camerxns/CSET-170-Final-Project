@@ -56,7 +56,6 @@ def home():
             return "ERROR ROUTING TO HOME"
 
 
-<<<<<<< HEAD
 @views.route("/shop")
 @login_required
 def shop():
@@ -65,8 +64,6 @@ def shop():
     
     products = Product.query.all()
     return render_template("shop.html", categories=categories, products=products)
-=======
->>>>>>> main
 
 
 @views.route("/profile")
