@@ -44,7 +44,7 @@ def home():
 
             return render_template("vendor_home.html", vendor_products=vendor_products, incoming_order=incoming_orders)
         case "CUSTOMER":
-            result = db.session.execute(text(f"select title, description, product_image, category from carts natural join cart_items join products using(product_id) where customer_id = { current_user.user_id };")).all()
+            result = db.session.execute(text(f"select title, description, product_image, category from Carts natural join Cart_Items join Products using(product_id) where customer_id = { current_user.user_id };")).all()
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
@@ -60,6 +60,14 @@ def home():
             return "ERROR ROUTING TO HOME"
 
 
+@views.route("/shop")
+@login_required
+def shop():
+    categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products")).all()]
+    categories.insert(0, "All")
+    
+    products = Product.query.all()
+    return render_template("shop.html", categories=categories, products=products)
 
 
 @views.route("/profile")
