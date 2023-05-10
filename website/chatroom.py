@@ -41,10 +41,6 @@ def generate_unique_code(length):
     return code
 
 
-# def write_to_text_file(username, room, message):
-#     with open("chatlog.txt", "a") as file:
-#         file.write(f"Username: {username}, Room: {room}, Message: {message}\n")
-
 @app.route("/", methods=["POST", "GET"])
 def home():
     session.clear()
@@ -82,11 +78,16 @@ def room():
 
     return render_template("chatroom.html", code=room, messages=rooms[room]["messages"])
 
+def write_to_text_file(username, room, message):
+    with open("chatlog.txt", "a") as file:
+        file.write(f"Username: {username}, Room: {room}, Message: {message}\n")
 
 @socketio.on("message")
 def message(data):
     name = session.get('name')
     room = session.get("room")
+    username = session.get("name")
+    message = data["data"]
     if room not in rooms:
         return
 
@@ -97,10 +98,7 @@ def message(data):
     send(content, to=room)
     rooms[room]["messages"].append(content)
     print(f"{session.get('name')} said: {data['data']}")
-    chat_message = ChatMessages(user_id=name, message=data, chat_id=room)
-    db.session.add(chat_message)
-    db.session.commit()
-    print('Message comitted')
+    write_to_text_file(username, room, message)
 
 
 @socketio.on("connect")
@@ -132,7 +130,6 @@ def disconnect():
 
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
-
 
 
 if __name__ == "__main__":
