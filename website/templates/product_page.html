@@ -113,8 +113,8 @@
         <h1 class="product-title">{{ title }}</h1>
         <img class="product-img" src="{{ url_for('static', filename='uploads/' + product_image) }}" alt="Product Image">
     </div>
-    <div class="product-details">
-       
+    <form class="product-details" method="POST" action="/add-to-cart">
+        <input type="hidden" name="vendor_product_id" value="{{ vendor_product_id }}">
         <div class="product-desc">
             <p>{{ description }}</p>
         </div>
@@ -161,8 +161,8 @@
         </div>
         {% endif %}
         <p class="price">${{ price[0] }}</p>
-        <button class="btn add-to-cart">Add to Cart</button>
-    </div>
+        <button type="submit" class="btn add-to-cart">Add to Cart</button>
+    </form>
 </div>
 {% endblock %}
 
