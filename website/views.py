@@ -56,18 +56,23 @@ def home():
 @views.route("/shop")
 @login_required
 def shop():
-    category = request.args.get("category")
-
     categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products")).all()]
-    
-    categories.insert(0, "All")
-    
-    if category and category != "all":
-        products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE category='{category}'"))
+
+    search = request.args.get("search")
+    if search:
+        products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE title LIKE '%{search}%' OR description LIKE '%{search}%'"))
     else:
-        products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products"))
+        category = request.args.get("category")
+
+    
+        categories.insert(0, "All")
+    
+        if category and category != "all":
+            products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE category='{category}'"))
+        else:
+            products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products"))
         
-    return render_template("shop.html", categories=categories, products=products)
+    return render_template("shop.html", categories=categories, products=products, search=search)
 
 
 @views.route("/profile")

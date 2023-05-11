@@ -154,12 +154,16 @@
 Shop
 {% endblock %}
 {% block body %}
-<div class="search-container">
-  <input type="text" class="search-bar" placeholder="Search...">
-  <button class="search-btn">
+<form class="search-container" action="/shop">
+  {% if search == None %}
+  <input type="text" class="search-bar" placeholder="Search..." name="search">
+  {% else %}
+  <input type="text" class="search-bar" placeholder="Search..." name="search" value="{{ search }}">
+  {% endif %}
+  <button type="submit" class="search-btn">
     <i class="fa fa-search"></i>
   </button>
-</div>
+</form>
 <div class="category-selection">
   {% for category in categories %}
   <a class="category" href="/shop?category={{ category | lower }}">{{ category }}</a>
