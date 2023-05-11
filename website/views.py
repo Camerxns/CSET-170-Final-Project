@@ -64,14 +64,13 @@ def shop():
         products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE title LIKE '%{search}%' OR description LIKE '%{search}%'"))
     else:
         category = request.args.get("category")
-
-    
-        categories.insert(0, "All")
     
         if category and category != "all":
             products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE category='{category}'"))
         else:
             products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products"))
+
+    categories.insert(0, "All")
     
     return render_template("shop.html", categories=categories, products=products, search=search)
 
