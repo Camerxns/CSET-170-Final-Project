@@ -112,7 +112,7 @@
     color: white;
   }
 
-  /* Lecture 7 */
+  
   h2 {
     text-align: center;
     font-weight: 300;
@@ -120,6 +120,8 @@
     word-spacing: 2px;
     text-align: center;
     letter-spacing: 1px;
+    color: #dcd3bd;
+    text-transform: uppercase;
 
   }
 
@@ -127,7 +129,7 @@
     display: block;
     height: 2px;
     width: 100px;
-    background-color: #e67e22;
+    background-color: #94aaa1;
     content: " ";
     margin: auto;
     margin-top: 30px
@@ -285,8 +287,7 @@
   }
 
   .live {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url("{{ url_for('static', filename='images/back_customers.jpg') }}");
+    background-color: #65746ea8;
     background-size: cover;
     background-attachment: fixed;
     margin: auto 0;
@@ -300,10 +301,11 @@
 
   .content {
     font-size: 17.5px;
-    color: white;
-    background-color: rgb(38, 11, 109);
+    color: rgb(8, 8, 8);
+    background-color:#bba581;
     height: 140px;
     border: solid 3px;
+    
 
   }
 
@@ -359,22 +361,7 @@
     padding-inline-start: 40px;
   }
 
-  .plan-price {
-    font-size: 300%;
-    margin-bottom: 10px;
-    font-weight: 100;
-    color: #e67e22;
-  }
-
-  .plan-box div:last-child {
-    text-align: center;
-    border: 0;
-  }
-
-  .contact-form {
-    width: 60%;
-    margin: 0 auto;
-  }
+ 
 
   .span-2-of-3 {
     width: 66.13%;
@@ -409,8 +396,6 @@
     display: table;
   }
 
-  .customer-name-photo {}
-
   .Customerrev {
     width: 100%;
   }
@@ -422,6 +407,63 @@
   .home_logout{
 display: flex;
 justify-content: space-between;
+  }
+
+  /* Styling for the buttons */
+  .shop-now-button {
+    display: block;
+    width: 250px;
+    height: 60px;
+    background-color: #94aaa1;
+    color: #fff;
+    text-align: center;
+    line-height: 60px;
+    margin: 10px auto;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .shop-now-button:hover {
+    background-color: #50a045;
+  }
+
+  .shop-button-container {
+    text-align: center;
+  }
+
+  .shop-button {
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+    background-color: #87999f;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    margin: 20px 5px; /* Increase the vertical margin to create noticeable spacing */
+    border-radius: 5px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .shop-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-color: #988567;
+  }
+
+  .message {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 24px;
+    color: #dcd3bd;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   }
 </style>
 
@@ -507,8 +549,22 @@ justify-content: space-between;
       </div>
     </div>
   </section>
-
+<section style="background-color: #908e72;">
+  <br>
+  <div class="shop-button-container">
+    <a href="#" class="shop-now-button">SHOP NOW</a>
+    <div>
+      <a href="#" class="shop-button">Shop Couches</a>
+      <a href="#" class="shop-button">Shop Mattresses</a>
+      <a href="#" class="shop-button">Shop Tables</a>
+      <a href="#" class="shop-button">Shop Furniture</a>
+    </div>
+    <p class="message">The Comfort Zone has it all here!</p>
+  </div>
+  <br>
+</section>
   <section class="section-meals" style="padding:0px">
+    
     <div class="meals-flexbox">
       <div>
         <img src="{{ url_for('static', filename='images/1.jpg') }}">
