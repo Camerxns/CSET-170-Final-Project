@@ -87,7 +87,7 @@ def send_to_database():
         chat_id = session.get('room')
         user_id = session.get('name')
         contents = file.read()
-        chat_message = "INSERT INTO Chat_Messages (file_contents) VALUES (%s)"
+        chat_message = ChatMessages(chat_id=chat_id, user_id=user_id, message=contents)
         db.session.add(chat_message)
         db.session.commit()
 
