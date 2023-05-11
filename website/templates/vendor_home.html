@@ -116,15 +116,26 @@
       font-weight: bold;
       margin: 0 0 10px 0;
     }
-    
+
+    input[name="your_items"]{
+      font-size: 25pt;
+      padding: 15px;
+      background-color: lightskyblue;
+    }
+
+    input[name="your_items"]:hover{
+      cursor: pointer;
+      background-color: lightcoral;
+      color: lightyellow;
+    }
   </style>
   {% extends 'base.html' %}
   {% block title %}
-  Shop
+  Your Items
   {% endblock %}
   {% block body %}
+  <input type="button" value="Your Items" name="your_items"></input>
   <div class="search-container">
-    <a href=""></a>
     <input type="text" class="search-bar" placeholder="Search...">
     <button class="search-btn">
       <i class="fa fa-search"></i>
@@ -136,7 +147,7 @@
     {% endfor %}
   </div>
   <div class="product-grid">
-    {% for product in products %}
+    {% for product in vendor_products %}
     <a class="product-card" href="/shop/product/{{ product[0] }}">
       <div class="product-img-container">
         <img class="product-img" src="{{ product[2] }}" alt="pic">

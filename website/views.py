@@ -34,15 +34,17 @@ def home():
 
             # vendor_products = VendorProduct.query.filter_by(
                 # vendor_id=vendor.vendor_id).all()
+            categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
+            categories.insert(0, "All")                
 
-            vendor_products = db.session.execute(text(f"select * from Vendor_Products natural join products where vendor_id = { vendor.vendor_id };")).all()
+            vendor_products = db.session.execute(text(f"select product_id, title, product_image from Products WHERE product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
 
             # incoming_orders = OrderItem.query.filter(
             #     db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
             
             incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
 
-            return render_template("vendor_home.html", vendor_products=vendor_products, incoming_order=incoming_orders)
+            return render_template("vendor_home.html", categories=categories, vendor_products=vendor_products, incoming_order=incoming_orders)
         case "CUSTOMER":
             result = db.session.execute(text(f"select title, description, product_image, category from Carts natural join Cart_Items join Products using(product_id) where customer_id = { current_user.user_id };")).all()
             customer = Customer.query.filter_by(
@@ -59,8 +61,6 @@ def home():
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
         
-
-
 
 @views.route("/shop")
 @login_required
