@@ -18,6 +18,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = env("SECRET_KEY")
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}'
+    app.config['UPLOAD_FOLDER'] = "static/uploads/"
 
     db.init_app(app)
 

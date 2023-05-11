@@ -40,7 +40,6 @@
 
     .product-title-img {
         display: block;
-        max-width: 500px;
     }
     
     .product-title {
@@ -53,8 +52,7 @@
     
     .product-img {
         display: block;
-        width: 400px;
-        height: 400px;
+        width: 500px;
     }
     
     .product-info label {
@@ -100,20 +98,20 @@
 
     .product-image{
         height: 400px;
-        width: 400px;
+        width: 600px;
     }
 </style>
 
 {% extends 'base.html' %}
 {% block title %}
-Products_Page
+{{ title }} | The Comfort Zone
 {% endblock %}
 
 {% block body %}
 <div class="container">
     <div class="product-title-img">
         <h1 class="product-title">{{ title }}</h1>
-        <img class="product-img" src="{{ url_for('static', filename='images/1.jpg') }}" alt="Product Image">
+        <img class="product-img" src="{{ url_for('static', filename='uploads/' + product_image) }}" alt="Product Image">
     </div>
     <div class="product-details">
        
