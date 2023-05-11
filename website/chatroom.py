@@ -82,6 +82,15 @@ def write_to_text_file(username, room, message):
     with open("chatlog.txt", "a") as file:
         file.write(f"Username: {username}, Room: {room}, Message: {message}\n")
 
+def send_to_database():
+    with open("chatlog.txt", "r") as file:
+        chat_id = session.get('room')
+        user_id = session.get('name')
+        contents = file.read()
+        chat_message = "INSERT INTO Chat_Messages (file_contents) VALUES (%s)"
+        db.session.add(chat_message)
+        db.session.commit()
+
 @socketio.on("message")
 def message(data):
     name = session.get('name')
@@ -99,6 +108,7 @@ def message(data):
     rooms[room]["messages"].append(content)
     print(f"{session.get('name')} said: {data['data']}")
     write_to_text_file(username, room, message)
+    send_to_database()
 
 
 @socketio.on("connect")
