@@ -71,7 +71,7 @@ def shop():
             products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE category='{category}'"))
         else:
             products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products"))
-        
+    
     return render_template("shop.html", categories=categories, products=products, search=search)
 
 

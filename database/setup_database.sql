@@ -206,7 +206,7 @@ INSERT INTO Vendors (user_id) VALUES
 
 
 INSERT INTO Products (title, description, product_image, category) VALUES
-	("Framework Laptop", "The best laptop in the world!", "no_img_for_ye", "computers"),
+	("Framework Laptop", "The best laptop in the world!", "framework-laptop.png", "computers"),
     ("IPhone 12 Pro", "You wanted to be part of the apple ecosystem *shrug*", "no_img_for_ye", "phones"),
     ("Couch", "One of the best couches in North America! With over 4 million of these couches sold, you can be sure you will be satified!", "no_img_for_ye", "couches");
 

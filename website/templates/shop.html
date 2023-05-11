@@ -173,7 +173,7 @@ Shop
   {% for product in products %}
   <a class="product-card" href="/shop/product/{{ product.product_id }}">
     <div class="product-img-container">
-      <img class="product-img" src="{{ product.product_image }}" alt="pic">
+      <img class="product-img" src="{{ url_for('static', filename='uploads/' + product.product_image) }}" alt="pic">
     </div>
     <div class="product-details">
       <h2 class="product-title">{{ product.title }}</h2>
