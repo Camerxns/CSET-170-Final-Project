@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}The Comfort Zone{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js" integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" crossorigin="anonymous"></script>
+    <style>
+    * {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        .header-section{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            height: 70px;
+            background-color: #80674f;
+            color: white;
+            padding: 0 20px;
+        }
+
+        #company-title{
+            font-family: "Apple Chancery", "cursive";
+        }
+
+        .header-item-1{
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .header-item-2{
+            display: flex;
+            align-items: center;
+            flex: 1;
+            font-size: 16pt;
+            margin-left: 35px;
+        }
+
+        .header-item-2 a{
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+        }
+
+        .header-item-3{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .main-content{
+            flex-grow: 1;
+        }
+
+        footer{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            width: 100%;
+            background-color: #80674f;
+            color: white;
+            height: 150px;
+            padding: 25px;
+        }
+
+        .footer-item-1{
+            flex: 1;
+            text-align: center;
+        }
+
+        .footer-item-2{
+            display: flex;
+            gap: 20px;
+        }
+
+        .fa{
+            padding: 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: white;
+        }
+
+        body{
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .fa-facebook{
+            background-color: darkblue;
+        }
+
+        .fa-twitter{
+            background-color: aqua;
+        }
+
+        .fa-instagram{
+            background: linear-gradient(pink 25%, orange );
+        }
+    </style>
+</head>
+
+<body>
+    {% block header %}
+    <header class="header-section">
+        <div class="header-item-1">
+            <a href="/" style="text-decoration:none;color:inherit;"><h2 id="company-title">The Comfort Zone</h2></a>
+        </div>
+        <div class="header-item-2">
+            <a href="/home">Home</a>
+            <a href="/shop">Shop</a>
+            <a href="/profile">Profile</a>
+        </div>
+
+        <div class="header-item-3">
+            <h3>Hello, {{ current_user.username }}</h3>
+            <form action="/logout" method="post">
+                <input type="submit" value = "logout">
+            </form>
+        </div>
+    </header>
+    {% endblock %}
+
+    <div class="main-content">
+        {% block body %}
+        {% endblock %}
+    </div>
+
+    {% block footer %}
+    <footer class="footer">
+        <div class="footer-item-1">
+            <h2>The Comfort Zone</h2>
+            <p>Copyright 2023, All rights reserved.</p>
+        </div>
+        <div class="footer-item-2">
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a>
+            <a href="#" class="fa fa-instagram"></a>
+        </div>
+    </footer>
+    {% endblock %}
+</body>
+
+{% block script %}
+{% endblock %}
+
+</html>

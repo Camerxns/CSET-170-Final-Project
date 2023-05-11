@@ -1,46 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    { % block title % }<title>The Comfort Zone</title>{ % endblock % }
-    <style>
-        *{
-            margin:0;
-            padding: 0%;
-            height: 100%;
-            box-sizing: border-box;
-        }
-        body{
-            background: linear-gradient(45deg, lightgreen, cyan)
-        }
-        .header-section{
-            display: flex;
-            justify-content: space-between;
-        }
-        #company-title{
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        }
-        .footer-conatiner{
-            position: fixed;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title>The Comfort Zone</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+            *{
+                margin:0;
+                padding: 0%;
+                height: 100%;
+                box-sizing: border-box;
+            }
+
+            body{
+                background-color: #dcd3bd;
+                min-height: 100vh;
+            }
+
+            #company-title{
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            }
+
+            .header-section{
+            display: grid;
+            height: 5%;
+            position: sticky;
+            background-color: grey;
+            grid-template-columns: repeat(4, auto);
+            grid-template-rows: repeat(1, 20px);
+            }
+
+            .header-item-3{
+                grid-column: -1 / -1;
+            }
+
+            img{
+                width: 200px;
+                height: 200px;
+            }
+
+            .main-content{
+                display: grid;
+                grid-template-columns: 250px 150px;
+                grid-template-rows: minmax(150px, auto);
+                gap: 20px;
+                justify-content: center;
+            }
+
+            .item{
+                background-color: #87999f;
+                grid-row: span 1;
+                grid-column: span 2;
+            }
+
+            footer{
+                display: grid;
+                height: auto;
+                width: auto;
+                grid-template-columns: repeat(2, 50%);
+                gap: 50px;
+                padding: 50px;
+                background-color: #80674f;
+            }
+
+            .fa{
+                padding: 10px;
+                font-size: 30px;
+                text-decoration: none;
+                color: white;
+            }
+
+            .fa-facebook{
+                background-color: lightblue;
+                height: 85%;
+            }
+
+            .fa-twitter{
+                color: aqua;
+            }
     </style>
 </head>
 <body>
     <header class="header-section">
-        <h2 id="company-title">The Comfort Zone</h2>
-        <div>
+        <div class="header-item-1"><h2 id="company-title">The Comfort Zone</h2></div>
+        <div class="header-item-2">
             <a href="">Store</a>
             <a href="">Users</a>
             <a href="">About</a>
         </div>
+        
+        <div class="header-item-3">
+            <h3>Hello, {{username}}</h3>
+            <button name="logout">Log Out</button>
+        </div>
     </header>
-    
     {%block body%}
-
+    <div class="main-content">
+        <div class="item item-1">
+            <img src="/website/static/images/bedframe1.png" alt="bedframe">
+        </div>
+        <div class="item item-2">
+            <img src="/website/static/images/dining-chair.png" alt="">
+        </div>
+        <div class="item item-3">
+            <img src="/website/static/images/bedframe2.png" alt="">
+        </div>
+        <div class="item item-4">
+            <img src="/website/static/images/sofa1.png" alt="">
+        </div>
+        <div class="item item-5">
+            <img src="/website/static/images/sofa2.png" alt="">
+        </div>
+        <div class="item item-6">
+            <img src="/website/static/images/coffeetable2.png" alt="">
+        </div>
+        <div class="item item-7">
+            <img src="/website/static/images/loveseat1.png" alt="">
+        </div>
+    </div>
     {% endblock %}
- 
-    <footer class="footer-container">
-        <h1>Footer</h1>
-    </footer>    
+    <footer>
+        <div>
+            <h1>Footer</h1>
+            <p>Copyright 2023, All rights reserved.</p>
+        </div>
+        <div>
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a>
+            <a href="#" class="fa fa-instagram"></a>
+        </div>
+    </footer>
 </body>
 </html>

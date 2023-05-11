@@ -5,6 +5,3 @@ from .models import *
 
 
 admin = Blueprint('admin', __name__)
-
-@admin.route('/')
-
