@@ -44,9 +44,6 @@ def home():
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
-            # cart_items = CartItem.query.filter_by(
-                # db.CartItem.cart.customer_id == customer.customer_id).all()
-
             orders = Order.query.filter_by(
                 customer_id=customer.customer_id).order_by(Order.order_date).all()
 
@@ -59,10 +56,17 @@ def home():
 @views.route("/shop")
 @login_required
 def shop():
+    category = request.args.get("category")
+
     categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products")).all()]
+    
     categories.insert(0, "All")
     
-    products = Product.query.all()
+    if category and category != "all":
+        products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE category='{category}'"))
+    else:
+        products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products"))
+        
     return render_template("shop.html", categories=categories, products=products)
 
 
