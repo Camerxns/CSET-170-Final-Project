@@ -15,8 +15,7 @@ def index():
 def base():
     return render_template("base.html")
 
-@views.route("/home")
-
+@views.route("/home", methods= ["POST", "GET"])
 @login_required
 def home():    
     match current_user.account_type():
@@ -44,6 +43,23 @@ def home():
             
             incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
 
+            show = request.form.get("show")
+            add = request.form.get("add")
+            edit = request.form.get("edit")
+            delete = request.form.get("delete")
+
+            # if Vendor.request.form == "POST":
+            #     if show:
+            #         return render_template("vendor_home.html")
+
+            #     elif add:
+            #         return render_template("vendor_add.html")
+                
+            #     elif edit:
+            #         return render_template("vendor_edit.html")
+
+            #     elif delete:
+            #         return render_template("vendor_delete.html")
             return render_template("vendor_home.html", categories=categories, vendor_products=vendor_products, incoming_order=incoming_orders)
         case "CUSTOMER":
             result = db.session.execute(text(f"select title, description, product_image, category from Carts natural join Cart_Items join Products using(product_id) where customer_id = { current_user.user_id };")).all()
@@ -56,11 +72,13 @@ def home():
             orders = Order.query.filter_by(
                 customer_id=customer.customer_id).order_by(Order.order_date).all()
 
+            
             return render_template("customer_home.html", orders=orders, cart_items=result)
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
-        
+
+
 
 @views.route("/shop")
 @login_required

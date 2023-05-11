@@ -117,10 +117,11 @@
       margin: 0 0 10px 0;
     }
 
-    input[name="your_items"]{
+    select, input[name="your_items"]{
       font-size: 25pt;
       padding: 15px;
       background-color: lightskyblue;
+      border: 2px solid black;
     }
 
     input[name="your_items"]:hover{
@@ -128,15 +129,30 @@
       background-color: lightcoral;
       color: lightyellow;
     }
+
+    form{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
   </style>
   {% extends 'base.html' %}
   {% block title %}
   Your Items
   {% endblock %}
   {% block body %}
-  <input type="button" value="Your Items" name="your_items"></input>
+  <form action="/home" method="POST">
+    <select name="vendor-options">
+      <option value="show">Show Your Items</option>
+      <option value="add">Add</option>
+      <option value="edit">Edit</option>
+      <option value="delete">Delete</option>
+    </select>
+    <input type="submit" value="Submit" name="vendor_submit"></input>
+  </form>
   <div class="search-container">
-    <input type="text" class="search-bar" placeholder="Search...">
+    <input type="text" classs="search-bar" placeholder="Search...">
     <button class="search-btn">
       <i class="fa fa-search"></i>
     </button>
