@@ -3,7 +3,7 @@
 <style>
   .checkout-container {
     max-width: 600px;
-    margin: 20 auto;
+    margin: 20px auto;
     padding: 20px;
     background-color: #f9f9f9;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -20,6 +20,30 @@
 
   .user-info {
     margin-bottom: 20px;
+  }
+
+  .user-info label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .user-info input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  .user-info .zip-code-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .user-info .zip-code-container input[type="text"] {
+    width: 45%;
   }
 
   .cart-items ul {
@@ -59,7 +83,7 @@
   .checkout-button:hover {
     background-color: #0056b3;
   }
-  </style>
+</style>
   
 
 {% extends 'base.html' %}
@@ -71,9 +95,6 @@ Profile
 
 <div class="checkout-container">
   <h2 class="checkout-title">Checkout</h2>
-  <div class="user-info">
-    <!-- Add user information here -->
-  </div>
   <div class="cart-items">
     <h3>Cart Items:</h3>
     <ul>
@@ -93,9 +114,24 @@ Profile
     <h3>Total Price:</h3>
     <!-- Add total price here -->
   </div>
+  
+<div class="checkout-container">
+  <h2 class="checkout-title">Order Address</h2>
+  <div class="user-info">
+    <label for="street">Street:</label>
+    <input type="text" id="street" name="street" placeholder="Enter your street" required>
+    <label for="street">City:</label>
+    <input type="text" id="city" name="city" placeholder="Enter city" required>
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" placeholder="Enter your state" required>
+    <label for="zip">ZIP Code:</label>
+    <input type="text" id="zip" name="zip" placeholder="Enter your ZIP code" required>
+  </div>
   <form action="/checkout" method="post">
     <a href="#" class="checkout-button">Proceed to Checkout</a>
   </form>
+
+  
  
 </div>
 
