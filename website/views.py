@@ -38,14 +38,11 @@ def home():
             incoming_orders = OrderItem.query.filter(
                 db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
 
-            return render_template("vendor_home.html", vendor_products=vendor_products, incoming_order=incoming_orders)
+            return render_template("vendor_home.html", vendor_products=vendor_products, incoming_orders=incoming_orders)
         case "CUSTOMER":
             result = db.session.execute(text(f"select title, description, product_image, category from Carts natural join Cart_Items join Products using(product_id) where customer_id = { current_user.user_id };")).all()
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
-
-            # cart_items = CartItem.query.filter_by(
-                # db.CartItem.cart.customer_id == customer.customer_id).all()
 
             orders = Order.query.filter_by(
                 customer_id=customer.customer_id).order_by(Order.order_date).all()
@@ -60,10 +57,22 @@ def home():
 @login_required
 def shop():
     categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products")).all()]
-    categories.insert(0, "All")
+
+    search = request.args.get("search")
+    if search:
+        products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE title LIKE '%{search}%' OR description LIKE '%{search}%'"))
+    else:
+        category = request.args.get("category")
+
     
-    products = Product.query.all()
-    return render_template("shop.html", categories=categories, products=products)
+        categories.insert(0, "All")
+    
+        if category and category != "all":
+            products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE category='{category}'"))
+        else:
+            products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products"))
+        
+    return render_template("shop.html", categories=categories, products=products, search=search)
 
 
 @views.route("/profile")
