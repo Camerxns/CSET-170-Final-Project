@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from sqlalchemy import text, create_engine
 from .models import *
@@ -63,19 +63,19 @@ def shop():
         products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE title LIKE '%{search}%' OR description LIKE '%{search}%'"))
     else:
         category = request.args.get("category")
-
-    
-        categories.insert(0, "All")
     
         if category and category != "all":
             products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products WHERE category='{category}'"))
         else:
             products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products"))
-        
+
+    categories.insert(0, "All")
+    
     return render_template("shop.html", categories=categories, products=products, search=search)
 
 
 @views.route("/profile")
+@login_required
 def profile():
     return render_template("profile.html")
 
@@ -99,7 +99,30 @@ def products_page(product_id):
     colors = [color[0] for color in colors]
     sizes = [size[0] for size in sizes]
 
-    price = db.session.execute(text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id=(SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id={vendor_id} AND product_id={product_id})")).first()
+    vendor_product_id = db.session.execute(text(f"SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id={vendor_id} AND product_id={product_id}")).first()[0]
+    price = db.session.execute(text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id={vendor_product_id}")).first()
 
-    return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price)
+    return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price, vendor_product_id=vendor_product_id)
     
+
+@views.route("/add-to-cart", methods=["POST"])
+@login_required
+def add_to_cart():
+    vendor_product_id = request.form.get("vendor_product_id")
+    quantity = request.form.get("quantity")
+    color = request.form.get("color")
+    size = request.form.get("size")
+
+    customer_id = db.session.execute(text(f"SELECT customer_id FROM Customers WHERE user_id={current_user.user_id}")).first()[0]
+    cart_id = db.session.execute(text(f"SELECT cart_id FROM Carts WHERE customer_id={customer_id}")).first()
+    if cart_id == None:
+        db.session.execute(text(f"INSERT INTO Carts (customer_id) VALUES ({customer_id})"))
+        db.session.commit()
+        cart_id = db.session.execute(text(f"SELECT cart_id FROM Carts WHERE customer_id={customer_id}")).first()[0]
+    else:
+        cart_id = cart_id[0]
+    
+    db.session.execute(text(f"INSERT INTO Cart_Items (cart_id, vendor_product_id, qty, color, size) VALUES ({cart_id}, {vendor_product_id}, {quantity}, '{color}', '{size}')"))
+    db.session.commit()
+    flash("Successfully added to cart")
+    return redirect(url_for("views.shop"))

@@ -1,32 +1,3 @@
-<!-- <style>
-  .main-content {
-    padding: 15px;
-  }
-  
-  .category-selection {
-    background-color: lightblue;
-    padding: 5px;
-    margin-right: 15px;
-    float: left;
-    min-width: fit-content;
-    width: 200px;
-    height: inherit;
-  }
-  
-  .category {
-    padding: 5px;
-    margin-left: 10px;
-  }
-
-  .product-card {
-    display: inline-block;
-    text-decoration: none;
-    color: inherit;
-    padding: 10px;
-    background-color: gray;
-  }
-  
-</style> -->
 <style>
   .main-content {
     padding: 15px;
@@ -173,7 +144,7 @@ Shop
   {% for product in products %}
   <a class="product-card" href="/shop/product/{{ product.product_id }}">
     <div class="product-img-container">
-      <img class="product-img" src="{{ product.product_image }}" alt="pic">
+      <img class="product-img" src="{{ url_for('static', filename='uploads/' + product.product_image) }}" alt="pic">
     </div>
     <div class="product-details">
       <h2 class="product-title">{{ product.title }}</h2>
