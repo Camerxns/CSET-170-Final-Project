@@ -15,8 +15,8 @@ def index():
 def base():
     return render_template("base.html")
 
-@views.route("/home")
 
+@views.route("/home")
 @login_required
 def home():    
     match current_user.account_type():
@@ -41,7 +41,7 @@ def home():
             return render_template("vendor_home.html", vendor_products=vendor_products, incoming_orders=incoming_orders)
         case "CUSTOMER":
             customer_id = db.session.execute(text(f"SELECT customer_id FROM Customers WHERE user_id = { current_user.user_id }")).first()[0]
-            result = db.session.execute(text(f"select title, description, product_image, category from Carts natural join Cart_Items join Vendor_Products using(vendor_product_id) JOIN Products USING(product_id) where customer_id = { customer_id };")).all()
+            result = db.session.execute(text(f"select title, description, product_image, category from Carts natural join Cart_Items join Vendor_Products using(vendor_product_id) JOIN Products USING(product_id) where customer_id = { customer_id }")).all()
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
