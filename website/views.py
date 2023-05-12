@@ -41,8 +41,10 @@ def home():
 
             return render_template("vendor_home.html", vendor_products=vendor_products, incoming_orders=incoming_orders)
         case "CUSTOMER":
+            customer_id = db.session.execute(
+                text(f"SELECT customer_id FROM Customers WHERE user_id = {current_user.user_id}")).first()[0]
             result = db.session.execute(text(
-                f"select title, description, product_image, category from Carts natural join Cart_Items join Products using(product_id) where customer_id = {current_user.user_id};")).all()
+                f"select title, description, product_image, category from Carts natural join Cart_Items join Vendor_Products using(vendor_product_id) JOIN Products USING(product_id) where customer_id = {customer_id};")).all()
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
@@ -68,13 +70,13 @@ def shop():
     else:
         category = request.args.get("category")
 
-        categories.insert(0, "All")
-
         if category and category != "all":
             products = db.session.execute(
                 text(f"SELECT product_id, title, product_image FROM Products WHERE category='{category}'"))
         else:
             products = db.session.execute(text(f"SELECT product_id, title, product_image FROM Products"))
+
+    categories.insert(0, "All")
 
     return render_template("shop.html", categories=categories, products=products, search=search)
 
@@ -118,6 +120,13 @@ def products_page(product_id):
     return render_template("product_page.html", title=title, description=description, product_image=product_image,
                            vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price,
                            vendor_product_id=vendor_product_id)
+
+
+@views.route("/checkout")
+def checkout():
+    # Retrieve cart items from the database
+
+    return render_template("checkout.html")
 
 
 @views.route("/add-to-cart", methods=["POST"])
