@@ -95,14 +95,14 @@ CREATE TABLE IF NOT EXISTS Discounts (
 
 CREATE TABLE IF NOT EXISTS Reviews (
 	review_id INT NOT NULL UNIQUE AUTO_INCREMENT,
-    product_id INT NOT NULL,
+    vendor_product_id INT NOT NULL,
     user_id INT NOT NULL,
     rating INT NOT NULL,
     review_date DATETIME NOT NULL DEFAULT NOW(),
     message TEXT DEFAULT NULL,
     image VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY(review_id),
-    FOREIGN KEY(product_id) REFERENCES Products(product_id),
+    FOREIGN KEY(vendor_product_id) REFERENCES Vendor_Products(vendor_product_id),
     FOREIGN KEY(user_id) REFERENCES Users(user_id),
     CHECK (rating >= 1 AND rating <= 5)
 );
@@ -131,13 +131,13 @@ CREATE TABLE IF NOT EXISTS Carts (
 CREATE TABLE IF NOT EXISTS Cart_Items(
 	cart_item_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     cart_id INT NOT NULL,
-    product_id INT NOT NULL,
+    vendor_product_id INT NOT NULL,
     qty INT NOT NULL DEFAULT 1,
     color VARCHAR(40) DEFAULT NULL,
     size VARCHAR(20) DEFAULT NULL,
     PRIMARY KEY(cart_item_id),
     FOREIGN KEY(cart_id) REFERENCES Carts(cart_id),
-    FOREIGN KEY(product_id) REFERENCES Products(product_id)
+    FOREIGN KEY(vendor_product_id) REFERENCES Vendor_Products(vendor_product_id)
 );
 
 CREATE TABLE IF NOT EXISTS Orders(
