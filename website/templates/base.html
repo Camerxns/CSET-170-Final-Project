@@ -56,6 +56,12 @@
             gap: 20px;
         }
 
+        .flash-message {
+            background-color: #80674f;
+            padding: 5px;
+            font-size: 16pt;
+        }
+
         .main-content{
             flex-grow: 1;
         }
@@ -129,6 +135,11 @@
         </div>
     </header>
     {% endblock %}
+    {% for message in get_flashed_messages() %}
+    <div class="flash-message">
+        {{ message }}
+    </div>
+    {% endfor %}
 
     <div class="main-content">
         {% block body %}
