@@ -41,6 +41,8 @@ def home():
             # incoming_orders = OrderItem.query.filter(
             #     db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
             
+            orders = db.session.execute(text(f"select * from orders"))
+
             incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
 
             show = request.form.get("show")
@@ -50,7 +52,6 @@ def home():
 
             # if Vendor.request.form == "POST":
             #     if show:
-            #         return render_template("vendor_home.html")
 
             #     elif add:
             #         return render_template("vendor_add.html")
@@ -60,7 +61,25 @@ def home():
 
             #     elif delete:
             #         return render_template("vendor_delete.html")
-            return render_template("vendor_home.html", categories=categories, vendor_products=vendor_products, incoming_order=incoming_orders)
+
+            orders = db.sesion.execute(text(f"select order_id, status, vp.product_id, p.title from Orders natural join Vendor_Products as vp natural join Products as p where p.product_id = {current_user.vendor_product_id};")).all()
+            
+            total_orders = []
+
+            shipped_orders = []
+
+            pending_orders = []
+
+            for order in orders:
+                if order[1] == "pending":
+                    pending_orders.append(orders)
+
+                if order[1] == "shipped":
+                    shipped_orders.append(orders)
+
+            total_orders.append(order)
+
+            return render_template("vendor_home.html", categories=categories, vendor_products=vendor_products, incoming_order=total_orders, pending_orders=pending_orders, shipped_orders=shipped_orders)
         case "CUSTOMER":
             result = db.session.execute(text(f"select title, description, product_image, category from Carts natural join Cart_Items join Products using(product_id) where customer_id = { current_user.user_id };")).all()
             customer = Customer.query.filter_by(
@@ -72,7 +91,6 @@ def home():
             orders = Order.query.filter_by(
                 customer_id=customer.customer_id).order_by(Order.order_date).all()
 
-            
             return render_template("customer_home.html", orders=orders, cart_items=result)
         case _:
             print("ERROR ROUTING TO HOME")
