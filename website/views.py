@@ -45,22 +45,21 @@ def home():
 
             incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
 
-            show = request.form.get("show")
-            add = request.form.get("add")
-            edit = request.form.get("edit")
-            delete = request.form.get("delete")
+            show = request.form["show"]
+            add = request.form["add"]
+            edit = request.form["edit"]
+            delete = request.form["delete"]
 
             # if Vendor.request.form == "POST":
-            #     if show:
 
-            #     elif add:
-            #         return render_template("vendor_add.html")
+            #     if add:
+            #         return redirect("/vendor_add.html")
                 
             #     elif edit:
-            #         return render_template("vendor_edit.html")
+            #         return redirect("/vendor_edit.html")
 
             #     elif delete:
-            #         return render_template("vendor_delete.html")
+            #         return redirect("/vendor_delete.html")
 
             orders = db.sesion.execute(text(f"select order_id, status, vp.product_id, p.title from Orders natural join Vendor_Products as vp natural join Products as p where p.product_id = {current_user.vendor_product_id};")).all()
             
@@ -96,6 +95,10 @@ def home():
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
 
+@views.route("/vendor/<int:vendor_id>")
+@login_required
+def admin_choice():
+    return render_template("vendor_choices")
 
 
 @views.route("/shop")
