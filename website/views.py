@@ -42,14 +42,13 @@ def home():
             # incoming_orders = OrderItem.query.filter(
             #     db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
             
-            orders = db.session.execute(text(f"select * from orders"))
 
             incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
 
-            show = request.form["show"]
-            add = request.form["add"]
-            edit = request.form["edit"]
-            delete = request.form["delete"]
+            show = request.form.get("show")
+            add = request.form.get("add")
+            edit = request.form.get("edit")
+            delete = request.form.get("delete")
 
             # if Vendor.request.form == "POST":
 
@@ -62,7 +61,7 @@ def home():
             #     elif delete:
             #         return redirect("/vendor_delete.html")
 
-            orders = db.sesion.execute(text(f"select order_id, item.order_item_id, customer_id, cart_id, order_date,  from Orders natural join Vendor_Products as vp natural join Order_Items as items where p.product_id = {current_user.vendor_product_id};")).all()
+            orders = db.sesion.execute(text(f"select order_id, items.order_item_id, customer_id, order_date,  from Orders natural join Vendor_Products as vp natural join Order_Items as items where p.product_id = {current_user.vendor_product_id};")).all()
             
             total_orders = []
 

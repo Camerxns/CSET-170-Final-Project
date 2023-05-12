@@ -151,6 +151,15 @@ CREATE TABLE IF NOT EXISTS Orders(
     FOREIGN KEY(cart_id) REFERENCES Carts(cart_id)
 );
 
+select * from users natural join customers;
+select * from carts;
+
+INSERT INTO Carts (customer_id)
+VALUES (1);
+
+INSERT INTO Orders (customer_id, cart_id, status)
+VALUES	(1, 1, "shipped");
+
 CREATE TABLE IF NOT EXISTS Order_Items(
 	order_item_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     order_id INT NOT NULL,
@@ -235,3 +244,13 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
     (2, '17\"'),
     (4, 'Large'),
     (4, 'Small');
+
+-- select * from products;
+-- select * from vendor_products;
+-- select * from orders;
+-- select * from order_items;
+
+INSERT INTO Order_Items(order_id, vendor_product_id, qty, color, size)
+VALUES	(1, 2, 5, "green", "m");
+
+select Orders.order_id, items.order_item_id, customer_id, order_date, status from Orders join Vendor_Products as vp join Order_Items as items join Products as p;
