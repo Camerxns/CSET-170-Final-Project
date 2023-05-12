@@ -1,7 +1,7 @@
 from sqlalchemy import CheckConstraint, Column, DECIMAL, DateTime, ForeignKey, Integer, String, Table, Text, text
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
-from __init__ import db
+from . import db
 
 
 Base = db.Model

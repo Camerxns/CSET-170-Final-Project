@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from environs import Env
+from flask_socketio import SocketIO
 
 env = Env()
 env.read_env()
@@ -27,12 +28,18 @@ def create_app():
     from .vendor import vendor
     from .admin import admin
     from .customer import customer
+    from .chatroom import chat
+
+    socketio = SocketIO(app)
+    socketio.init_app(app)
+
 
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
     app.register_blueprint(vendor, url_prefix="/vendor/")
     app.register_blueprint(admin, url_prefix="/admin/")
     app.register_blueprint(customer, url_prefix="/admin")
+    app.register_blueprint(chat, url_prefix="/")
 
     from .models import User
 

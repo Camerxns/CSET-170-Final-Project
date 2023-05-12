@@ -1,32 +1,18 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Blueprint, render_template, request, session, redirect, url_for
 from flask_socketio import join_room, leave_room, send, SocketIO
+from flask import current_app as app
 import random
 from flask_sqlalchemy import SQLAlchemy
-from models import ChatMessage, Chat
-from environs import Env
+from .models import ChatMessage, Chat
+from . import db
 
+socketio = SocketIO()
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "hjhjsdahhds"
-socketio = SocketIO(app)
-
-
-
-env = Env()
-env.read_env()
-
-db = SQLAlchemy()
-MYSQL_USERNAME = env("MYSQL_USERNAME")
-MYSQL_PASSWORD = env("MYSQL_PASSWORD")
-MYSQL_HOST = env("MYSQL_HOST")
-MYSQL_PORT = env.int("MYSQL_PORT")
-MYSQL_DATABASE = "CSET_180_FINAL_PROJECT"
-
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
-db.init_app(app)
+chat = Blueprint('chat', __name__)
 
 
 rooms = {}
+
 
 
 def generate_unique_code(length):
@@ -41,7 +27,7 @@ def generate_unique_code(length):
     return code
 
 
-@app.route("/", methods=["POST", "GET"])
+@chat.route("/chat", methods=["POST", "GET"])
 def home():
     session.clear()
     if request.method == "POST":
@@ -65,12 +51,12 @@ def home():
 
         session["room"] = room
         session["name"] = name
-        return redirect(url_for("room"))
+        return redirect(url_for("chat.room"))
 
     return render_template("chat2.html")
 
 
-@app.route("/room")
+@chat.route("/chat/room")
 def room():
     room = session.get("room")
     if room is None or session.get("name") is None or room not in rooms:
@@ -78,21 +64,7 @@ def room():
 
     return render_template("chatroom.html", code=room, messages=rooms[room]["messages"])
 
-def write_to_text_file(username, room, message):
-    with open("chatlog.txt", "a") as file:
-        file.write(f"Username: {username}, Room: {room}, Message: {message}\n")
 
-# def send_to_database():
-#     with open("chatlog.txt", "r") as file:
-#         chat_id = session.get('room')
-#         user_id = session.get('name')
-#         contents = file.read()
-#         chats_add = Chat(chat_id=chat_id)
-#         chat_message = ChatMessage(chat_id=chat_id, user_id=user_id, message=contents)
-#         db.session.add(chats_add)
-#         db.session.commit()
-#         db.session.add(chat_message)
-#         db.session.commit()
 
 @socketio.on("message")
 def message(data):
@@ -150,4 +122,4 @@ def disconnect():
 
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(chat, debug=True, allow_unsafe_werkzeug=True)
