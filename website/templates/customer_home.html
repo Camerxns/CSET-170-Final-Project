@@ -56,11 +56,13 @@
 
     .cart-details{
         display: flex;
-        height: 80px;
-        width: 100%;
+        width: 300px;
         overflow-wrap: break-word;
-        justify-content: flex-start;
+        justify-content: space-between;
+        align-items: center;
         border: 2px solid gray;
+        margin-bottom: 10px;
+        padding: 5px;
     }
 
     .cart-item-image{
@@ -119,12 +121,8 @@
         <div class="cart-items">
             {% for item in cart_items %}
             <div class="cart-details">
-                <div>
-                    <h3>{{ item[0] }}</h3>
-                </div>
-                <div>
-                    <img src="{{ item[2] }}" class="cart-item-image" alt="item-image"> 
-                </div>
+                <h3>{{ item[0] }}</h3>
+                <img src="{{ url_for('static', filename='uploads/') + item[2] }}" class="cart-item-image" alt="item-image">
             </div>
             {% endfor %}
 
