@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import join_room, leave_room, send, SocketIO
 import random
 from flask_sqlalchemy import SQLAlchemy
-from models import ChatMessages
+from models import ChatMessage, Chat
 from environs import Env
 
 
@@ -20,7 +20,7 @@ MYSQL_USERNAME = env("MYSQL_USERNAME")
 MYSQL_PASSWORD = env("MYSQL_PASSWORD")
 MYSQL_HOST = env("MYSQL_HOST")
 MYSQL_PORT = env.int("MYSQL_PORT")
-MYSQL_DATABASE = "CSET180_FINAL_PROJECT"
+MYSQL_DATABASE = "CSET_180_FINAL_PROJECT"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
 db.init_app(app)
@@ -87,7 +87,10 @@ def write_to_text_file(username, room, message):
 #         chat_id = session.get('room')
 #         user_id = session.get('name')
 #         contents = file.read()
-#         chat_message = ChatMessages(chat_id=chat_id, user_id=user_id, message=contents)
+#         chats_add = Chat(chat_id=chat_id)
+#         chat_message = ChatMessage(chat_id=chat_id, user_id=user_id, message=contents)
+#         db.session.add(chats_add)
+#         db.session.commit()
 #         db.session.add(chat_message)
 #         db.session.commit()
 
@@ -95,7 +98,6 @@ def write_to_text_file(username, room, message):
 def message(data):
     name = session.get('name')
     room = session.get("room")
-    username = session.get("name")
     message = data["data"]
     if room not in rooms:
         return
@@ -107,8 +109,13 @@ def message(data):
     send(content, to=room)
     rooms[room]["messages"].append(content)
     print(f"{session.get('name')} said: {data['data']}")
-    write_to_text_file(username, room, message)
-    # send_to_database()
+    chat_id = Chat(chat_id=room)
+    chat_message = ChatMessage(chat_id=room, user_id=name, message=message)
+    db.session.add(chat_id)
+    db.session.commit()
+    db.session.add(chat_message)
+    db.session.commit()
+
 
 
 @socketio.on("connect")

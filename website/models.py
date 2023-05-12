@@ -2,7 +2,6 @@ from sqlalchemy import CheckConstraint, Column, DECIMAL, DateTime, ForeignKey, I
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 from __init__ import db
-from datetime import datetime
 
 
 Base = db.Model
@@ -14,7 +13,7 @@ class Chat(Base):
 
     chat_id = Column(Integer, primary_key=True, unique=True)
 
-    users = relationship('User')
+    users = relationship('User', secondary='Chat_Users')
 
 
 class Product(Base):
@@ -65,50 +64,25 @@ class Admin(Base):
     user = relationship('User')
 
 
-# class ChatMessages(Base):
-#     __tablename__ = 'Chat_Messages'
-    
-#     chat_message_id = Column(Integer, primary_key=True, unique=True)
-#     chat_id = Column(ForeignKey('Chats.chat_id'), nullable=False, index=True)
-#     user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
-#     message_date = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
-#     message = Column(Text, nullable=False)
-
-#     chat = relationship('Chat')
-#     user = relationship('User')
-
-#     users = relationship('User', secondary='Chat_Users', backref='chats')
-
-
-# t_Chat_Users = Table(
-#     'Chat_Users', metadata,
-#     Column('chat_id', ForeignKey('Chats.chat_id'), nullable=False, index=True),
-#     Column('user_id', ForeignKey('Users.user_id'), nullable=False, index=True)
-# )
-
-class ChatMessages(db.Model):
+class ChatMessage(Base):
     __tablename__ = 'Chat_Messages'
 
-    chat_message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    chat_id = Column(Integer, ForeignKey('chats.id'))  # Establishing the foreign key relationship
-    user_id = Column(Integer, ForeignKey('users.id'))
-    message_date = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    message = Column(Text)
-    # message = db.Column(db.Text, nullable=False)
+    chat_message_id = Column(Integer, primary_key=True, unique=True)
+    chat_id = Column(ForeignKey('Chats.chat_id'), nullable=False, index=True)
+    user_id = Column(ForeignKey('Users.user_id'), nullable=False, index=True)
+    message_date = Column(DateTime, nullable=False,
+                          server_default=text("CURRENT_TIMESTAMP"))
+    message = Column(Text, nullable=False)
 
-    def __init__(self, chat_id, user_id, message):
-        self.chat_id = chat_id
-        self.user_id = user_id
-        self.message = message
+    chat = relationship('Chat')
+    user = relationship('User')
 
-class Chats(Base):
-    __tablename__ = 'chats'
-    id = Column(Integer, primary_key=True)
-    users = relationship('Users', backref='chats')  # Establishing the relationship to the 'Users' table
 
-class Users(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
+t_Chat_Users = Table(
+    'Chat_Users', metadata,
+    Column('chat_id', ForeignKey('Chats.chat_id'), nullable=False, index=True),
+    Column('user_id', ForeignKey('Users.user_id'), nullable=False, index=True)
+)
 
 
 class Complaint(Base):
