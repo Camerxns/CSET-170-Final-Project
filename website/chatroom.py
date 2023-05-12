@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from flask_socketio import join_room, leave_room, send, SocketIO
 from flask import current_app as app
 import random
-from flask_sqlalchemy import SQLAlchemy
 from .models import ChatMessage, Chat
 from . import db
 
@@ -12,7 +11,6 @@ chat = Blueprint('chat', __name__)
 
 
 rooms = {}
-
 
 
 def generate_unique_code(length):
@@ -60,7 +58,7 @@ def home():
 def room():
     room = session.get("room")
     if room is None or session.get("name") is None or room not in rooms:
-        return redirect(url_for("chat2"))
+        return redirect(url_for("chat.home"))
 
     return render_template("chatroom.html", code=room, messages=rooms[room]["messages"])
 
@@ -122,4 +120,5 @@ def disconnect():
 
 
 if __name__ == "__main__":
-    socketio.run(chat, debug=True, allow_unsafe_werkzeug=True)
+    socketio.init_app(app, debug=True)
+    socketio.run(app, debug=True)

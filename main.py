@@ -8,5 +8,5 @@ socketio.init_app(app)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
     socketio.run(app, debug=True, use_reloader=True)
