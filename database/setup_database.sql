@@ -229,6 +229,7 @@ CREATE TABLE IF NOT EXISTS Chat_Messages(
 
 INSERT INTO Users (name, username, email, password) VALUES
 	("Justin Koch", "Code12", "jdkoch2855@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f"),
+    ("Connor Hamilton", "QuasimodoKiwi", "example@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f"),
     ("Hank Williams", "Hank", "hankwilliams86@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f"),
     ("Jack Rhysiter", "Hackerman", "jrhysiter12@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f"),
     ("Bart Reeds", "BartReeds23", "breads23@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f");

@@ -61,7 +61,7 @@ def home():
             #     elif delete:
             #         return redirect("/vendor_delete.html")
 
-            orders = db.sesion.execute(text(f"select order_id, status, vp.product_id, p.title from Orders natural join Vendor_Products as vp natural join Products as p where p.product_id = {current_user.vendor_product_id};")).all()
+            orders = db.sesion.execute(text(f"select order_id, item.order_item_id, customer_id, cart_id, order_date,  from Orders natural join Vendor_Products as vp natural join Order_Items as items where p.product_id = {current_user.vendor_product_id};")).all()
             
             total_orders = []
 
