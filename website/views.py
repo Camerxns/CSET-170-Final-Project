@@ -103,9 +103,9 @@ def products_page(product_id):
     vendor_product_id = db.session.execute(text(f"SELECT vendor_product_id FROM Vendor_Products WHERE vendor_id={vendor_id} AND product_id={product_id}")).first()[0]
     price = db.session.execute(text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id={vendor_product_id}")).first()
 
-    return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price, vendor_product_id=vendor_product_id)
+    reviews = db.session.execute(text(f"SELECT * FROM Reviews JOIN Users USING(user_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE product_id={product_id}")).all()
     
-   
+    return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price, vendor_product_id=vendor_product_id, reviews=reviews)
    
     
 @views.route("/checkout")
