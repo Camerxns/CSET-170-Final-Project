@@ -235,7 +235,8 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
     (4, 'Large'),
     (4, 'Small');
 
-
+INSERT INTO Reviews(vendor_product_id, user_id, rating, message, image) VALUES
+	(1, 1, 3, "Great laptop! I've been able to upgrade it! A wonder for laptops.", "framework-internals.jpg");
 
 
 
