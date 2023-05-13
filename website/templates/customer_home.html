@@ -108,6 +108,19 @@
     #content-item{
         font-size: 50pt;
     }
+
+    .remove-item-btn {
+        box-shadow: none;
+        height: 40px;
+        width: 40px;
+    }
+
+    .remove-cart-icon {
+        color: red;
+        height: 100%;
+        width: 100%;
+    }
+    
 </style>
 
 {% extends "base.html" %}
@@ -121,6 +134,11 @@
         <div class="cart-items">
             {% for item in cart_items %}
             <div class="cart-details">
+                <form method="/remove-from-cart">
+                    <button type="submit" class="remove-item-btn">
+                        <ion-icon class="remove-cart-icon" name="remove-circle"></ion-icon>
+                    </button>
+                </form>
                 <h3>{{ item[0] }}</h3>
                 <img src="{{ url_for('static', filename='uploads/') + item[2] }}" class="cart-item-image" alt="item-image">
             </div>

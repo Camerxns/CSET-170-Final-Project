@@ -137,3 +137,14 @@ def add_to_cart():
     db.session.commit()
     flash("Successfully added to cart")
     return redirect(url_for("views.shop"))
+
+
+@views.route("/remove-from-cart", methods=["POST"])
+@login_required
+def remove_from_cart():
+    cart_item_id = request.form.get("cart_item_id")
+
+    db.session.execute(text(f"DELETE FROM Cart_Items WHERE cart_item_id={cart_item_id}"))
+    db.session.commit()
+
+    return redirect(request.url)
