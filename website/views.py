@@ -43,8 +43,7 @@ def home():
             customer_id = db.session.execute(text(f"SELECT customer_id FROM Customers WHERE user_id = { current_user.user_id }")).first()[0]
             cart_items = db.session.execute(text(f"SELECT *, Cart_Items.qty as cart_items_qty FROM Cart_Items JOIN Carts USING(cart_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE customer_id={customer_id}"))
             cart_total = 0
-            for cart_item in cart_items:
-                cart_total += cart_item.price
+
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 

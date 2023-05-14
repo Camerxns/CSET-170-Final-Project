@@ -78,23 +78,17 @@
         padding: 5px;
     }
 
+    .cart-details-column-1 {
+        
+    }
+
     .cart-details-column-2 {
-        display: flex;   
-        justify-content: space-between;
-        width: 100%;
+        flex-grow: 1;
     }
 
-    .cart-details-column-2-column-1 {
-        display: flex;
-        flex-direction: column;
-        margin-right: 5px;
-    }
-
-    .cart-details-column-2-column-2 {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
+    .cart-details-column-3 {
+        align-self: center;
+        justify-self: center;
     }
 
     .cart-item-image{
@@ -182,22 +176,20 @@
                     </button>
                 </form>
                 <div class="cart-details-column-2">
-                    <div class="cart-details-column-2-column-1">
-                        <h3 class="cart-item-title">{{ item.title }}</h3>
-                        <div class="cart-details-column-2-row-2-column-1">
-                            {% if item.color != "None" %}
-                            <p class="cart-item-color-size">Color: {{ item.color }}</p>
-                            {% endif %}
-                            {% if item.size != "None" %}
-                            <p class="cart-item-color-size">{{ "Size: " + item.size if item.size is not none else "" }}</p>
-                            {% endif %}
-                            <p class="cart-item-color-size">{{ "Qty: " + item.cart_items_qty | string if item.cart_items_qty is not none else "" }}</p>
-                        </div>
+                    <h3 class="cart-item-title">{{ item.title }}</h3>
+                    <div class="cart-details-column-2-row-2-column-1">
+                        {% if item.color != "None" %}
+                        <p class="cart-item-color-size">Color: {{ item.color }}</p>
+                        {% endif %}
+                        {% if item.size != "None" %}
+                        <p class="cart-item-color-size">{{ "Size: " + item.size if item.size is not none else "" }}</p>
+                        {% endif %}
+                        <p class="cart-item-color-size">{{ "Qty: " + item.cart_items_qty | string if item.cart_items_qty is not none else "" }}</p>
                     </div>
-                    <div class="cart-details-column-2-column-2">
-                        <img src="{{ url_for('static', filename='uploads/') + item.product_image }}" class="cart-item-image" alt="item-image">
-                        <h4 class="cart-item-price">${{ item.price }}</h4>
-                    </div>
+                </div>
+                <div class="cart-details-column-3">
+                    <img src="{{ url_for('static', filename='uploads/') + item.product_image }}" class="cart-item-image" alt="item-image">
+                    <h4 class="cart-item-price">${{ item.price }}</h4>
                 </div>
             </div>
             <hr>
