@@ -18,7 +18,7 @@ def base():
 
 @views.route("/home")
 @login_required
-def home():    
+def home():
     match current_user.account_type():
         case "ADMIN":
             admin = Admin.query.filter_by(user_id=current_user.user_id).first()
@@ -41,14 +41,17 @@ def home():
             return render_template("vendor_home.html", vendor_products=vendor_products, incoming_orders=incoming_orders)
         case "CUSTOMER":
             customer_id = db.session.execute(text(f"SELECT customer_id FROM Customers WHERE user_id = { current_user.user_id }")).first()[0]
-            result = db.session.execute(text(f"select title, description, product_image, category from Carts natural join Cart_Items join Vendor_Products using(vendor_product_id) JOIN Products USING(product_id) where customer_id = { customer_id }")).all()
+            cart_items = db.session.execute(text(f"SELECT *, Cart_Items.qty as cart_items_qty FROM Cart_Items JOIN Carts USING(cart_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE customer_id={customer_id}"))
+            cart_total = 0
+            for cart_item in cart_items:
+                cart_total += cart_item.price
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
             orders = Order.query.filter_by(
                 customer_id=customer.customer_id).order_by(Order.order_date).all()
 
-            return render_template("customer_home.html", orders=orders, cart_items=result)
+            return render_template("customer_home.html", orders=orders, cart_items=cart_items, cart_total=cart_total)
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
@@ -147,4 +150,4 @@ def remove_from_cart():
     db.session.execute(text(f"DELETE FROM Cart_Items WHERE cart_item_id={cart_item_id}"))
     db.session.commit()
 
-    return redirect(request.url)
+    return redirect(request.referrer)
