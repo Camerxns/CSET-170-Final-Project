@@ -235,9 +235,10 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
     (4, 'Large'),
     (4, 'Small');
 
+INSERT INTO Reviews(vendor_product_id, user_id, rating, message, image) VALUES
+	(1, 1, 3, "Great laptop! I've been able to upgrade it! A wonder for laptops.", "framework-internals.jpg");
 
-
-
+SELECT cart_item_id, title, product_image, price FROM Cart_Items JOIN Carts USING(cart_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE customer_id=1;
 
 
 

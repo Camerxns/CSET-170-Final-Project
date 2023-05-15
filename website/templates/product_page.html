@@ -8,7 +8,7 @@
         padding: 0;
     }
     
-    .container {
+    .main-content {
         min-width: 800px;
         width: fit-content;
         margin: 0 auto;
@@ -18,6 +18,9 @@
         border-radius: 5px;
         margin-top: 50px;
         margin-bottom: 50px;
+    }
+    
+    .container {
         display: flex;
         justify-content: space-between;
     }
@@ -100,6 +103,49 @@
         height: 400px;
         width: 600px;
     }
+
+    .review {
+        margin-top: 10px;
+        background-color: #dcd3bd;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .name-and-stars {
+        width: fit-content;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .review-stars {
+        display: flex;
+    }
+
+    .star {
+        color: rgb(207, 176, 0);
+        align-self: center;
+    }
+
+    .w50px {
+        width: 50px;
+    }
+
+    .review-date {
+        align-self: center;
+        margin-left: 10px;
+    }
+
+    .review-message-image {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .review-image {
+        display: block;
+        height: 200px;
+        width: 300px;
+    }
+
 </style>
 
 {% extends 'base.html' %}
@@ -163,6 +209,36 @@
         <p class="price">${{ price[0] }}</p>
         <button type="submit" class="btn add-to-cart">Add to Cart</button>
     </form>
+</div>
+<div class="reviews">
+    <h1 class="review-title">Reviews</h1>
+    <hr>
+    {% if reviews | length > 0 %}
+    {% for review in reviews %}
+    <div class="review">
+        <div class="name-and-stars">
+            <h2 class="review-name">{{ review.name }}</h2>
+            <p class="review-date">{{ review.review_date.strftime("%b %d, %Y") }}</p>
+            <div class="w50px"></div>
+            <div class="review-stars">
+                {% for i in range(5) %}
+                {% if review.rating > i %}
+                <ion-icon class="star" name="star"></ion-icon>
+                {% else %}
+                <ion-icon class="star" name="star-outline"></ion-icon>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="review-message-image">
+            <p class="review-message">{{ review.message }}</p>
+            <img class="review-image" src="{{ url_for('static', filename='uploads/' + review.image) }}">
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="no-reviews-msg">Be the first to review this product!</p>
+    {% endif %}
 </div>
 {% endblock %}
 

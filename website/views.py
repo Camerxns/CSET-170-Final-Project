@@ -43,15 +43,17 @@ def home():
         case "CUSTOMER":
             customer_id = db.session.execute(
                 text(f"SELECT customer_id FROM Customers WHERE user_id = {current_user.user_id}")).first()[0]
-            result = db.session.execute(text(
-                f"select title, description, product_image, category from Carts natural join Cart_Items join Vendor_Products using(vendor_product_id) JOIN Products USING(product_id) where customer_id = {customer_id}")).all()
+            cart_items = db.session.execute(text(
+                f"SELECT *, Cart_Items.qty as cart_items_qty FROM Cart_Items JOIN Carts USING(cart_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE customer_id={customer_id}"))
+            cart_total = 0
+
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
             orders = Order.query.filter_by(
                 customer_id=customer.customer_id).order_by(Order.order_date).all()
 
-            return render_template("customer_home.html", orders=orders, cart_items=result)
+            return render_template("customer_home.html", orders=orders, cart_items=cart_items, cart_total=cart_total)
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
@@ -117,9 +119,12 @@ def products_page(product_id):
     price = db.session.execute(
         text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id={vendor_product_id}")).first()
 
+    reviews = db.session.execute(text(
+        f"SELECT * FROM Reviews JOIN Users USING(user_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE product_id={product_id}")).all()
+
     return render_template("product_page.html", title=title, description=description, product_image=product_image,
                            vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price,
-                           vendor_product_id=vendor_product_id)
+                           vendor_product_id=vendor_product_id, reviews=reviews)
 
 
 @views.route("/checkout")
@@ -152,3 +157,14 @@ def add_to_cart():
     db.session.commit()
     flash("Successfully added to cart")
     return redirect(url_for("views.shop"))
+
+
+@views.route("/remove-from-cart", methods=["POST"])
+@login_required
+def remove_from_cart():
+    cart_item_id = request.form.get("cart_item_id")
+
+    db.session.execute(text(f"DELETE FROM Cart_Items WHERE cart_item_id={cart_item_id}"))
+    db.session.commit()
+
+    return redirect(request.referrer)
