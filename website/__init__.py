@@ -21,6 +21,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}'
     app.config['UPLOAD_FOLDER'] = "static/uploads/"
     # app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+    app.config['FLASK_SOCKETIO_ENABLED'] = True
 
 
     db.init_app(app)
@@ -30,11 +31,12 @@ def create_app():
     from .vendor import vendor
     from .admin import admin
     from .customer import customer
+    from .chatroom import chat, create_socketio
+
+
+    socketio = create_socketio(app)
+
     from .chatroom import chat
-
-    socketio = SocketIO(app)
-    socketio.init_app(app)
-
 
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
@@ -53,4 +55,4 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
 
-    return app
+    return app, socketio
