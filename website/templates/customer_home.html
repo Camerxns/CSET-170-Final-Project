@@ -1,14 +1,4 @@
 <style>
-    *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    #company-title{
-        font-family: "Apple Chancery", "cursive";
-    }
-
     .main-content{
         display: grid; 
         background-image: url("../static/images/wood-background.jpg");
@@ -32,6 +22,9 @@
     .intro-box{
         grid-area: hello;
         font-size: 25pt;
+        display: flex;
+        justify-content: center;
+        align-content: center;
     }
 
     .cart{
@@ -42,16 +35,26 @@
         justify-content: space-between;
     }
 
-    .cart>button{
+    .go-to-cart-wrapper {
+        display: block;
         height: 100px;
         width: 50%;
         border: 2px solid goldenrod;
         font-size: 20pt;
         filter: drop-shadow(5px 5px 1rem black);
+        background-color: lightgray;
+        display: flex;
+        justify-content: center;
+        color: inherit;
+        text-decoration: none;
     }
 
-    .cart>button:hover{
-        cursor: pointer;
+    .go-to-cart {
+        align-self: center;
+        height: fit-content;
+    }
+
+    .go-to-cart-wrapper:hover{
         background-color: black;
         color: gold;
         
@@ -61,16 +64,27 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        width: 300px;
         background-color: lightyellow;
+        border: 1px solid black;
     }
 
     .cart-details{
         display: flex;
-        height: 80px;
         width: 100%;
         overflow-wrap: break-word;
-        justify-content: flex-start;
-        border: 2px solid gray;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 5px;
+    }
+
+    .cart-details-column-2 {
+        flex-grow: 1;
+    }
+
+    .cart-details-column-3 {
+        align-self: center;
+        justify-self: center;
     }
 
     .cart-item-image{
@@ -79,6 +93,25 @@
         border-radius: 50% ;
     }
 
+    .remove-item-btn {
+        box-shadow: none;
+        height: 40px;
+        width: 40px;
+        border: none;
+        background-color: inherit;
+        margin-right: 5px;
+    }
+
+    .remove-cart-icon:hover {
+        background-color: none;
+        cursor: pointer;
+    }
+
+    .remove-cart-icon {
+        color: rgb(160, 0, 0);
+        height: 100%;
+        width: 100%;
+    }
 
     .slideshow{
         grid-area: slideshow;
@@ -116,6 +149,9 @@
     #content-item{
         font-size: 50pt;
     }
+
+    
+    
 </style>
 
 {% extends "base.html" %}
@@ -147,24 +183,42 @@
 
 {% block body %} 
     <div class="content-item intro-box">
-        Hello, {{ current_user.username }}
+        <h1>Hello, {{ current_user.username }}</h1>
     </div>
     <div class="content-item cart">
         <h2>Cart</h2>
         <div class="cart-items">
             {% for item in cart_items %}
             <div class="cart-details">
-                <div>
-                    <h3>{{ item[0] }}</h3>
+                <form class="cart-item-column-1" action="/remove-from-cart" method="POST">
+                    <input type="hidden" name="cart_item_id" value="{{ item.cart_item_id }}">
+                    <button type="submit" class="remove-item-btn">
+                        <ion-icon class="remove-cart-icon" name="remove-circle"></ion-icon>
+                    </button>
+                </form>
+                <div class="cart-details-column-2">
+                    <h3 class="cart-item-title">{{ item.title }}</h3>
+                    <div class="cart-details-column-2-row-2-column-1">
+                        {% if item.color != "None" %}
+                        <p class="cart-item-color-size">Color: {{ item.color }}</p>
+                        {% endif %}
+                        {% if item.size != "None" %}
+                        <p class="cart-item-color-size">{{ "Size: " + item.size if item.size is not none else "" }}</p>
+                        {% endif %}
+                        <p class="cart-item-color-size">{{ "Qty: " + item.cart_items_qty | string if item.cart_items_qty is not none else "" }}</p>
+                    </div>
                 </div>
-                <div>
-                    <img src="{{ item[2] }}" class="cart-item-image" alt="item-image"> 
+                <div class="cart-details-column-3">
+                    <img src="{{ url_for('static', filename='uploads/') + item.product_image }}" class="cart-item-image" alt="item-image">
+                    <h4 class="cart-item-price">${{ item.price }}</h4>
                 </div>
             </div>
+            <hr>
             {% endfor %}
-
         </div>
-        <button>Checkout</button>
+        <a class="go-to-cart-wrapper" href="/cart">
+            <p class="go-to-cart">Go To Cart</p>
+        </a>
     </div>
     <div class="content-item slideshow">
         Slideshow
