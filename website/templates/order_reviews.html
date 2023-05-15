@@ -1,0 +1,68 @@
+<style>
+ 
+    .order-details-container {
+        text-align: center;
+        padding: 30px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 0 auto;
+      }
+    
+      .order-heading {
+        font-size: 32px;
+        color: #333;
+        margin-bottom: 30px;
+        font-family: 'Arial', sans-serif;
+        text-transform: uppercase;
+      }
+    
+      .order-info {
+        margin-bottom: 20px;
+      }
+    
+      .order-label {
+        font-size: 18px;
+        color: #777;
+        margin-bottom: 5px;
+        font-family: 'Arial', sans-serif;
+      }
+    
+      .order-value {
+        font-size: 20px;
+        color: #333;
+        font-weight: bold;
+        font-family: 'Arial', sans-serif;
+      }
+    
+      .order-message {
+        font-size: 20px;
+        color: #555;
+        margin-top: 30px;
+        font-family: 'Arial', sans-serif;
+        font-style: italic;
+        letter-spacing: 1px;
+      }
+
+</style>
+
+{% extends 'base.html' %}
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body %}
+<div class="order-details-container">
+    <h1 class="order-heading">Order Details</h1>
+    <p class="order-message">Here are the details of the order you just made.</p>
+    <div class="order-info">
+      <p class="order-label">Order ID:</p>
+      <p class="order-value">123456</p>
+    </div>
+    <div class="order-info">
+      <p class="order-label">Order Address:</p>
+      <p class="order-value">123 Main St, City, State, Zip</p>
+    </div>
+  </div>
+{% endblock %}

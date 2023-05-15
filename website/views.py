@@ -150,3 +150,8 @@ def remove_from_cart():
     db.session.commit()
 
     return redirect(request.referrer)
+
+
+@views.route("/order-review")
+def order_review():
+    return render_template("order_reviews.html")
