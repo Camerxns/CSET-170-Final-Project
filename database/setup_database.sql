@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS Vendor_Products (
     qty INT NOT NULL DEFAULT 1,
     price DECIMAL(9,2) NOT NULL DEFAULT 0.00,
     warranty_length DATE DEFAULT NULL,
+    date_created DATE DEFAULT NOW(),
     PRIMARY KEY(vendor_product_id),
     FOREIGN KEY(product_id) REFERENCES Products(product_id),
     FOREIGN KEY(vendor_id) REFERENCES Vendors(vendor_id)
@@ -240,7 +241,7 @@ INSERT INTO Reviews(vendor_product_id, user_id, rating, message, image) VALUES
 
 SELECT cart_item_id, title, product_image, price FROM Cart_Items JOIN Carts USING(cart_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE customer_id=1;
 
-
+SELECT * FROM Orders ORDER BY order_date;
 
 
 
