@@ -15,8 +15,7 @@ def index():
 def base():
     return render_template("base.html")
 
-@views.route("/home")
-
+@views.route("/home", methods=["GET", "POST"])
 @login_required
 def home():    
     match current_user.account_type():
@@ -44,18 +43,20 @@ def home():
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
-            # cart_items = CartItem.query.filter_by(
-                # db.CartItem.cart.customer_id == customer.customer_id).all()
-
             orders = Order.query.filter_by(
                 customer_id=customer.customer_id).order_by(Order.order_date).all()
+            
+            toConcerns = request.form.get('toConcerns')
+
+            if toConcerns:
+                customer.customer_id = current_user.user_id     
+                return redirect("complaints.html")                              
+
 
             return render_template("customer_home.html", orders=orders, cart_items=result)
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
-
-
 
 
 @views.route("/profile")
