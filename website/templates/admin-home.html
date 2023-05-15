@@ -51,11 +51,33 @@
         padding: 5px;
         border: 1px solid black;
         border-radius: 5px;
+        margin-bottom: 5px;
     }
 
     .complaint-flex {
         display: flex;
         justify-content: space-between;
+    }
+
+    .incoming-orders {
+
+    }
+
+    .order {
+        padding: 5px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    .product {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        padding: 5px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-bottom: 5px;
     }
 
 </style>
@@ -82,13 +104,21 @@
         <div class="incoming-orders">
             {% for order in incoming_orders %}
             <div class="order">
-                <h1 class="order-id">{{ order.order_id }}</h1>
+                <h1 class="order-id">Order id: {{ order.order_id }}</h1>
+                <p class="order-date">{{ order.order_date }}</p>
             </div>
             {% endfor %}
         </div>
     </div>
     <div class="admin-section new-products">
         <h1 class="section-title">New Products</h1>
+        {% for product in recently_added_products %}
+        <a class="product" href="/shop/product/{{ product.product_id }}">
+            <h1 class="product-name">{{ product.title }}</h1>
+            <h3 class="vendor-name">Vendor ID: {{ product.vendor_id }}</h3>
+            <p class="product-date">{{ product.date_created }}</p>
+        </a>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS Vendor_Products (
     qty INT NOT NULL DEFAULT 1,
     price DECIMAL(9,2) NOT NULL DEFAULT 0.00,
     warranty_length DATE DEFAULT NULL,
-    date_created DATE DEFAULT NOW(),
+    date_created DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY(vendor_product_id),
     FOREIGN KEY(product_id) REFERENCES Products(product_id),
     FOREIGN KEY(vendor_id) REFERENCES Vendors(vendor_id)
@@ -239,9 +239,47 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
 INSERT INTO Reviews(vendor_product_id, user_id, rating, message, image) VALUES
 	(1, 1, 3, "Great laptop! I've been able to upgrade it! A wonder for laptops.", "framework-internals.jpg");
 
-SELECT cart_item_id, title, product_image, price FROM Cart_Items JOIN Carts USING(cart_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE customer_id=1;
+INSERT INTO Complaints (user_id, title, description, demand) VALUES
+	(1, "REFUND ME", "I purchased a couch 24 days ago, and it still hasn't arrived!", "REFUND");
 
-SELECT * FROM Orders ORDER BY order_date;
+
+# DESC Carts;
+INSERT INTO Carts (customer_id) VALUES (1);
+
+
+# DESC Cart_Items;
+INSERT INTO Cart_Items (cart_id, vendor_product_id, qty, color, size) VALUES
+	(1, 1, 2, "Orange", '15"');
+
+
+# DESC Orders;
+INSERT INTO Orders (customer_id, cart_id) VALUES
+	(1, );
+    
+
+DESC Order_Items;
+INSERT INTO Order_Items (order_id, vendor_product_size, qty, color, size) VALUES
+	();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
