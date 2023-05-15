@@ -79,6 +79,12 @@ def create_socketio(app):
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         message_div = "<div class='text'><span><strong>{}</strong>: {}</span><span class='muted'>{}</span></div>".format(name, message, current_time)
         socketio.emit("display_message", message_div, room=room)
+        chats_add = Chat(chat_id=room)
+        chat_message = ChatMessage(chat_id=room, user_id=name, message=message)
+        db.session.add(chats_add)
+        db.session.commit()
+        db.session.add(chat_message)
+        db.session.commit()
 
 
 
