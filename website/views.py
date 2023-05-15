@@ -150,3 +150,20 @@ def remove_from_cart():
     db.session.commit()
 
     return redirect(request.referrer)
+
+
+@views.route("/complaints_page", methods=["GET"])
+def complaints_page():
+    return render_template("complaints_page.html")
+
+@views.route("/complaints_page", methods=["POST"])
+def complaint_submit():
+    title = request.form.get("title")
+    description = request.form.get("complaint")
+
+
+    db.session.exexcute(f"INSERT INTO Complaints (title, description) VALUES ('{title}', '{description}') where ")
+
+    db.session.commit()
+
+    return 
