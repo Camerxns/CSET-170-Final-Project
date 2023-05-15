@@ -16,8 +16,6 @@ def base():
     return render_template("base.html")
 
 @views.route("/home", methods=["GET", "POST"])
-
-@views.route("/home")
 @login_required
 def home():
     match current_user.account_type():
