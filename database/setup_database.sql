@@ -183,8 +183,7 @@ CREATE TABLE IF NOT EXISTS Chat_Messages(
     message_date DATETIME NOT NULL DEFAULT NOW(),
     message TEXT NOT NULL,
     PRIMARY KEY(chat_message_id),
-    FOREIGN KEY(chat_id) REFERENCES Chats(chat_id),
-    FOREIGN KEY(user_id) REFERENCES Users(user_id)
+    FOREIGN KEY(chat_id) REFERENCES Chats(chat_id)
 );
 
 INSERT INTO Users (name, username, email, password) VALUES
