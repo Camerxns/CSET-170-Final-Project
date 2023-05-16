@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %} {% block body %}
   <head>
     <meta charset="UTF-8" />
     <title>Chat App</title>
@@ -83,4 +82,5 @@ h2 {
   <body>
     <div class="content">{% block content %} {% endblock %}</div>
   </body>
-</html>
+
+  {% endblock %}
