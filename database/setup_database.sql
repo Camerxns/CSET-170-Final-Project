@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS Chat_Users(
 CREATE TABLE IF NOT EXISTS Chat_Messages(
 	chat_message_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     chat_id INT NOT NULL,
-    user_id INT NOT NULL,
+    user_id VARCHAR(30) NOT NULL,
     message_date DATETIME NOT NULL DEFAULT NOW(),
     message TEXT NOT NULL,
     PRIMARY KEY(chat_message_id),
