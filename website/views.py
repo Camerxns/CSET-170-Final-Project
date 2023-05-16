@@ -197,7 +197,7 @@ def remove_from_cart():
 
 @views.route("/order-review")
 def order_review():
-     order_id = db.session.execute(text(f"SELECT order_id FROM Orders where order_id={current_user.order_id}")).first()
-     return render_template("order_reviews.html", order_id=order_id)
+    
+     return render_template("order_reviews.html")
    
     
