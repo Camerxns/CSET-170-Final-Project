@@ -95,14 +95,14 @@ CREATE TABLE IF NOT EXISTS Discounts (
 
 CREATE TABLE IF NOT EXISTS Reviews (
 	review_id INT NOT NULL UNIQUE AUTO_INCREMENT,
-    vendor_product_id INT NOT NULL,
+    product_id INT NOT NULL,
     user_id INT NOT NULL,
     rating INT NOT NULL,
     review_date DATETIME NOT NULL DEFAULT NOW(),
     message TEXT DEFAULT NULL,
     image VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY(review_id),
-    FOREIGN KEY(vendor_product_id) REFERENCES Vendor_Products(vendor_product_id),
+    FOREIGN KEY(product_id) REFERENCES Products(product_id),
     FOREIGN KEY(user_id) REFERENCES Users(user_id),
     CHECK (rating >= 1 AND rating <= 5)
 );
@@ -131,13 +131,13 @@ CREATE TABLE IF NOT EXISTS Carts (
 CREATE TABLE IF NOT EXISTS Cart_Items(
 	cart_item_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     cart_id INT NOT NULL,
-    vendor_product_id INT NOT NULL,
+    product_id INT NOT NULL,
     qty INT NOT NULL DEFAULT 1,
     color VARCHAR(40) DEFAULT NULL,
     size VARCHAR(20) DEFAULT NULL,
     PRIMARY KEY(cart_item_id),
     FOREIGN KEY(cart_id) REFERENCES Carts(cart_id),
-    FOREIGN KEY(vendor_product_id) REFERENCES Vendor_Products(vendor_product_id)
+    FOREIGN KEY(product_id) REFERENCES Products(product_id)
 );
 
 CREATE TABLE IF NOT EXISTS Orders(
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS Chat_Users(
 CREATE TABLE IF NOT EXISTS Chat_Messages(
 	chat_message_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     chat_id INT NOT NULL,
-    user_id INT NOT NULL,
+    user_id VARCHAR(30) NOT NULL,
     message_date DATETIME NOT NULL DEFAULT NOW(),
     message TEXT NOT NULL,
     PRIMARY KEY(chat_message_id),
@@ -234,22 +234,3 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
     (2, '17\"'),
     (4, 'Large'),
     (4, 'Small');
-
-INSERT INTO Reviews(vendor_product_id, user_id, rating, message, image) VALUES
-	(1, 1, 3, "Great laptop! I've been able to upgrade it! A wonder for laptops.", "framework-internals.jpg");
-
-SELECT cart_item_id, title, product_image, price FROM Cart_Items JOIN Carts USING(cart_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE customer_id=1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
