@@ -23,10 +23,13 @@ def home():
     match current_user.account_type():
         case "ADMIN":
             incoming_orders = db.session.execute(text(f"SELECT * FROM Orders ORDER BY order_date;"))
-            recently_added_products = db.session.execute(text(f"SELECT *, Products.title FROM Vendor_Products JOIN Products USING(product_id) ORDER BY date_created LIMIT 3;"))
-            complaints = db.session.execute(text(f"SELECT *, Users.name as author FROM Complaints JOIN Users USING(user_id) ORDER BY complaint_date;"))
+            recently_added_products = db.session.execute(text(
+                f"SELECT *, Products.title FROM Vendor_Products JOIN Products USING(product_id) ORDER BY date_created LIMIT 3;"))
+            complaints = db.session.execute(text(
+                f"SELECT *, Users.name as author FROM Complaints JOIN Users USING(user_id) ORDER BY complaint_date;"))
 
-            return render_template("admin-home.html", incoming_orders=incoming_orders, recently_added_products=recently_added_products, complaints=complaints)
+            return render_template("admin-home.html", incoming_orders=incoming_orders,
+                                   recently_added_products=recently_added_products, complaints=complaints)
         case "VENDOR":
             vendor = Vendor.query.filter_by(
                 user_id=current_user.user_id).first()
@@ -125,11 +128,34 @@ def products_page(product_id):
                            vendor_product_id=vendor_product_id, reviews=reviews)
 
 
-@views.route("/checkout")
+@views.route("/checkout", methods=["GET", "POST"])
+@login_required
 def checkout():
-    # Retrieve cart items from the database
+    customer = db.session.execute(text(f"SELECT * FROM Customers WHERE user_id={current_user.user_id}")).first()
+    cart = db.session.execute(text(f"SELECT * FROM Carts WHERE customer_id={customer.customer_id}")).first()
+    cart_items = db.session.execute(text(
+        f"SELECT *, Cart_Items.qty AS item_qty FROM Cart_Items JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE cart_id={cart.cart_id}")).all()
+    cart_total = 0
+    for cart_item in cart_items.copy():
+        vendor_product_id = cart_item.vendor_product_id
+        product_price = db.session.execute(
+            text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id={vendor_product_id}")).first()
+        cart_total += product_price.price * cart_item.item_qty
 
-    return render_template("checkout.html")
+    if request.method == "POST":
+        db.session.execute(
+            text(f"INSERT INTO Orders (customer_id, cart_id) VALUES ({customer.customer_id}, {cart.cart_id});"))
+        db.session.commit()
+        order = db.session.execute(text(f"SELECT * FROM Orders WHERE order_id=LAST_INSERT_ID()")).first()
+        for cart_item in cart_items.copy():
+            db.session.execute(text(
+                f"INSERT INTO Order_Items (order_id, vendor_product_id, qty, color, size) VALUES ({order.order_id}, {cart_item.vendor_product_id}, {cart_item.item_qty}, '{cart_item.color}', '{cart_item.size}');"))
+            db.session.commit()
+        db.session.execute(text(f"DELETE FROM Cart_Items WHeRE cart_id={cart.cart_id}"))
+        db.session.commit()
+        return redirect(url_for("views.home"))
+    else:
+        return render_template("checkout.html", cart_items=cart_items, cart_total=cart_total)
 
 
 @views.route("/add-to-cart", methods=["POST"])
