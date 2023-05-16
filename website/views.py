@@ -22,13 +22,11 @@ def base():
 def home():
     match current_user.account_type():
         case "ADMIN":
-            admin = Admin.query.filter_by(user_id=current_user.user_id).first()
+            incoming_orders = db.session.execute(text(f"SELECT * FROM Orders ORDER BY order_date;"))
+            recently_added_products = db.session.execute(text(f"SELECT *, Products.title FROM Vendor_Products JOIN Products USING(product_id) ORDER BY date_created LIMIT 3;"))
+            complaints = db.session.execute(text(f"SELECT *, Users.name as author FROM Complaints JOIN Users USING(user_id) ORDER BY complaint_date;"))
 
-            products = VendorProduct.query.all()
-
-            incoming_orders = OrderItem.query.all()
-
-            return render_template("vendor_home.html", vendor_products=products, incoming_orders=incoming_orders)
+            return render_template("admin-home.html", incoming_orders=incoming_orders, recently_added_products=recently_added_products, complaints=complaints)
         case "VENDOR":
             vendor = Vendor.query.filter_by(
                 user_id=current_user.user_id).first()

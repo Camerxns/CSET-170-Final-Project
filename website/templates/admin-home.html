@@ -1,0 +1,124 @@
+<style>
+    .main-content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        justify-content: space-between;
+    }
+
+    .admin-section {
+        padding: 5px;
+    }
+
+    .section-title {
+        text-align: center;
+    }
+
+    .section-title::after {
+        display: block;
+        content: "";
+        border: 2px solid black;
+        width: 80%;
+        margin: 2px auto 10px;
+    }
+
+    .left {
+        background-color: beige;
+        width: 49%;
+    }
+
+    .right {
+        width: 49%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .new-orders {
+        background-color: beige;
+        height: 49%;
+    }
+
+    .new-products {
+        background-color: beige;
+        height: 49%;
+    }
+
+    .complaint {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        padding: 5px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    .complaint-flex {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .incoming-orders {
+
+    }
+
+    .order {
+        padding: 5px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    .product {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        padding: 5px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+</style>
+
+{% extends 'base.html' %}
+{% block body %}
+<div class="admin-section left">
+    <h1 class="section-title">Complaints</h1>
+    {% for complaint in complaints %}
+    <a class="complaint" href="/complaint/{{ complaint.complaint_id }}">
+        <div class="complaint-flex">
+            <div class="complaint-title-author">
+                <h1 class="complaint-title">{{ complaint.title }}</h1>
+                <p class="complaint-author">{{ complaint.author }}</p>
+            </div>
+            <p class="complaint-date">{{ complaint.complaint_date }}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+<div class="right">
+    <div class="admin-section new-orders">
+        <h1 class="section-title">Incoming Orders</h1>
+        <div class="incoming-orders">
+            {% for order in incoming_orders %}
+            <div class="order">
+                <h1 class="order-id">Order id: {{ order.order_id }}</h1>
+                <p class="order-date">{{ order.order_date }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="admin-section new-products">
+        <h1 class="section-title">New Products</h1>
+        {% for product in recently_added_products %}
+        <a class="product" href="/shop/product/{{ product.product_id }}">
+            <h1 class="product-name">{{ product.title }}</h1>
+            <h3 class="vendor-name">Vendor ID: {{ product.vendor_id }}</h3>
+            <p class="product-date">{{ product.date_created }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
