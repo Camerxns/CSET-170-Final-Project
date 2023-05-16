@@ -66,7 +66,7 @@ def home():
 @login_required
 def shop():
     categories = [category[0].capitalize() for category in
-                  db.session.execute(text(f"SELECT category FROM Products")).all()]
+                  db.session.execute(text(f"SELECT DISTINCT category FROM Products ORDER BY category")).all()]
 
     search = request.args.get("search")
     if search:
