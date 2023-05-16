@@ -128,13 +128,7 @@
       cursor: pointer;
       background-color: lightcoral;
       color: lightyellow;
-    }
-
-    form{
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }    
+    }   
 
     .orders-container{
       display: grid;
@@ -161,15 +155,17 @@
   {{ current_user.name }}'s Page
   {% endblock %}
   {% block body %}
+  
   <form action="/home" method="POST">
     <select name="vendor-options">
-      <option name="show">Show Your Items</option>
-      <option name="add">Add</option>
-      <option name="edit">Edit</option>
-      <option name="delete">Delete</option>
+      <option value="show">Show Your Items</option>
+      <option value="add">Add</option>
+      <option value="edit">Edit</option>
+      <option value="delete">Delete</option>
     </select>
     <input type="submit" value="Submit" name="vendor_submit"></input>
   </form>
+
   <div class="search-container">
     <input type="text" class="search-bar" placeholder="Search...">
     <button class="search-btn">
@@ -182,16 +178,16 @@
     {% endfor %}
   </div>
   <div class="product-grid">
-    <!-- {% for product in vendor_products %} -->
-    <!-- <a class="product-card" href="/shop/product/{{ product[0] }}"> -->
+    {% for product in vendor_products %}
+    <a class="product-card" href="/shop/product/{{ product[0] }}">
       <div class="product-img-container">
-        <!-- <img class="product-img" src="{{ product[2] }}" alt="pic"> -->
+        <img class="product-img" src="{{ product[2] }}" alt="pic">
       </div>
       <div class="product-details">
-        <!-- <h2 class="product-title">{{ product[1] }}</h2> -->
+        <h2 class="product-title">{{ product[1] }}</h2>
       </div>
     </a>
-  <!-- {% endfor %} -->
+  {% endfor %}
   </div>
   <div class="orders-container">
     <div class="all-orders">

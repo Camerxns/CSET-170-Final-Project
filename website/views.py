@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from sqlalchemy import text, create_engine
 from .models import *
+from werkzeug.utils import secure_filename, redirect, send_from_directory
 from . import db
 
 views = Blueprint('views', __name__)
@@ -37,8 +38,6 @@ def home():
             categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
             categories.insert(0, "All")                
 
-            # vendor_products = db.session.execute(text(f"select product_id, title, product_image from Products WHERE product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
-
             # incoming_orders = OrderItem.query.filter(
                 # db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
             
@@ -47,13 +46,13 @@ def home():
             if request.method == "POST":
                 choices = request.form.get("vendor-options")
                 if choices == 'add':
-                    return redirect("/vendor/add")
+                    return redirect(url_for("views.admin_add"))
                 
                 elif choices == 'edit':
-                    return redirect("/vendor/edit")
+                    return redirect(url_for("views.admin_edit"))
 
                 elif choices == 'delete':
-                    return redirect("/vendor/delete")
+                    return redirect(url_for("views.admin_delete"))
 
             # orders = db.sesion.execute(text(f"select order_id, status, items.order_item_id, customer_id, order_date from Orders natural join Vendor_Products as vp natural join Order_Items as items where p.product_id = {current_user.vendor_product_id};")).all()
             
@@ -85,27 +84,55 @@ def home():
             return "ERROR ROUTING TO HOME"
 
 
-@views.route("/vendor/add")
+@views.route("/vendor/add", methods=["GET"])
 @login_required
-def admin_add():       
+def admin_add():
     return render_template("vendor_add.html")
 
+@views.route("/vendor/add", methods=["POST"])
+@login_required
+def add_items():
+    title = request.form.get("title")
+    description = request.form.get("description")
+    product_image = request.files["product_image"]
+    category = request.form.get("category")
+    price = request.form.get("price")
+    color = request.form.get("color")
+    size = request.form.get("size")
+    quantity = request.form.get("quantity")
+
+
+    if product_image.filename == "":
+        filename = ""
+    else:
+        filename = secure_filename(product_image.filename)
+        product_image.save("website/static/uploads/" + filename)
+    db.session.execute(text(f"INSERT INTO Products (title, description, product_image, category) VALUES ('{title}', '{description}', '{filename}', '{category}')"))
+    db.session.commit()
+    
+    product = db.session.execute(text(f"SELECT * FROM Products WHERE product_id = LAST_INSERT_ID()")).first()
+    vendor_id = db.session.execute(text(f"SELECT vendor_id FROM Vendors WHERE user_id = {current_user.user_id}")).first()
+
+    db.session.execute(text(f"INSERT INTO Vendor_Products (product_id, vendor_id, qty, price) VALUES({product.product_id}, {vendor_id.vendor_id}, {quantity}, {price})"))
+    db.session.commit()
+    db.session.execute(text(f"INSERT INTO Vendor_Product_Sizes VALUES ({vendor_id.vendor_id}, '{size}')"))
+    db.session.commit()
+    db.session.execute(text(f"INSERT INTO Vendor_Product_Colors VALUES ({vendor_id.vendor_id}, '{color}')"))
+    db.session.commit()
+    
+    return redirect(url_for("views.home"))
+ 
 @views.route("/vendor/edit", methods=["GET"])
 @login_required
 def admin_edit():
+    
     return render_template("vendor_edit.html")
 
 @views.route("/vendor/edit", methods=["POST"])
 @login_required
 def edit_process():
-    vendor = Vendor.query.filter_by(
-    user_id=current_user.user_id).first()
-
-    vendor_products = VendorProduct.query.filter_by(
-    vendor_id=vendor.vendor_id).all()
-    categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
-    categories.insert(0, "All")
-    return redirect("/vendor/edit", vendor_products=vendor_products, categories=categories)
+    vendor_products = db.session.execute(text(f"select product_id, title, product_image from Products WHERE product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
+    return redirect("/vendor/edit")
 
 
 @views.route("/vendor/delete", methods=["GET"])
@@ -176,9 +203,7 @@ def products_page(product_id):
     price = db.session.execute(text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id={vendor_product_id}")).first()
 
     return render_template("product_page.html", title=title, description=description, product_image=product_image, vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price, vendor_product_id=vendor_product_id)
-    
-   
-   
+      
     
 @views.route("/checkout")
 def checkout():

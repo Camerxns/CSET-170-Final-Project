@@ -1,5 +1,75 @@
+<style>
+body{
+    background-color: beige;
+}
+
+.main-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-container{
+    display: flex;
+    border: 2px solid black;
+    border-radius: 25px;
+    background-color: whitesmoke;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 130%;
+    height: 45%;
+    justify-content: space-between;
+}
+
+input[type=text]:focus{
+    border: 3px solid gray;
+}
+
+#title{
+    text-overflow: ellipsis;
+}
+
+#submit{
+    padding: 10px;
+}
+
+</style>
 {% extends "base.html" %}
 
 {% block body %}
-Hello World!
+<form action="/vendor/add" method="post" enctype="multipart/form-data">
+<div class="add-container">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="title">
+            </div>
+            <div>
+                <input type="text" id="description" name="description" placeholder="Description:">
+            </div>
+            <div>
+                <label for="product_image" id="product_image">Choose Image</label>
+                <input type="file" id="product_image" name="product_image" accept=".jpg, .jpeg, .png">
+            </div>
+            <div>
+                <input type="text" id="category" name="category" placeholder="Category">
+            </div>
+            <div>
+                <label for="price">Price (USD): </label>
+                <input type="number" id="price" name="price">
+            </div>
+            <div>
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity">
+            </div>
+            <div>
+                <label for="color">Color:</label>
+                <input type="text" id="color" name="color">
+            </div>
+            <div>
+                <label for="size">Size:</label>
+                <input type="size" id="size" name="size">
+            </div>
+            <input type="submit" id="submit">
+        </div>
+    </form>
 {% endblock %}
