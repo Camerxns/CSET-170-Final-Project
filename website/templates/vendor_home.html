@@ -158,7 +158,7 @@
   </style>
   {% extends 'base.html' %}
   {% block title %}
-  {{ current_user.user_id }}'s Page
+  {{ current_user.name }}'s Page
   {% endblock %}
   {% block body %}
   <form action="/home" method="POST">
@@ -182,46 +182,48 @@
     {% endfor %}
   </div>
   <div class="product-grid">
-    {% for product in vendor_products %}
-    <a class="product-card" href="/shop/product/{{ product[0] }}">
+    <!-- {% for product in vendor_products %} -->
+    <!-- <a class="product-card" href="/shop/product/{{ product[0] }}"> -->
       <div class="product-img-container">
-        <img class="product-img" src="{{ product[2] }}" alt="pic">
+        <!-- <img class="product-img" src="{{ product[2] }}" alt="pic"> -->
       </div>
       <div class="product-details">
-        <h2 class="product-title">{{ product[1] }}</h2>
+        <!-- <h2 class="product-title">{{ product[1] }}</h2> -->
       </div>
     </a>
-  {% endfor %}
+  <!-- {% endfor %} -->
   </div>
   <div class="orders-container">
     <div class="all-orders">
       <h4>Orders</h4>
       <ul class="order-list">
-        {% for total in incoming_orders %}
+        <!-- {% for total in incoming_orders %} -->
         <li>
-          <a href="">{{ total. }}</a>
+          <!-- <a href="">{{ total.name }}</a> -->
         </li>
-        {% endfor %}
+        <!-- {% endfor %} -->
       </ul>
     </div>
     <div class="orders-shipped">
       <h4>Shipped</h4>
       <ul class="order-list">
-        {% for shipped in shipped_orders %}
+        <!-- {% for shipped in shipped_orders %} -->
         <li>
-          <a href="">{{ shipped.title }}</a>
+          <!-- <a href="">{{ shipped.title }}</a> -->
         </li>
-        <li>{{ shipped. }}</li>
-        {% endfor %}
+        <!-- <li>{{ shipped.title }}</li> -->
+        <!-- {% endfor %} -->
       </ul>
     </div>
     <div class="orders-pending">
       <h4>Pending</h4>
       <ul class="order-list">
-        {% for pending in pending_orders}
-        <li><a href="">{{ pending.title }}</a></li>
-        <li>{{ pending.title }}</li>
-        {% endfor %}
+        <!-- {% for pending in pending_orders %} -->
+        <li>
+          <!-- <a href="">{{ pending.title }}</a> -->
+        </li>
+        <!-- <li>{{ pending.title }}</li> -->
+        <!-- {% endfor %} -->
       </ul>
     </div>
   </div>

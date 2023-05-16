@@ -259,3 +259,4 @@ VALUES	(1, 2, 5, "green", "m");
 select Orders.order_id, items.order_item_id, customer_id, order_date, status from Orders join Vendor_Products as vp join Order_Items as items join Products as p;
 
 select * from orders;
+select * from order_items;

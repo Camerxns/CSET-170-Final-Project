@@ -154,7 +154,7 @@ class Cart(Base):
 
 
 class VendorProduct(Base):
-    __tablename__ = 'Vendor_Products'
+    __tablename__ = 'Vendor_Products' 
 
     vendor_product_id = Column(Integer, primary_key=True, unique=True)
     product_id = Column(ForeignKey('Products.product_id'),

@@ -39,24 +39,24 @@ def home():
 
             # vendor_products = db.session.execute(text(f"select product_id, title, product_image from Products WHERE product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
 
-            incoming_orders = OrderItem.query.filter(
-                db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
+            # incoming_orders = OrderItem.query.filter(
+                # db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
             
-            # incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
+            incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
 
-            add = request.form.get("add")
-            edit = request.form.get("edit")
-            delete = request.form.get("delete")
 
-            if current_user.request.form == "POST":
+            if request.method == "POST":
+                add = request.form.get("add")
+                edit = request.form.get("edit")
+                delete = request.form.get("delete")
                 if add:
-                    return redirect("/vendor_add.html")
+                    return redirect("/vendor/add")
                 
                 elif edit:
-                    return redirect("/vendor_edit.html")
+                    return redirect("/vendor/edit")
 
                 elif delete:
-                    return redirect("/vendor_delete.html")
+                    return redirect("/vendor/delete")
 
             # orders = db.sesion.execute(text(f"select order_id, status, items.order_item_id, customer_id, order_date from Orders natural join Vendor_Products as vp natural join Order_Items as items where p.product_id = {current_user.vendor_product_id};")).all()
             
@@ -87,12 +87,13 @@ def home():
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
 
-@views.route("/vendor/<int:vendor_id>/add", methods=["GET", "POST"])
+
+@views.route("/vendor/add", methods=["GET"])
 @login_required
 def admin_add():       
     return render_template("vendor_add.html")
 
-@views.route("/vendor/<int:vendor_id>/edit", methods=["GET", "POST"])
+@views.route("/vendor/edit", methods=["GET", "POST"])
 @login_required
 def admin_edit():
     vendor = Vendor.query.filter_by(
@@ -102,9 +103,9 @@ def admin_edit():
     vendor_id=vendor.vendor_id).all()
     categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
     categories.insert(0, "All")
-    return render_template("vendor_edit.html")
+    return render_template("vendor_edit.html", vendor_products=vendor_products, categories=categories)
 
-@views.route("/vendor/<int:vendor_id>/delete", methods=["GET", "POST"])
+@views.route("/vendor/delete", methods=["GET", "POST"])
 @login_required
 def admin_delete():
     vendor = Vendor.query.filter_by(
@@ -115,7 +116,7 @@ def admin_delete():
     categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
     categories.insert(0, "All")
     
-    return render_template("vendor_delete.html")
+    return render_template("vendor_delete.html", vendor_products=vendor_products, categories=categories)
 
 @views.route("/shop")
 @login_required
