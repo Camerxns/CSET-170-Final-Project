@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS Vendor_Products (
     qty INT NOT NULL DEFAULT 1,
     price DECIMAL(9,2) NOT NULL DEFAULT 0.00,
     warranty_length DATE DEFAULT NULL,
+    date_created DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY(vendor_product_id),
     FOREIGN KEY(product_id) REFERENCES Products(product_id),
     FOREIGN KEY(vendor_id) REFERENCES Vendors(vendor_id)
@@ -95,14 +96,14 @@ CREATE TABLE IF NOT EXISTS Discounts (
 
 CREATE TABLE IF NOT EXISTS Reviews (
 	review_id INT NOT NULL UNIQUE AUTO_INCREMENT,
-    vendor_product_id INT NOT NULL,
+    product_id INT NOT NULL,
     user_id INT NOT NULL,
     rating INT NOT NULL,
     review_date DATETIME NOT NULL DEFAULT NOW(),
     message TEXT DEFAULT NULL,
     image VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY(review_id),
-    FOREIGN KEY(vendor_product_id) REFERENCES Vendor_Products(vendor_product_id),
+    FOREIGN KEY(product_id) REFERENCES Products(product_id),
     FOREIGN KEY(user_id) REFERENCES Users(user_id),
     CHECK (rating >= 1 AND rating <= 5)
 );
@@ -183,12 +184,11 @@ CREATE TABLE IF NOT EXISTS Chat_Users(
 CREATE TABLE IF NOT EXISTS Chat_Messages(
 	chat_message_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     chat_id INT NOT NULL,
-    user_id INT NOT NULL,
+    user_id VARCHAR(30) NOT NULL,
     message_date DATETIME NOT NULL DEFAULT NOW(),
     message TEXT NOT NULL,
     PRIMARY KEY(chat_message_id),
-    FOREIGN KEY(chat_id) REFERENCES Chats(chat_id),
-    FOREIGN KEY(user_id) REFERENCES Users(user_id)
+    FOREIGN KEY(chat_id) REFERENCES Chats(chat_id)
 );
 
 INSERT INTO Users (name, username, email, password) VALUES
@@ -220,7 +220,7 @@ INSERT INTO Products (title, description, product_image, category) VALUES
 INSERT INTO Vendor_Products (product_id, vendor_id, qty, price, warranty_length) VALUES
 	((SELECT product_id FROM Products WHERE title="Framework Laptop"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="jrhysiter12@gmail.com")), 4, 32.66, NULL),
     ((SELECT product_id FROM Products WHERE title="IPhone 12 Pro"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="jrhysiter12@gmail.com")), 87, 999.99, '2023-08-12'),
-    ((SELECT product_id FROM Products WHERE title="Framework Laptop"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="breads23@gmail.com")), 4, 32.66, NULL),
+    ((SELECT product_id FROM Products WHERE title="Framework Laptop"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="breads23@gmail.com")), 4, 29.95, NULL),
     ((SELECT product_id FROM Products WHERE title="Couch"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="breads23@gmail.com")), 7, 65.23, NULL);
 
 INSERT INTO Vendor_Product_Colors (vendor_product_id, color) VALUES
@@ -241,21 +241,44 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
     (4, 'Large'),
     (4, 'Small');
 
+INSERT INTO Reviews(product_id, user_id, rating, message, image) VALUES
+	(1, 1, 3, "Great laptop! I've been able to upgrade it! A wonder for laptops.", "framework-internals.jpg");
 -- select * from products;
 -- select * from vendor_products;
 -- select * from orders;
 -- select * from order_items;
 
+INSERT INTO Complaints (user_id, title, description, demand) VALUES
+	(1, "REFUND ME", "I purchased a couch 24 days ago, and it still hasn't arrived!", "REFUND");
 INSERT INTO Carts (customer_id)
 VALUES (1);
 
 INSERT INTO Orders (customer_id, cart_id, status)
 VALUES	(1, 1, "shipped");
 
+# DESC Carts;
+INSERT INTO Carts (customer_id) VALUES (1);
 INSERT INTO Order_Items(order_id, vendor_product_id, qty, color, size)
 VALUES	(1, 2, 5, "green", "m");
 
 -- select Orders.order_id, items.order_item_id, customer_id, order_date, status from Orders join Vendor_Products as vp join Order_Items as items join Products as p;
 
+# DESC Cart_Items;
+INSERT INTO Cart_Items (cart_id, vendor_product_id, qty, color, size) VALUES
+	(1, 1, 2, "Orange", '15"');
+
+
+# DESC Orders;
+INSERT INTO Orders (customer_id, cart_id) VALUES
+	(1, 1);
+    
+
+# DESC Order_Items;
+INSERT INTO Order_Items (order_id, vendor_product_id, qty, color, size) VALUES
+	(1, 1, 2, "Orange", '15"');
+
+# SELECT * FROM Order_Items WHERE order_id = LAST_INSERT_ID();
+SELECT * FROM Orders;
+SELECT * FROM Order_Items WHERE order_id=2;
 -- select * from orders;
 -- select * from order_items;

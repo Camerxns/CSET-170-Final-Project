@@ -1,0 +1,58 @@
+{% extends 'chat.html' %} {% block content %}
+<div class="message-box">
+  <h2>Chat Room: {{room}}</h2>
+  <div class="messages" id="messages"></div>
+  <div class="inputs">
+    <input
+      type="text"
+      rows="3"
+      placeholder="Message"
+      name="message"
+      id="message"
+    />
+    <button type="button" name="send" id="send-btn" onclick="sendMessage()">
+      Send
+    </button>
+  </div>
+</div>
+<script type="text/javascript">
+  var socketio = io();
+
+const messages = document.getElementById("messages");
+
+const createMessage = (name, message) => {
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("text");
+  const senderSpan = document.createElement("span");
+  const senderText = document.createElement("strong");
+  senderText.textContent = name;
+  senderSpan.appendChild(senderText);
+  senderSpan.appendChild(document.createTextNode(": " + message));
+  const current_time = new Date().toLocaleString();
+  const timestampSpan = document.createElement("span");
+  timestampSpan.classList.add("muted");
+  timestampSpan.textContent = current_time;
+  messageDiv.appendChild(senderSpan);
+  messageDiv.appendChild(timestampSpan);
+  messages.appendChild(messageDiv);
+};
+
+socketio.on("message", (data) => {
+  createMessage(data.name, data.message);
+});
+
+  const sendMessage = () => {
+    const message = document.getElementById("message");
+    if (message.value == "") return;
+    socketio.emit("message", {
+      room: "{{ room }}",
+      name: "{{ session['name'] }}",
+      message: message.value,
+    });
+    message.value = "";
+  };
+
+  document.getElementById("send-btn").addEventListener("click", sendMessage);
+</script>
+
+{% endblock %}
