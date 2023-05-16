@@ -27,9 +27,10 @@ def home():
                 f"SELECT *, Products.title FROM Vendor_Products JOIN Products USING(product_id) ORDER BY date_created LIMIT 3;"))
             complaints = db.session.execute(text(
                 f"SELECT *, Users.name as author FROM Complaints JOIN Users USING(user_id) ORDER BY complaint_date;"))
+            chats = db.session.execute(text(f"SELECT * FROM Chats"))
 
             return render_template("admin-home.html", incoming_orders=incoming_orders,
-                                   recently_added_products=recently_added_products, complaints=complaints)
+                                   recently_added_products=recently_added_products, complaints=complaints, chats=chats)
         case "VENDOR":
             vendor = Vendor.query.filter_by(
                 user_id=current_user.user_id).first()
@@ -166,8 +167,7 @@ def add_to_cart():
     color = request.form.get("color")
     size = request.form.get("size")
 
-    customer_id = \
-    db.session.execute(text(f"SELECT customer_id FROM Customers WHERE user_id={current_user.user_id}")).first()[0]
+    customer_id = db.session.execute(text(f"SELECT customer_id FROM Customers WHERE user_id={current_user.user_id}")).first()[0]
     cart_id = db.session.execute(text(f"SELECT cart_id FROM Carts WHERE customer_id={customer_id}")).first()
     if cart_id == None:
         db.session.execute(text(f"INSERT INTO Carts (customer_id) VALUES ({customer_id})"))
