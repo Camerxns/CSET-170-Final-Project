@@ -139,6 +139,10 @@
         width: 300px;
     }
 
+    #rating {
+        width: 50px;
+    }
+
 </style>
 
 {% extends 'base.html' %}
@@ -205,6 +209,22 @@
 </div>
 <div class="reviews">
     <h1 class="review-title">Reviews</h1>
+    <hr>
+    <h3>Post a Review</h3>
+    <br>
+    <form class="new-review" action="/review/{{ product_id }}" method="POST" enctype="multipart/form-data">
+        <label for="rating">Rating:</label>
+        <input type="number" name="rating" id="rating" min="1" max="5" value="5">
+
+        <label for="message">Review:</label>
+        <input type="text" name="message" id="message">
+
+        <label for="image">Image:</label>
+        <input type="file" name="image" id="image">
+
+        <input type="submit" value="Post Review">
+    </form>
+    <br>
     <hr>
     {% if reviews | length > 0 %}
     {% for review in reviews %}

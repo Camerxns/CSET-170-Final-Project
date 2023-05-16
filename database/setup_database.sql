@@ -96,14 +96,14 @@ CREATE TABLE IF NOT EXISTS Discounts (
 
 CREATE TABLE IF NOT EXISTS Reviews (
 	review_id INT NOT NULL UNIQUE AUTO_INCREMENT,
-    vendor_product_id INT NOT NULL,
+    product_id INT NOT NULL,
     user_id INT NOT NULL,
     rating INT NOT NULL,
     review_date DATETIME NOT NULL DEFAULT NOW(),
     message TEXT DEFAULT NULL,
     image VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY(review_id),
-    FOREIGN KEY(vendor_product_id) REFERENCES Vendor_Products(vendor_product_id),
+    FOREIGN KEY(product_id) REFERENCES Products(product_id),
     FOREIGN KEY(user_id) REFERENCES Users(user_id),
     CHECK (rating >= 1 AND rating <= 5)
 );
@@ -235,7 +235,7 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
     (4, 'Large'),
     (4, 'Small');
 
-INSERT INTO Reviews(vendor_product_id, user_id, rating, message, image) VALUES
+INSERT INTO Reviews(product_id, user_id, rating, message, image) VALUES
 	(1, 1, 3, "Great laptop! I've been able to upgrade it! A wonder for laptops.", "framework-internals.jpg");
 
 INSERT INTO Complaints (user_id, title, description, demand) VALUES
@@ -263,33 +263,3 @@ INSERT INTO Order_Items (order_id, vendor_product_id, qty, color, size) VALUES
 # SELECT * FROM Order_Items WHERE order_id = LAST_INSERT_ID();
 SELECT * FROM Orders;
 SELECT * FROM Order_Items WHERE order_id=2;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

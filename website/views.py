@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from sqlalchemy import text, create_engine
+from werkzeug.utils import secure_filename
 from .models import *
 from . import db
 
@@ -122,11 +123,11 @@ def products_page(product_id):
         text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id={vendor_product_id}")).first()
 
     reviews = db.session.execute(text(
-        f"SELECT * FROM Reviews JOIN Users USING(user_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE product_id={product_id}")).all()
+        f"SELECT * FROM Reviews JOIN Users USING(user_id) WHERE product_id={product_id}")).all()
 
     return render_template("product_page.html", title=title, description=description, product_image=product_image,
                            vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price,
-                           vendor_product_id=vendor_product_id, reviews=reviews)
+                           vendor_product_id=vendor_product_id, reviews=reviews, product_id=product_id)
 
 
 @views.route("/checkout", methods=["GET", "POST"])
@@ -192,3 +193,23 @@ def remove_from_cart():
     db.session.commit()
 
     return redirect(request.referrer)
+
+
+@views.route("/review/<int:product_id>", methods=["POST"])
+@login_required
+def add_review(product_id):
+    user_id = current_user.user_id
+    rating = request.form.get("rating")
+    message = request.form.get("message")
+    image = request.files["image"]
+
+    if image is None:
+        filename = ""
+    else:
+        filename = secure_filename(image.filename)
+        image.save("website/static/uploads/" + filename)
+    
+    db.session.execute(text(f"INSERT INTO Reviews (product_id, user_id, rating, message, image) VALUES ({product_id}, {user_id}, {rating}, '{message}', '{filename}')"))
+    db.session.commit()
+    
+    return redirect(url_for("views.products_page", product_id=product_id))
