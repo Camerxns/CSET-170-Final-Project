@@ -1,5 +1,3 @@
-
-
 <style>
   .checkout-container {
     max-width: 600px;
@@ -130,7 +128,7 @@
 
 {% extends 'base.html' %}
 {% block title %}
-Profile
+Checkout
 {% endblock %}
 
 {% block body %}
@@ -142,9 +140,9 @@ Profile
     <ul>
       {% for item in cart_items %}
       <li>
-        <span class="item-name">{{ item.product_name }}</span>
+        <span class="item-name">{{ item.title }}</span>
         <span class="item-details">
-          Quantity: {{ item.quantity }} |
+          Quantity: {{ item.item_qty }} |
           Color: {{ item.color }} |
           Price: {{ item.price }}
         </span>
@@ -153,7 +151,7 @@ Profile
     </ul>
   </div>
   <div class="order-total">
-    <h3>Total Price:</h3>
+    <h3>Total Price: ${{ cart_total }}</h3>
     <!-- Add total price here -->
   </div>
   
@@ -218,8 +216,8 @@ Profile
 </div>
     
 <div>
-<form action="/checkout" method="post">
-  <a href="#" class="checkout-button">Proceed to Checkout</a>
+<form action="/checkout" method="POST">
+  <button type="submit" class="checkout-button">Proceed to Checkout</button>
 </form>
 </div>
 </div>

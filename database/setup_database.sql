@@ -155,13 +155,13 @@ CREATE TABLE IF NOT EXISTS Orders(
 CREATE TABLE IF NOT EXISTS Order_Items(
 	order_item_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     order_id INT NOT NULL,
-    product_id INT NOT NULL,
+    vendor_product_id INT NOT NULL,
     qty INT,
     color VARCHAR(40),
     size VARCHAR(20),
     PRIMARY KEY(order_item_id),
     FOREIGN KEY(order_id) REFERENCES Orders(order_id),
-    FOREIGN KEY(product_id) REFERENCES Products(product_id)
+    FOREIGN KEY(vendor_product_id) REFERENCES Vendor_Products(vendor_product_id)
 );
 
 CREATE TABLE IF NOT EXISTS Chats(
@@ -254,13 +254,16 @@ INSERT INTO Cart_Items (cart_id, vendor_product_id, qty, color, size) VALUES
 
 # DESC Orders;
 INSERT INTO Orders (customer_id, cart_id) VALUES
-	(1, );
+	(1, 1);
     
 
-DESC Order_Items;
-INSERT INTO Order_Items (order_id, vendor_product_size, qty, color, size) VALUES
-	();
+# DESC Order_Items;
+INSERT INTO Order_Items (order_id, vendor_product_id, qty, color, size) VALUES
+	(1, 1, 2, "Orange", '15"');
 
+# SELECT * FROM Order_Items WHERE order_id = LAST_INSERT_ID();
+SELECT * FROM Orders;
+SELECT * FROM Order_Items WHERE order_id=2;
 
 
 
