@@ -215,7 +215,7 @@ INSERT INTO Products (title, description, product_image, category) VALUES
 INSERT INTO Vendor_Products (product_id, vendor_id, qty, price, warranty_length) VALUES
 	((SELECT product_id FROM Products WHERE title="Framework Laptop"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="jrhysiter12@gmail.com")), 4, 32.66, NULL),
     ((SELECT product_id FROM Products WHERE title="IPhone 12 Pro"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="jrhysiter12@gmail.com")), 87, 999.99, '2023-08-12'),
-    ((SELECT product_id FROM Products WHERE title="Framework Laptop"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="breads23@gmail.com")), 4, 32.66, NULL),
+    ((SELECT product_id FROM Products WHERE title="Framework Laptop"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="breads23@gmail.com")), 4, 29.95, NULL),
     ((SELECT product_id FROM Products WHERE title="Couch"), (SELECT vendor_id FROM Vendors WHERE user_id=(SELECT user_id FROM Users WHERE email="breads23@gmail.com")), 7, 65.23, NULL);
 
 INSERT INTO Vendor_Product_Colors (vendor_product_id, color) VALUES
