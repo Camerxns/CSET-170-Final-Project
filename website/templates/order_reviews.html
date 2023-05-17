@@ -71,7 +71,7 @@
 
 {% extends 'base.html' %}
 {% block title %}
-Profile
+Order Review
 {% endblock %}
 
 {% block body %}
@@ -79,18 +79,19 @@ Profile
 <div class="order-reviews-container">
   <h2 class="order-reviews-title">Order Reviews</h2>
   <div class="order-details">
-    <h3>Order ID: {{ order_id }}</h3>
-    <h3>Current User: {{ current_user.name }}</h3>
+    <h3>Order ID: {{ order.order_id }}</h3>
+    <h3>Customer ID: {{ order.customer_id }}</h3>
   </div>
   <div class="cart-items">
     <h3>Cart Items:</h3>
     <ul>
-      {% for item in cart_items %}
+      {% for item in order_items %}
       <li>
-        <span class="item-name">{{ item.product_name }}</span>
+        <span class="item-name">{{ item.title }}</span>
         <span class="item-details">
-          Quantity: {{ item.quantity }} |
+          Quantity: {{ item.qty }} |
           Color: {{ item.color }} |
+          Size: {{ item.size }} |
           Price: {{ item.price }}
         </span>
       </li>
@@ -98,8 +99,7 @@ Profile
     </ul>
   </div>
   <div class="order-total">
-    <h3>Total Price:</h3>
-    <span class="total-price">{{ total_price }}</span>
+    <h3>Total Price: ${{ total }}</h3>
   </div>
 </div>
 {% endblock %}
