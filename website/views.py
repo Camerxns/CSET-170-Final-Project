@@ -96,16 +96,20 @@ def order_manipulation(order_id):
     complete = request.form.get("complete")
     delete = request.form.get("delete")
 
-    if request.form.get == "POST":
+    if request.method == "POST":
         if pending:
             db.session.execute(text(f"UPDATE Orders SET status = 'pending' WHERE order_id = {order_id};"))
-            db.session.commit
+            db.session.commit()
+            return redirect(url_for("views.home"))
         if complete:
             db.session.execute(text(f"UPDATE Orders SET status = 'shipped' WHERE order_id = {order_id};"))
-            db.session.commit
+            db.session.commit()
+            return redirect(url_for("views.home"))
         if delete:
             db.session.execute(text(f"DELETE FROM Orders WHERE order_id = {order_id};"))
-            db.session.commit
+            db.session.commit()
+            return redirect(url_for("views.home"))
+    
     return render_template("order_choices.html", order=order)
 
 @views.route("/vendor/add", methods=["GET"])

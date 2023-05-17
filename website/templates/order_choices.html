@@ -7,11 +7,16 @@
 
 .choices-container{
     display: flex;
-    width: 25%;
-    height: 25%;
+    width: 40%;
+    height: 40%;
+    flex-wrap: wrap;
     justify-content: center;
     background-color: tan;
     color: white;
+}
+
+button{
+    border: 2px solid salmon;
 }
 
 </style>
@@ -19,11 +24,20 @@
 {% extends "base.html" %}
 {% block body %}
 <div class="choices-container">
-    <h2>Order #{{ order.order_id }}</h2>
     <div>
-        <form action="/order/<int:order_id>" method="POST">
-            
-        </form>
+        <h2>Order #{{ order.order_id }}</h2>
+        <h2>Status: {{ order.status.capitalize() }}</h2>
     </div>
+    <form action="{{ url_for('views.order_manipulation', order_id=order.order_id) }}" method="POST">
+        <div>
+            <button type="submit" name="pending" value="pending">SET STATUS TO Pending</button>
+        </div>
+        <div>
+            <button type="submit" name="complete" value="complete">SET STATUS TO Shipped</button>
+        </div>
+        <div>
+            <button type="submit" name="delete" value="delete">Delete Order</button>
+        </div>
+    </form>
 </div>
 {% endblock %}
