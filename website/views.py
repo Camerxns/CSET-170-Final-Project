@@ -41,7 +41,7 @@ def home():
             categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
             categories.insert(0, "All")
             
-            incoming_orders = db.session.execute(text(f"select status, customers.customer_id, order_id, name, title, product_id from orders join customers natural join users natural join products;")).all()
+            incoming_orders = db.session.execute(text(f"select status, Customers.customer_id, order_id, name, title, product_id from Orders join Customers natural join Users natural join Products;")).all()
             vendor_product_images = db.session.execute(text(f"select product_image from Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
 
             if request.method == "POST":
