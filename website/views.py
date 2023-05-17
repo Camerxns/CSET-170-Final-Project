@@ -197,21 +197,22 @@ def remove_from_cart():
     return redirect(request.referrer)
 
 
-@views.route("/complaints_page", methods=["GET"])
+@views.route("/complain", methods=["GET"])
+@login_required
 def complaints_page():
     return render_template("complaints_page.html")
 
-@views.route("/complaints_page", methods=["POST"])
+@views.route("/complain", methods=["POST"])
 def complaint_submit():
     title = request.form.get("title")
+    user_id = current_user.user_id
     description = request.form.get("complaint")
+    demand = request.form.get("demand")
 
-
-    db.session.exexcute(f"INSERT INTO Complaints (title, description) VALUES ('{title}', '{description}') where ")
-
+    db.session.execute(text(f"INSERT INTO Complaints (user_id, title, description, demand) VALUES ({user_id}, '{title}', '{description}', '{demand}')"))
     db.session.commit()
 
-    return 
+    return redirect(url_for("views.home"))
 
 
 @views.route("/order-review/<int:order_id>")
