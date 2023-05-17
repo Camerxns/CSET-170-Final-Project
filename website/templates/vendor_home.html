@@ -30,14 +30,14 @@
     }
     
     .search-container {
-      
       display: flex;
       justify-content: flex-end;
+      margin-top: 20px;
       margin-bottom: 20px;
     }
     
     .search-bar {
-      background-color:#dcd3bd;
+      background-color:#988567;
       padding: 10px;
       font-size: 16px;
       border: none;
@@ -138,15 +138,12 @@
       padding: 25px;
     }
 
-    .all-orders{
-      border-bottom: 2px solid black;
+
+    li{
+      display: inline;
     }
 
-    .orders-shipped{
-      border-bottom: 2px solid black;
-    }
-
-    .orders-pending{
+    .all-orders, .orders-shipped, .orders-pending{
       border-bottom: 2px solid black;
     }
   </style>
@@ -195,7 +192,7 @@
       <ul class="order-list">
         {% for total in incoming_orders %}
         <li>
-          <a href="/shop/product/<int:product_id>">{{ total[0] }}</a>
+          <a href="/shop/product/order-review/{{ total[2] }}">{{ total[0] }}</a>
         </li>
         {% endfor %}
       </ul>
@@ -205,7 +202,7 @@
       <ul class="order-list">
         {% for shipped in shipped_orders %}
         <li>
-          <a href="/shop/product/<int:product_id>">{{ shipped[0] }}</a>
+          <a href="/shop/product/order-review/{{ shipped[2] }}">{{ shipped[0] }}</a>
         </li>
         {% endfor %}
       </ul>
@@ -215,7 +212,7 @@
       <ul class="order-list">
         {% for pending in pending_orders %}
         <li>
-          <a href="/shop/product/<int:product_id>">{{ pending[0] }}</a>
+          <a href="/shop/product/order-review/{{ pending[2] }}">{{ pending[0] }}</a>
         </li>
         {% endfor %}
       </ul>

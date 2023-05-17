@@ -40,10 +40,7 @@ def home():
             vendor_products = VendorProduct.query.filter_by(
                 vendor_id=vendor.vendor_id).all()
             categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
-            categories.insert(0, "All")                
-
-            # incoming_orders = OrderItem.query.filter(
-                # db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
+            categories.insert(0, "All")
             
             incoming_orders = db.session.execute(text(f"select status, customers.customer_id, order_id, name, title, product_id from orders join customers natural join users natural join products;")).all()
 
@@ -58,8 +55,6 @@ def home():
                 elif choices == 'delete':
                     return redirect(url_for("views.admin_delete"))
 
-            # orders = db.sesion.execute(text(f"select order_id, status, items.order_item_id, customer_id, order_date from Orders natural join Vendor_Products as vp natural join Order_Items as items where p.product_id = {current_user.vendor_product_id};")).all()
-            
             total_orders = []
             shipped_orders = []
             pending_orders = []
@@ -69,7 +64,7 @@ def home():
                     pending_orders.append(order)
                 elif order[0] == "shipped":
                     shipped_orders.append(order)
-                total_orders.append(order)
+                total_orders.append(order)      
 
             return render_template("vendor_home.html", categories=categories, vendor_products=vendor_products, incoming_orders=total_orders, pending_orders=pending_orders, shipped_orders=shipped_orders)
         case "CUSTOMER":
@@ -140,11 +135,6 @@ def edit_pick():
     vendor_products = db.session.execute(text(f"select product_id, title, product_image from Products WHERE product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
     return redirect(url_for("views.home"))
 
-# @views.route("/vendor/edit/<int:product_id>", methods=["GET", "POST"])
-# @login_required
-# def edit_process():
-
-
 @views.route("/vendor/delete", methods=["GET"])
 @login_required
 def admin_delete():  
@@ -162,6 +152,9 @@ def deletion():
     categories.insert(0, "All")
     
     return redirect("/vendor/delete", vendor_products=vendor_products, categories=categories)
+
+
+
 
 @views.route("/shop")
 @login_required

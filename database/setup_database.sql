@@ -250,8 +250,8 @@ INSERT INTO Reviews(product_id, user_id, rating, message, image) VALUES
 
 INSERT INTO Complaints (user_id, title, description, demand) VALUES
 	(1, "REFUND ME", "I purchased a couch 24 days ago, and it still hasn't arrived!", "REFUND");
-INSERT INTO Carts (customer_id)
-VALUES (1);
+-- INSERT INTO Carts (customer_id)
+-- VALUES (1);
 
 INSERT INTO Orders (customer_id, cart_id, status)
 VALUES	(1, 1, "shipped");
