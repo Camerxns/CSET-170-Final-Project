@@ -29,36 +29,6 @@
       background-color: lightgray;
     }
     
-    .search-container {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-    
-    .search-bar {
-      background-color:#988567;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px 0 0 5px;
-      width: 60%;
-    }
-    
-    .search-btn {
-      background-color: #94aaa1;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 0 5px 5px 0;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .search-btn:hover {
-      background-color: #3e8e41;
-    }
-    
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -138,9 +108,10 @@
       padding: 25px;
     }
 
-
     li{
       display: inline;
+      margin-left: 100px;
+      background-color: navajowhite;
     }
 
     .all-orders, .orders-shipped, .orders-pending{
@@ -163,12 +134,6 @@
     <input type="submit" value="Submit" name="vendor_submit"></input>
   </form>
 
-  <div class="search-container">
-    <input type="text" class="search-bar" placeholder="Search...">
-    <button class="search-btn">
-      <i class="fa fa-search"></i>
-    </button>
-  </div>
   <div class="category-selection">
     {% for category in categories %}
     <a class="category" href="/shop?category={{ category | lower }}">{{ category }}</a>
@@ -178,7 +143,9 @@
     {% for product in vendor_products %}
     <a class="product-card" href="/shop/product/{{ product[0] }}">
       <div class="product-img-container">
-        <img class="product-img" src="{{ product[2] }}" alt="pic">
+        {% for image in vendor_product_images %}
+        <img class="product-img" src="/website/static/uploads/{{ image[0] }}" alt="pic">
+        {% endfor %}
       </div>
       <div class="product-details">
         <h2 class="product-title">{{ product[1] }}</h2>
@@ -192,7 +159,8 @@
       <ul class="order-list">
         {% for total in incoming_orders %}
         <li>
-          <a href="/shop/product/order-review/{{ total[2] }}">{{ total[0] }}</a>
+          <label for="order">Order #{{ total[2] }}, Name: {{ total[3] }}</label>
+          <a id="order" href="/order/{{ total.order_id }}">{{ total[0] }}</a>
         </li>
         {% endfor %}
       </ul>
@@ -202,7 +170,10 @@
       <ul class="order-list">
         {% for shipped in shipped_orders %}
         <li>
-          <a href="/shop/product/order-review/{{ shipped[2] }}">{{ shipped[0] }}</a>
+          <label for="order">Order #{{ shipped[2] }}, Name: {{ shipped[3] }}</label>
+          <a id="order" href="/order/{{ shipped.order_id }}">{{ shipped[0] }}</a>
+          <form action="/home" method="post">
+          </form>
         </li>
         {% endfor %}
       </ul>
@@ -212,7 +183,8 @@
       <ul class="order-list">
         {% for pending in pending_orders %}
         <li>
-          <a href="/shop/product/order-review/{{ pending[2] }}">{{ pending[0] }}</a>
+          <label for="order">Order #{{ pending[2] }}, Name: {{ pending[3] }}</label>
+          <a id="order" href="/order/{{ pending.order_id }}">{{ pending[0] }}</a>
         </li>
         {% endfor %}
       </ul>

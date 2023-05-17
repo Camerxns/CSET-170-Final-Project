@@ -59,6 +59,8 @@ CREATE TABLE IF NOT EXISTS Products (
     PRIMARY KEY(product_id)
 );
 
+select * from products natural join vendors natural join users where username = "Hackerman";
+
 CREATE TABLE IF NOT EXISTS Vendor_Products (
 	vendor_product_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     product_id INT NOT NULL,
@@ -250,14 +252,14 @@ INSERT INTO Reviews(product_id, user_id, rating, message, image) VALUES
 
 INSERT INTO Complaints (user_id, title, description, demand) VALUES
 	(1, "REFUND ME", "I purchased a couch 24 days ago, and it still hasn't arrived!", "REFUND");
--- INSERT INTO Carts (customer_id)
--- VALUES (1);
+INSERT INTO Carts (customer_id)
+VALUES (1);
 
 INSERT INTO Orders (customer_id, cart_id, status)
 VALUES	(1, 1, "shipped");
 
 # DESC Carts;
-INSERT INTO Carts (customer_id) VALUES (1);
+-- INSERT INTO Carts (customer_id) VALUES (1);
 INSERT INTO Order_Items(order_id, vendor_product_id, qty, color, size)
 VALUES	(1, 2, 5, "green", "m");
 
@@ -279,7 +281,8 @@ INSERT INTO Order_Items (order_id, vendor_product_id, qty, color, size) VALUES
 
 # SELECT * FROM Order_Items WHERE order_id = LAST_INSERT_ID();
 SELECT * FROM Orders;
-select * from customers natural join users;
+select * from admins natural join users;
+select * from products;
 select status, customers.customer_id, order_id, name, title, product_id from orders join customers natural join users natural join products;
 SELECT * FROM Order_Items WHERE order_id=2;
 -- select * from orders;

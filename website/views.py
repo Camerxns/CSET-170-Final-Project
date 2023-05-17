@@ -18,7 +18,6 @@ def index():
 def base():
     return render_template("base.html")
 
-
 @views.route("/home", methods= ["GET", "POST"])
 @login_required
 def home():
@@ -43,11 +42,12 @@ def home():
             categories.insert(0, "All")
             
             incoming_orders = db.session.execute(text(f"select status, customers.customer_id, order_id, name, title, product_id from orders join customers natural join users natural join products;")).all()
+            vendor_product_images = db.session.execute(text(f"select product_image from Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
 
             if request.method == "POST":
                 choices = request.form.get("vendor-options")
                 if choices == 'add':
-                    return redirect(url_for("views.admin_add"))
+                    return redirect(url_for("views.vendor_add"))
                 
                 elif choices == 'edit':
                     return redirect(url_for("views.admin_edit"))
@@ -64,9 +64,9 @@ def home():
                     pending_orders.append(order)
                 elif order[0] == "shipped":
                     shipped_orders.append(order)
-                total_orders.append(order)      
+                total_orders.append(order)
 
-            return render_template("vendor_home.html", categories=categories, vendor_products=vendor_products, incoming_orders=total_orders, pending_orders=pending_orders, shipped_orders=shipped_orders)
+            return render_template("vendor_home.html", categories=categories, vendor_products=vendor_products, vendor_product_images=vendor_product_images, incoming_orders=total_orders, pending_orders=pending_orders, shipped_orders=shipped_orders)
         case "CUSTOMER":
             customer_id = db.session.execute(
                 text(f"SELECT customer_id FROM Customers WHERE user_id = {current_user.user_id}")).first()[0]
@@ -88,10 +88,14 @@ def home():
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
 
+@views.route("/order/<int:order_id>", methods=["GET", "POST"])
+@login_required
+def order_manipulation(order_id):
+    return render_template("order_choices.html")
 
 @views.route("/vendor/add", methods=["GET"])
 @login_required
-def admin_add():
+def vendor_add():
     return render_template("vendor_add.html")
 
 @views.route("/vendor/add", methods=["POST"])
@@ -105,7 +109,6 @@ def add_items():
     color = request.form.get("color")
     size = request.form.get("size")
     quantity = request.form.get("quantity")
-
 
     if product_image.filename == "":
         filename = ""
@@ -155,8 +158,6 @@ def deletion():
     categories.insert(0, "All")
     
     return redirect("/vendor/delete", vendor_products=vendor_products, categories=categories)
-
-
 
 
 @views.route("/shop")
