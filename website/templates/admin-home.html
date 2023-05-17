@@ -25,6 +25,9 @@
     .left {
         background-color: #dcd3bd;
         width: 49%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .right {
@@ -44,6 +47,11 @@
         height: 49%;
     }
 
+    .complaints {
+        height: 49%;
+    }
+
+
     .complaint {
         display: block;
         color: inherit;
@@ -59,6 +67,23 @@
         justify-content: space-between;
     }
 
+    .new-chat {
+        color: inherit;
+        text-decoration: none;
+        background-color: #94aaa1;
+        display: inline-block;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .chats {
+        height: 49%;
+    }
+
+    .chat {
+        display: block;
+    }
+    
     .incoming-orders {
 
     }
@@ -85,18 +110,29 @@
 {% extends 'base.html' %}
 {% block body %}
 <div class="admin-section left">
-    <h1 class="section-title">Complaints</h1>
-    {% for complaint in complaints %}
-    <a class="complaint" href="/complaint/{{ complaint.complaint_id }}">
-        <div class="complaint-flex">
-            <div class="complaint-title-author">
-                <h1 class="complaint-title">{{ complaint.title }}</h1>
-                <p class="complaint-author">{{ complaint.author }}</p>
+    <div class="complaints">
+        <h1 class="section-title">Complaints</h1>
+        {% for complaint in complaints %}
+        <a class="complaint" href="/complaint/{{ complaint.complaint_id }}">
+            <div class="complaint-flex">
+                <div class="complaint-title-author">
+                    <h1 class="complaint-title">{{ complaint.title }}</h1>
+                    <p class="complaint-author">{{ complaint.author }}</p>
+                </div>
+                <p class="complaint-date">{{ complaint.complaint_date }}</p>
             </div>
-            <p class="complaint-date">{{ complaint.complaint_date }}</p>
-        </div>
-    </a>
-    {% endfor %}
+        </a>
+        {% endfor %}
+    </div>
+    <div class="chats">
+        <h1 class="section-title">Chats</h1>
+        <a class="new-chat" href="/chat"><h1>New Chat</h1></a>
+        {% for chat in chats %}
+        <a class="chat" href="/chat/{{ chat.chat_id }}">
+            <h1 class="chat-id">{{ chat.chat_id }}</h1>
+        </a>
+        {% endfor %}
+    </div>
 </div>
 <div class="right">
     <div class="admin-section new-orders">

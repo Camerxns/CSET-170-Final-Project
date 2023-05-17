@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from sqlalchemy import text, create_engine
+from werkzeug.utils import secure_filename
 from .models import *
 from . import db
 
@@ -27,9 +28,10 @@ def home():
                 f"SELECT *, Products.title FROM Vendor_Products JOIN Products USING(product_id) ORDER BY date_created LIMIT 3;"))
             complaints = db.session.execute(text(
                 f"SELECT *, Users.name as author FROM Complaints JOIN Users USING(user_id) ORDER BY complaint_date;"))
+            chats = db.session.execute(text(f"SELECT * FROM Chats"))
 
             return render_template("admin-home.html", incoming_orders=incoming_orders,
-                                   recently_added_products=recently_added_products, complaints=complaints)
+                                   recently_added_products=recently_added_products, complaints=complaints, chats=chats)
         case "VENDOR":
             vendor = Vendor.query.filter_by(
                 user_id=current_user.user_id).first()
@@ -64,7 +66,7 @@ def home():
 @login_required
 def shop():
     categories = [category[0].capitalize() for category in
-                  db.session.execute(text(f"SELECT category FROM Products")).all()]
+                  db.session.execute(text(f"SELECT DISTINCT category FROM Products ORDER BY category")).all()]
 
     search = request.args.get("search")
     if search:
@@ -121,11 +123,11 @@ def products_page(product_id):
         text(f"SELECT price FROM Vendor_Products WHERE vendor_product_id={vendor_product_id}")).first()
 
     reviews = db.session.execute(text(
-        f"SELECT * FROM Reviews JOIN Users USING(user_id) JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE product_id={product_id}")).all()
+        f"SELECT * FROM Reviews JOIN Users USING(user_id) WHERE product_id={product_id}")).all()
 
     return render_template("product_page.html", title=title, description=description, product_image=product_image,
                            vendors=vendors, default_vendor=vendor_id, colors=colors, sizes=sizes, price=price,
-                           vendor_product_id=vendor_product_id, reviews=reviews)
+                           vendor_product_id=vendor_product_id, reviews=reviews, product_id=product_id)
 
 
 @views.route("/checkout", methods=["GET", "POST"])
@@ -166,8 +168,7 @@ def add_to_cart():
     color = request.form.get("color")
     size = request.form.get("size")
 
-    customer_id = \
-    db.session.execute(text(f"SELECT customer_id FROM Customers WHERE user_id={current_user.user_id}")).first()[0]
+    customer_id = db.session.execute(text(f"SELECT customer_id FROM Customers WHERE user_id={current_user.user_id}")).first()[0]
     cart_id = db.session.execute(text(f"SELECT cart_id FROM Carts WHERE customer_id={customer_id}")).first()
     if cart_id == None:
         db.session.execute(text(f"INSERT INTO Carts (customer_id) VALUES ({customer_id})"))
@@ -190,14 +191,30 @@ def remove_from_cart():
 
     db.session.execute(text(f"DELETE FROM Cart_Items WHERE cart_item_id={cart_item_id}"))
     db.session.commit()
-
-
     return redirect(request.referrer)
 
 
 @views.route("/order-review")
 def order_review():
     
-     return render_template("order_reviews.html")
+    return render_template("order_reviews.html")
    
     
+@views.route("/review/<int:product_id>", methods=["POST"])
+@login_required
+def add_review(product_id):
+    user_id = current_user.user_id
+    rating = request.form.get("rating")
+    message = request.form.get("message")
+    image = request.files["image"]
+
+    if image is None:
+        filename = ""
+    else:
+        filename = secure_filename(image.filename)
+        image.save("website/static/uploads/" + filename)
+    
+    db.session.execute(text(f"INSERT INTO Reviews (product_id, user_id, rating, message, image) VALUES ({product_id}, {user_id}, {rating}, '{message}', '{filename}')"))
+    db.session.commit()
+    
+    return redirect(url_for("views.products_page", product_id=product_id))
