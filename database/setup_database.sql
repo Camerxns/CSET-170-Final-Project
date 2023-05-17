@@ -279,6 +279,8 @@ INSERT INTO Order_Items (order_id, vendor_product_id, qty, color, size) VALUES
 
 # SELECT * FROM Order_Items WHERE order_id = LAST_INSERT_ID();
 SELECT * FROM Orders;
+select * from customers natural join users;
+select status, customers.customer_id, order_id, name, title, product_id from orders join customers natural join users natural join products;
 SELECT * FROM Order_Items WHERE order_id=2;
 -- select * from orders;
 -- select * from order_items;

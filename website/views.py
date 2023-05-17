@@ -45,7 +45,7 @@ def home():
             # incoming_orders = OrderItem.query.filter(
                 # db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
             
-            incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
+            incoming_orders = db.session.execute(text(f"select status, customers.customer_id, order_id, name, title, product_id from orders join customers natural join users natural join products;")).all()
 
             if request.method == "POST":
                 choices = request.form.get("vendor-options")
@@ -65,9 +65,9 @@ def home():
             pending_orders = []
 
             for order in incoming_orders:
-                if order[1] == "pending":
+                if order[0] == "pending":
                     pending_orders.append(order)
-                elif order[1] == "shipped":
+                elif order[0] == "shipped":
                     shipped_orders.append(order)
                 total_orders.append(order)
 
@@ -132,14 +132,17 @@ def add_items():
 @views.route("/vendor/edit", methods=["GET"])
 @login_required
 def admin_edit():
-    
     return render_template("vendor_edit.html")
 
 @views.route("/vendor/edit", methods=["POST"])
 @login_required
-def edit_process():
+def edit_pick():
     vendor_products = db.session.execute(text(f"select product_id, title, product_image from Products WHERE product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
-    return redirect("/vendor/edit")
+    return redirect(url_for("views.home"))
+
+# @views.route("/vendor/edit/<int:product_id>", methods=["GET", "POST"])
+# @login_required
+# def edit_process():
 
 
 @views.route("/vendor/delete", methods=["GET"])
