@@ -53,10 +53,13 @@ def home():
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
-            orders = Order.query.filter_by(
-                customer_id=customer.customer_id).order_by(Order.order_date).all()
+            pending_orders = db.session.execute(text(f"SELECT * FROM Orders WHERE status=\"pending\""))
+            shipped_orders = db.session.execute(text(f"SELECT * FROM Orders WHERE status=\"shipped\""))
+            delivered_orders = db.session.execute(text(f"SELECT * FROM Orders WHERE status=\"delivered\""))
 
-            return render_template("customer_home.html", orders=orders, cart_items=cart_items, cart_total=cart_total)
+            reviews = db.session.execute(text(f"SELECT Products.title AS product_title, Products.product_id AS product_id, Reviews.* FROM Reviews JOIN Products USING(product_id) ORDER BY review_date LIMIT 3"))
+
+            return render_template("customer_home.html", pending_orders=pending_orders, shipped_orders=shipped_orders, delivered_orders=delivered_orders, cart_items=cart_items, cart_total=cart_total, reviews=reviews)
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
