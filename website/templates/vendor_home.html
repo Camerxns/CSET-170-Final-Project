@@ -102,14 +102,20 @@
 
     .orders-container{
       display: grid;
-      grid-auto-rows: 100px;
+      grid-auto-rows: auto;
       background-color: tan;
       gap: 25px;
       padding: 25px;
+      width: 100%;
+      /* overflow: auto; */
+    }
+    
+    ul{
+      list-style-position: inside;
     }
 
     li{
-      display: inline;
+      float: left;
       margin-left: 100px;
       background-color: navajowhite;
     }
