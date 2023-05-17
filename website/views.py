@@ -155,7 +155,7 @@ def checkout():
             db.session.commit()
         db.session.execute(text(f"DELETE FROM Cart_Items WHeRE cart_id={cart.cart_id}"))
         db.session.commit()
-        return redirect(url_for("views.home"))
+        return redirect(url_for("views.order_review", order_id=order.order_id))
     else:
         return render_template("checkout.html", cart_items=cart_items, cart_total=cart_total)
 
@@ -191,10 +191,21 @@ def remove_from_cart():
 
     db.session.execute(text(f"DELETE FROM Cart_Items WHERE cart_item_id={cart_item_id}"))
     db.session.commit()
-
     return redirect(request.referrer)
 
 
+@views.route("/order-review/<int:order_id>")
+@login_required
+def order_review(order_id):
+    order = db.session.execute(text(f"SELECT * FROM Orders WHERE order_id={order_id}")).first()
+    order_items = db.session.execute(text(f"SELECT Products.title AS title, Order_Items.qty AS qty, Order_Items.color AS color, Order_Items.size AS size, Vendor_Products.price AS price FROM Order_Items JOIN Vendor_Products USING(vendor_product_id) JOIN Products USING(product_id) WHERE order_id={order_id}")).all()
+    total = 0
+    for order_item in order_items.copy():
+        total += order_item.price * order_item.qty
+    
+    return render_template("order_reviews.html", order=order, order_items=order_items, total=total)
+   
+    
 @views.route("/review/<int:product_id>", methods=["POST"])
 @login_required
 def add_review(product_id):
