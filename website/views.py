@@ -77,10 +77,13 @@ def home():
             customer = Customer.query.filter_by(
                 user_id=current_user.user_id).first()
 
-            orders = Order.query.filter_by(
-                customer_id=customer.customer_id).order_by(Order.order_date).all()
+            pending_orders = db.session.execute(text(f"SELECT * FROM Orders WHERE status=\"pending\""))
+            shipped_orders = db.session.execute(text(f"SELECT * FROM Orders WHERE status=\"shipped\""))
+            delivered_orders = db.session.execute(text(f"SELECT * FROM Orders WHERE status=\"delivered\""))
 
-            return render_template("customer_home.html", orders=orders, cart_items=cart_items, cart_total=cart_total)
+            reviews = db.session.execute(text(f"SELECT Products.title AS product_title, Products.product_id AS product_id, Reviews.* FROM Reviews JOIN Products USING(product_id) ORDER BY review_date LIMIT 3"))
+
+            return render_template("customer_home.html", pending_orders=pending_orders, shipped_orders=shipped_orders, delivered_orders=delivered_orders, cart_items=cart_items, cart_total=cart_total, reviews=reviews)
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
@@ -286,6 +289,24 @@ def remove_from_cart():
     db.session.execute(text(f"DELETE FROM Cart_Items WHERE cart_item_id={cart_item_id}"))
     db.session.commit()
     return redirect(request.referrer)
+
+
+@views.route("/complain", methods=["GET"])
+@login_required
+def complaints_page():
+    return render_template("complaints_page.html")
+
+@views.route("/complain", methods=["POST"])
+def complaint_submit():
+    title = request.form.get("title")
+    user_id = current_user.user_id
+    description = request.form.get("complaint")
+    demand = request.form.get("demand")
+
+    db.session.execute(text(f"INSERT INTO Complaints (user_id, title, description, demand) VALUES ({user_id}, '{title}', '{description}', '{demand}')"))
+    db.session.commit()
+
+    return redirect(url_for("views.home"))
 
 
 @views.route("/order-review/<int:order_id>")
