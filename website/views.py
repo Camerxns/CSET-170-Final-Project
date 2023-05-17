@@ -45,7 +45,7 @@ def home():
             # incoming_orders = OrderItem.query.filter(
                 # db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
             
-            incoming_orders = db.session.execute(text(f"select * from order_items;")).all()
+            incoming_orders = db.session.execute(text(f"select * from Order_Items;")).all()
 
             if request.method == "POST":
                 choices = request.form.get("vendor-options")
