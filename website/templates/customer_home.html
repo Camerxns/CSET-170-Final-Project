@@ -16,7 +16,7 @@
     }
 
     .content-item{
-        background-color: lightblue;
+        background-color: #dcd3bd;
     }
 
     .intro-box{
@@ -65,7 +65,7 @@
         flex-direction: column;
         height: 100%;
         width: 300px;
-        background-color: lightyellow;
+        background-color: #dcd3bd;
         border: 1px solid black;
     }
 
@@ -121,6 +121,7 @@
         grid-area: orders;
         display: flex;
         flex-direction: column;
+        padding: 5px;
     }
 
     .reviews-box{
@@ -145,11 +146,21 @@
         color: gold;
         cursor: pointer;
     }
+
+    .review {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        margin-bottom: 5px;
+    }
     
     #content-item{
         font-size: 50pt;
     }
 
+    .inset {
+        padding-left: 10px;
+    }
     
     
 </style>
@@ -191,26 +202,44 @@
             <hr>
             {% endfor %}
         </div>
-        <a class="go-to-cart-wrapper" href="/cart">
-            <p class="go-to-cart">Go To Cart</p>
+        <a class="go-to-cart-wrapper" href="/checkout">
+            <p class="go-to-cart">Checkout</p>
         </a>
     </div>
     <div class="content-item slideshow">
-        Slideshow
+        <a href="/chat">Need to talk to an Admin? Chat here!</a>
     </div>
     <div class="content-item orders-box">
         <div>
             <h4>Orders</h4>
         </div>
         <div>
+            <h4>Delivered</h4>
+            {% for order in delivered_orders %}
+            <p class="inset"><a href="/order-review/{{ order.order_id }}">{{ order.order_id }}</a></p>
+            {% endfor %}
+        </div>
+        <div>
             <h4>Shipped</h4>
+            {% for order in shipped_orders %}
+            <p class="inset"><a href="/order-review/{{ order.order_id }}">{{ order.order_id }}</a></p>
+            {% endfor %}
         </div>
         <div>
             <h4>Pending</h4>
+            {% for order in pending_orders %}
+            <p class="inset"><a href="/order-review/{{ order.order_id }}">{{ order.order_id }}</a></p>
+            {% endfor %}
         </div>
     </div>
     <div class="content-item reviews-box">
         <h4>Reviews</h4>
-        <button>View</button>
+        {% for review in reviews %}
+        <a class="review" href="/shop/product/{{ review.product_id }}">
+            <h1>{{ review.product_title }}</h1>
+            <p>Stars: {{ review.rating }}</p>
+        </a>
+        <hr>
+        {% endfor %}
     </div>
 {% endblock %}
