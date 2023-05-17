@@ -117,9 +117,6 @@
     font-weight: bold;
     margin: 0 0 10px 0;
   }
-  
-  
-
 </style>
 {% extends 'base.html' %}
 {% block title %}
@@ -143,12 +140,12 @@ Shop
 </div>
 <div class="product-grid">
   {% for product in products %}
-  <a class="product-card" href="/shop/product/{{ product.product_id }}">
+  <a class="product-card" href="/shop/product/{{ product[0] }}">
     <div class="product-img-container">
       <img class="product-img" src="{{ url_for('static', filename='uploads/' + product.product_image) }}" alt="pic">
     </div>
     <div class="product-details">
-      <h2 class="product-title">{{ product.title }}</h2>
+      <h2 class="product-title">{{ product[1] }}</h2>
     </div>
   </a>
 {% endfor %}

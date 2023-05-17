@@ -59,6 +59,8 @@ CREATE TABLE IF NOT EXISTS Products (
     PRIMARY KEY(product_id)
 );
 
+select * from products natural join vendors natural join users where username = "Hackerman";
+
 CREATE TABLE IF NOT EXISTS Vendor_Products (
 	vendor_product_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     product_id INT NOT NULL,
@@ -152,6 +154,11 @@ CREATE TABLE IF NOT EXISTS Orders(
     FOREIGN KEY(cart_id) REFERENCES Carts(cart_id)
 );
 
+select * from users natural join customers;
+select * from carts;
+
+
+
 CREATE TABLE IF NOT EXISTS Order_Items(
 	order_item_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     order_id INT NOT NULL,
@@ -188,6 +195,7 @@ CREATE TABLE IF NOT EXISTS Chat_Messages(
 
 INSERT INTO Users (name, username, email, password) VALUES
 	("Justin Koch", "Code12", "jdkoch2855@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f"),
+    ("Connor Hamilton", "QuasimodoKiwi", "example@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f"),
     ("Hank Williams", "Hank", "hankwilliams86@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f"),
     ("Jack Rhysiter", "Hackerman", "jrhysiter12@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f"),
     ("Bart Reeds", "BartReeds23", "breads23@gmail.com", "pbkdf2:sha256:600000$wv32rCrCar3DBGgk$5d1f75a96ba5cd1e8ec9c5fea90946767e1b35d6e8df55c190d570528af5690f");
@@ -237,14 +245,25 @@ INSERT INTO Vendor_Product_Sizes (vendor_product_id, size) VALUES
 
 INSERT INTO Reviews(product_id, user_id, rating, message, image) VALUES
 	(1, 1, 3, "Great laptop! I've been able to upgrade it! A wonder for laptops.", "framework-internals.jpg");
+-- select * from products;
+-- select * from vendor_products;
+-- select * from orders;
+-- select * from order_items;
 
 INSERT INTO Complaints (user_id, title, description, demand) VALUES
 	(1, "REFUND ME", "I purchased a couch 24 days ago, and it still hasn't arrived!", "REFUND");
+INSERT INTO Carts (customer_id)
+VALUES (1);
 
+INSERT INTO Orders (customer_id, cart_id, status)
+VALUES	(1, 1, "shipped");
 
 # DESC Carts;
-INSERT INTO Carts (customer_id) VALUES (1);
+-- INSERT INTO Carts (customer_id) VALUES (1);
+INSERT INTO Order_Items(order_id, vendor_product_id, qty, color, size)
+VALUES	(1, 2, 5, "green", "m");
 
+-- select Orders.order_id, items.order_item_id, customer_id, order_date, status from Orders join Vendor_Products as vp join Order_Items as items join Products as p;
 
 # DESC Cart_Items;
 INSERT INTO Cart_Items (cart_id, vendor_product_id, qty, color, size) VALUES
@@ -262,4 +281,9 @@ INSERT INTO Order_Items (order_id, vendor_product_id, qty, color, size) VALUES
 
 # SELECT * FROM Order_Items WHERE order_id = LAST_INSERT_ID();
 SELECT * FROM Orders;
+select * from admins natural join users;
+select * from products;
+select status, customers.customer_id, order_id, name, title, product_id from orders join customers natural join users natural join products;
 SELECT * FROM Order_Items WHERE order_id=2;
+-- select * from orders;
+-- select * from order_items;

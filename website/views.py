@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import text, create_engine
 from werkzeug.utils import secure_filename
 from .models import *
+from werkzeug.utils import secure_filename, redirect, send_from_directory
 from . import db
 
 views = Blueprint('views', __name__)
@@ -17,8 +18,7 @@ def index():
 def base():
     return render_template("base.html")
 
-
-@views.route("/home")
+@views.route("/home", methods= ["GET", "POST"])
 @login_required
 def home():
     match current_user.account_type():
@@ -38,11 +38,35 @@ def home():
 
             vendor_products = VendorProduct.query.filter_by(
                 vendor_id=vendor.vendor_id).all()
+            categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
+            categories.insert(0, "All")
+            
+            incoming_orders = db.session.execute(text(f"select status, customers.customer_id, order_id, name, title, product_id from orders join customers natural join users natural join products;")).all()
+            vendor_product_images = db.session.execute(text(f"select product_image from Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
 
-            incoming_orders = OrderItem.query.filter(
-                db.OrderItem.vendor_product.vendor_id == vendor.vendor_id)
+            if request.method == "POST":
+                choices = request.form.get("vendor-options")
+                if choices == 'add':
+                    return redirect(url_for("views.vendor_add"))
+                
+                elif choices == 'edit':
+                    return redirect(url_for("views.admin_edit"))
 
-            return render_template("vendor_home.html", vendor_products=vendor_products, incoming_orders=incoming_orders)
+                elif choices == 'delete':
+                    return redirect(url_for("views.admin_delete"))
+
+            total_orders = []
+            shipped_orders = []
+            pending_orders = []
+
+            for order in incoming_orders:
+                if order[0] == "pending":
+                    pending_orders.append(order)
+                elif order[0] == "shipped":
+                    shipped_orders.append(order)
+                total_orders.append(order)
+
+            return render_template("vendor_home.html", categories=categories, vendor_products=vendor_products, vendor_product_images=vendor_product_images, incoming_orders=total_orders, pending_orders=pending_orders, shipped_orders=shipped_orders)
         case "CUSTOMER":
             customer_id = db.session.execute(
                 text(f"SELECT customer_id FROM Customers WHERE user_id = {current_user.user_id}")).first()[0]
@@ -63,6 +87,96 @@ def home():
         case _:
             print("ERROR ROUTING TO HOME")
             return "ERROR ROUTING TO HOME"
+
+@views.route("/order/<int:order_id>", methods=["GET", "POST"])
+@login_required
+def order_manipulation(order_id):
+    order = db.session.execute(text(f"SELECT * from Orders where order_id = {order_id};")).first()
+    pending = request.form.get("pending")
+    complete = request.form.get("complete")
+    delete = request.form.get("delete")
+
+    if request.method == "POST":
+        if pending:
+            db.session.execute(text(f"UPDATE Orders SET status = 'pending' WHERE order_id = {order_id};"))
+            db.session.commit()
+            return redirect(url_for("views.home"))
+        if complete:
+            db.session.execute(text(f"UPDATE Orders SET status = 'shipped' WHERE order_id = {order_id};"))
+            db.session.commit()
+            return redirect(url_for("views.home"))
+        if delete:
+            db.session.execute(text(f"DELETE FROM Orders WHERE order_id = {order_id};"))
+            db.session.commit()
+            return redirect(url_for("views.home"))
+    
+    return render_template("order_choices.html", order=order)
+
+@views.route("/vendor/add", methods=["GET"])
+@login_required
+def vendor_add():
+    return render_template("vendor_add.html")
+
+@views.route("/vendor/add", methods=["POST"])
+@login_required
+def add_items():
+    title = request.form.get("title")
+    description = request.form.get("description")
+    product_image = request.files["product_image"]
+    category = request.form.get("category")
+    price = request.form.get("price")
+    color = request.form.get("color")
+    size = request.form.get("size")
+    quantity = request.form.get("quantity")
+
+    if product_image.filename == "":
+        filename = ""
+    else:
+        filename = secure_filename(product_image.filename)
+        product_image.save("website/static/uploads/" + filename)
+    db.session.execute(text(f"INSERT INTO Products (title, description, product_image, category) VALUES ('{title}', '{description}', '{filename}', '{category}')"))
+    db.session.commit()
+    
+    product = db.session.execute(text(f"SELECT * FROM Products WHERE product_id = LAST_INSERT_ID()")).first()
+    vendor_id = db.session.execute(text(f"SELECT vendor_id FROM Vendors WHERE user_id = {current_user.user_id}")).first()
+
+    db.session.execute(text(f"INSERT INTO Vendor_Products (product_id, vendor_id, qty, price) VALUES({product.product_id}, {vendor_id.vendor_id}, {quantity}, {price})"))
+    db.session.commit()
+    db.session.execute(text(f"INSERT INTO Vendor_Product_Sizes VALUES ({vendor_id.vendor_id}, '{size}')"))
+    db.session.commit()
+    db.session.execute(text(f"INSERT INTO Vendor_Product_Colors VALUES ({vendor_id.vendor_id}, '{color}')"))
+    db.session.commit()
+    
+    return redirect(url_for("views.home"))
+ 
+@views.route("/vendor/edit", methods=["GET"])
+@login_required
+def admin_edit():
+    return render_template("vendor_edit.html")
+
+@views.route("/vendor/edit", methods=["POST"])
+@login_required
+def edit_pick():
+    vendor_products = db.session.execute(text(f"select product_id, title, product_image from Products WHERE product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()
+    return redirect(url_for("views.home"))
+
+@views.route("/vendor/delete", methods=["GET"])
+@login_required
+def admin_delete():  
+    return render_template("vendor_delete.html")
+
+@views.route("/vendor/delete", methods=["POST"])
+@login_required
+def deletion():
+    vendor = Vendor.query.filter_by(
+    user_id=current_user.user_id).first()
+
+    vendor_products = VendorProduct.query.filter_by(
+    vendor_id=vendor.vendor_id).all()
+    categories = [category[0].capitalize() for category in db.session.execute(text(f"SELECT category FROM Products where product_id IN (select product_id from Vendor_Products where vendor_id = (select vendor_id from Vendors where user_id = {current_user.user_id}))")).all()]
+    categories.insert(0, "All")
+    
+    return redirect("/vendor/delete", vendor_products=vendor_products, categories=categories)
 
 
 @views.route("/shop")

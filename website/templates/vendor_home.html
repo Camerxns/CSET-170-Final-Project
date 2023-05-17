@@ -1,9 +1,193 @@
 <style>
+    .main-content {
+      padding: 15px;
+    }
+    
+    .category-selection {
+      background-color:#c3b69b;
+      padding: 5px;
+      margin-right: 15px;
+      float: left;
+      min-width: fit-content;
+      width: 200px;
+      height: inherit;
+    }
+    
+    .category {
+      display: block;
+      margin: 10px 0;
+      padding: 5px;
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    
+    .category:hover {
+      background-color: lightgray;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-gap: 20px;
+    }
+    
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      background-color: white;
+      border: 1px solid lightgray;
+      border-radius: 5px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+      overflow: hidden;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .product-img-container {
+      height: 250px;
+      width: 100%;
+      overflow: hidden;
+    }
+    
+    .product-img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    
+    .product-card:hover .product-img {
+      transform: scale(1.1);
+    }
+    
+    .product-details {
+      padding: 10px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .product-title {
+      font-size: 24px;
+      margin: 0 0 10px 0;
+    }
+    
+    .product-price {
+      font-weight: bold;
+      margin: 0 0 10px 0;
+    }
 
-</style>
+    select, input[name="vendor_submit"]{
+      font-size: 25pt;
+      padding: 15px;
+      background-color: lightskyblue;
+      border: 2px solid black;
+    }
 
-{% extends "base.html" %}
+    input[name="your_items"]:hover{
+      cursor: pointer;
+      background-color: lightcoral;
+      color: lightyellow;
+    }   
 
-{% block body %}
+    .orders-container{
+      display: grid;
+      grid-auto-rows: 100px;
+      background-color: tan;
+      gap: 25px;
+      padding: 25px;
+    }
 
-{% endblock %}
+    li{
+      display: inline;
+      margin-left: 100px;
+      background-color: navajowhite;
+    }
+
+    .all-orders, .orders-shipped, .orders-pending{
+      border-bottom: 2px solid black;
+    }
+  </style>
+  {% extends 'base.html' %}
+  {% block title %}
+  {{ current_user.name }}'s Page
+  {% endblock %}
+  {% block body %}
+  
+  <form action="/home" method="POST">
+    <select name="vendor-options">
+      <option value="show">Show Your Items</option>
+      <option value="add">Add</option>
+      <option value="edit">Edit</option>
+      <option value="delete">Delete</option>
+    </select>
+    <input type="submit" value="Submit" name="vendor_submit"></input>
+  </form>
+
+  <div class="category-selection">
+    {% for category in categories %}
+    <a class="category" href="/shop?category={{ category | lower }}">{{ category }}</a>
+    {% endfor %}
+  </div>
+  <div class="product-grid">
+    {% for product in vendor_products %}
+    <a class="product-card" href="/shop/product/{{ product[0] }}">
+      <div class="product-img-container">
+        {% for image in vendor_product_images %}
+        <img class="product-img" src="/website/static/uploads/{{ image[0] }}" alt="pic">
+        {% endfor %}
+      </div>
+      <div class="product-details">
+        <h2 class="product-title">{{ product[1] }}</h2>
+      </div>
+    </a>
+  {% endfor %}
+  </div>
+  <div class="orders-container">
+    <div class="all-orders">
+      <h4>Orders</h4>
+      <ul class="order-list">
+        {% for total in incoming_orders %}
+        <li>
+          <label for="order">Order #{{ total[2] }}, Name: {{ total[3] }}</label>
+          <a id="order" href="/order/{{ total.order_id }}">{{ total[0] }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="orders-shipped">
+      <h4>Shipped</h4>
+      <ul class="order-list">
+        {% for shipped in shipped_orders %}
+        <li>
+          <label for="order">Order #{{ shipped[2] }}, Name: {{ shipped[3] }}</label>
+          <a id="order" href="/order/{{ shipped.order_id }}">{{ shipped[0] }}</a>
+          <form action="/home" method="post">
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="orders-pending">
+      <h4>Pending</h4>
+      <ul class="order-list">
+        {% for pending in pending_orders %}
+        <li>
+          <label for="order">Order #{{ pending[2] }}, Name: {{ pending[3] }}</label>
+          <a id="order" href="/order/{{ pending.order_id }}">{{ pending[0] }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endblock %}

@@ -1,0 +1,61 @@
+<style>
+    .main-content{
+        background-color: #144141;
+    }
+
+    .edit-wrapper{
+        display: flex;
+        width: 100%;
+        height: inherit;
+        justify-content: space-between;
+    }
+    .edit-item-image{
+        width: 50%;
+        background-color: rebeccapurple;
+    }
+
+    .edit-item-wrapper{
+        background-color: yellowgreen;
+        display: flex;
+        width: 50%;
+        flex-direction: column;
+    }
+
+    #submit{
+        border-radius: 10px;
+        border: 2px solid gold;
+        padding: 25px;
+    }
+
+</style>
+{% extends "base.html" %}
+
+{% block body %}
+<h1 style="color:white; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+    Select your product.</h1>    
+<div class="edit-wrapper">
+    <div class="edit-item-image">
+        <h2>Image</h2>
+    </div>
+    <div class="edit-item-wrapper">
+        <form action="/vendor/edit" method="post">
+            <div>
+                <label for="title">Title: </label>
+                <input type="text" id="title">
+            </div>
+            <div>
+                <label for="price">Price</label>
+                <input type="text">
+            </div>
+            <div>
+                <label for="description">Desc.</label>
+                <input type="text" id="description">
+            </div>
+            <div>
+                
+            </div>
+            <input type="submit" id="submit">
+        </form>
+    </div>
+</div>
+{% endblock %}
