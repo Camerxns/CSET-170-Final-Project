@@ -1,12 +1,29 @@
-<style>
+<style>        
 .main-content{
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.choices-container{
+    display: flex;
+    width: 25%;
+    height: 25%;
+    justify-content: center;
+    background-color: tan;
+    color: white;
+}
+
 </style>
 
 {% extends "base.html" %}
 {% block body %}
-<div>
-
+<div class="choices-container">
+    <h2>Order #{{ order.order_id }}</h2>
+    <div>
+        <form action="/order/<int:order_id>" method="POST">
+            
+        </form>
+    </div>
 </div>
 {% endblock %}

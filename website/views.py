@@ -91,22 +91,22 @@ def home():
 @views.route("/order/<int:order_id>", methods=["GET", "POST"])
 @login_required
 def order_manipulation(order_id):
-    order = db.session.execute(f"SELECT * FROM Orders where order_id = {order_id}").all()
-    status = order[4]
+    order = db.session.execute(text(f"SELECT * from Orders where order_id = {order_id};")).first()
+    pending = request.form.get("pending")
+    complete = request.form.get("complete")
+    delete = request.form.get("delete")
 
     if request.form.get == "POST":
-        if status == pending:
-            db.session.execute(f"UPDATE Orders SET status = 'pending' WHERE order_id = {order_id}")
+        if pending:
+            db.session.execute(text(f"UPDATE Orders SET status = 'pending' WHERE order_id = {order_id};"))
             db.session.commit
-        if status == complete:
-            db.session.execute(f"UPDATE Orders SET status = 'shipped' WHERE order_id = {order_id}")
+        if complete:
+            db.session.execute(text(f"UPDATE Orders SET status = 'shipped' WHERE order_id = {order_id};"))
             db.session.commit
-        if status == delete:
-            db.session.execute(f"DELETE FROM Orders WHERE order_id = {order_id}")
+        if delete:
+            db.session.execute(text(f"DELETE FROM Orders WHERE order_id = {order_id};"))
             db.session.commit
-        
-
-    return render_template("order_choices.html")
+    return render_template("order_choices.html", order=order)
 
 @views.route("/vendor/add", methods=["GET"])
 @login_required
