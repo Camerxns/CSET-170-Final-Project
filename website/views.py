@@ -91,6 +91,21 @@ def home():
 @views.route("/order/<int:order_id>", methods=["GET", "POST"])
 @login_required
 def order_manipulation(order_id):
+    order = db.session.execute(f"SELECT * FROM Orders where order_id = {order_id}").all()
+    status = order[4]
+
+    if request.form.get == "POST":
+        if status == pending:
+            db.session.execute(f"UPDATE Orders SET status = 'pending' WHERE order_id = {order_id}")
+            db.session.commit
+        if status == complete:
+            db.session.execute(f"UPDATE Orders SET status = 'shipped' WHERE order_id = {order_id}")
+            db.session.commit
+        if status == delete:
+            db.session.execute(f"DELETE FROM Orders WHERE order_id = {order_id}")
+            db.session.commit
+        
+
     return render_template("order_choices.html")
 
 @views.route("/vendor/add", methods=["GET"])
